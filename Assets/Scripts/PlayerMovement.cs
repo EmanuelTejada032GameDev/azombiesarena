@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -12,6 +13,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _crouchPlayerSpeed = 3f;
     [SerializeField] private float defaultGravity = 9.81f;
     private float _verticalVelocity;
+
+    [SerializeField] private LayerMask _floorLayer;
+    [SerializeField] private float _rotationSpeed = 15f;
 
     private void Awake()
     {
@@ -35,6 +39,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        HandleMovement();
+        HandleRotation();
+    }
+
+    private void HandleMovement()
+    {
         Vector2 inputVector = _inputs.Player.Move.ReadValue<Vector2>();
         Vector3 cameraForward = _mainCamera.forward;
         Vector3 cameraRight = _mainCamera.right;
@@ -55,10 +65,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            _verticalVelocity -= defaultGravity * Time.deltaTime; 
+            _verticalVelocity -= defaultGravity * Time.deltaTime;
         }
 
-        bool isCrouchPressed = _inputs.Player.Crouch.IsPressed(); 
+        bool isCrouchPressed = _inputs.Player.Crouch.IsPressed();
         bool isSprintPressed = _inputs.Player.Sprint.IsPressed();
 
         if (isCrouchPressed)
@@ -78,8 +88,34 @@ public class PlayerMovement : MonoBehaviour
         finalMovementVector.y = _verticalVelocity;
 
         _characterController.Move(finalMovementVector * Time.deltaTime);
-
     }
 
+    private void HandleRotation()
+    {
+        // STEP 1: Shoot a physical ray from the mouse position through the camera lens
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        // STEP 2: Ask Unity if that ray hit our specific floor layer
+        // 'out RaycastHit hit' is just a container where Unity saves the information of the collision
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _floorLayer))
+        {
+            // STEP 3: Find the direction from the player's current position to the floor hit point
+            // (Target position minus Current position)
+            Vector3 targetDirection = hit.point - transform.position;
+
+            // STEP 4: The Sanitization! Force the Y axis to zero so the capsule never tilts down
+            targetDirection.y = 0f;
+
+            // STEP 5: Check if the direction is valid (to avoid errors if the mouse is exactly on the player)
+            if (targetDirection.sqrMagnitude > 0.001f)
+            {
+                // Turn our flat direction vector into a target rotation state
+                Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+
+                // Smoothly rotate from our current rotation to the target rotation over time
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
+            }
+        }
+    }
 
 }
