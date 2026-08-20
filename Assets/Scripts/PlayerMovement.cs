@@ -187,6 +187,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
+    public PlayerInput GetInputInstance() => _inputs;
+
     private void OnDrawGizmos()
     {
         // Ensure the gizmo only draws if the application is playing and running the math
