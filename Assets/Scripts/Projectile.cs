@@ -40,17 +40,11 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if ((_hitLayers.value & (1 << other.gameObject.layer)) > 0)
-        {
-            HandleImpact(other);
-        }
-    }
-
+ 
     private void HandleImpact(Collider hitCollider)
     {
         //Debug.Log("Bullet hit: " + hitCollider.gameObject.name + " on layer: " + LayerMask.LayerToName(hitCollider.gameObject.layer));
+        hitCollider.gameObject.GetComponentInParent<IDamagable>()?.TakeDamage(1);
         Deactivate();
     }
 
