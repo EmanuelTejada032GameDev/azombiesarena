@@ -190,3 +190,5 @@ MonoBehaviour:
   _hitLayers:
     serializedVersion: 2
     m_Bits: 392
+  _environmentImpactPrefab: {fileID: 2691674519807872610, guid: 0692d1d5109600e46992f95778e6bf61, type: 3}
+  _zombieImpactPrefab: {fileID: 2691674519807872610, guid: 6783c6dc62f5b544c871d9b284468532, type: 3}

@@ -10,6 +10,11 @@ public class Projectile : MonoBehaviour
 
     [SerializeField] private LayerMask _hitLayers;
 
+
+    [Header("Game Juice / Impact Prefabs")]
+    [SerializeField] private GameObject _environmentImpactPrefab;
+    [SerializeField] private GameObject _zombieImpactPrefab;
+
     private void OnEnable()
     {
         _currentLifeTimer = _lifeTime;
@@ -25,7 +30,7 @@ public class Projectile : MonoBehaviour
         if (Physics.Raycast(_lastPosition, movementDirection, out RaycastHit hit, moveDistance, _hitLayers))
         {
             transform.position = hit.point; 
-            HandleImpact(hit.collider);
+            HandleImpact(hit.collider, hit.point, hit.normal);
             return; 
         }
 
@@ -41,11 +46,28 @@ public class Projectile : MonoBehaviour
     }
 
  
-    private void HandleImpact(Collider hitCollider)
+    private void HandleImpact(Collider hitCollider, Vector3 hitPoint, Vector3 hitNormal)
     {
-        //Debug.Log("Bullet hit: " + hitCollider.gameObject.name + " on layer: " + LayerMask.LayerToName(hitCollider.gameObject.layer));
-        hitCollider.gameObject.GetComponentInParent<IDamagable>()?.TakeDamage(1);
+        IDamagable damageable = hitCollider.gameObject.GetComponentInParent<IDamagable>();
+
+        if (damageable != null)
+        {
+            damageable.TakeDamage(1);
+            SpawnImpactEffect(_zombieImpactPrefab, hitPoint, hitNormal);
+        }
+        else
+        {
+            SpawnImpactEffect(_environmentImpactPrefab, hitPoint, hitNormal);
+        }
+
         Deactivate();
+    }
+
+    private void SpawnImpactEffect(GameObject prefab, Vector3 position, Vector3 normal)
+    {
+        if (prefab == null) return;
+        GameObject impactFX = Instantiate(prefab, position, Quaternion.LookRotation(normal));
+        Destroy(impactFX, 1.0f);
     }
 
     private void Deactivate()
