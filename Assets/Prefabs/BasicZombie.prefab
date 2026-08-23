@@ -61,6 +61,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Zombie
   _pathUpdateInterval: 0.2
+  _attackRange: 1.5
+  _attackCooldown: 1
+  _attackDamage: 1
+  _pollingInterval: 0.2
 --- !u!195 &6113013402654549863
 NavMeshAgent:
   m_ObjectHideFlags: 0
