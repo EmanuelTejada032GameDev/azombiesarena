@@ -73,6 +73,7 @@ public class PlayerMovement : MonoBehaviour
 
         if(GameManager.Instance.State == GameManager.GameState.Playing)
         {
+            Debug.Log($"{GameManager.Instance.State},{GameManager.GameState.Playing},{GameManager.Instance.State == GameManager.GameState.Playing}");
             HandleMovement();
             HandleRotation();
         }

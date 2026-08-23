@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [Header("Current Status")]
     private GameState _state;
 
-    public GameState State;
+    public GameState State => _state;
 
 
     [Header("Scene References")]
