@@ -24,6 +24,10 @@ public class Zombie : MonoBehaviour
     private IDamagable _playerDamageable;
     private bool _canAttack = true;
 
+    [Header("Economy Rewards")]
+    [SerializeField] private int _pointsPerHit = 10;
+    [SerializeField] private int _pointsOnDeath = 60;
+
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -40,10 +44,16 @@ public class Zombie : MonoBehaviour
         if (_healthSystem != null)
         {
             _healthSystem.OnDied += HandleDeath;
+            _healthSystem.OnDamaged += HandleDamaged;
         }
     }
 
-    
+    private void HandleDamaged(object sender, EventArgs e)
+    {
+        EconomyManager.Instance.AddPoints(_pointsPerHit);
+        // Damage Logic or visual effects
+    }
+
     public void InitializeTarget(Transform playerTransform)
     {
         _targetPlayer = playerTransform;
@@ -110,6 +120,7 @@ public class Zombie : MonoBehaviour
             _agent.enabled = false; 
         }
 
+        EconomyManager.Instance.AddPoints(_pointsOnDeath);
         // Trigger zombie death logic and FXs here
         Destroy(gameObject, .4f);
     }
