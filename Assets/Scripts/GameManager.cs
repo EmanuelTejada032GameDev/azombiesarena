@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -108,6 +107,7 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 1f;
                 _mainMenuUI.SetActive(false);
                 _gameOverUI.SetActive(false);
+                _pauseMenuUI.SetActive(false);
                 break;
             case GameState.Paused:
                 Time.timeScale = 0f;

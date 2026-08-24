@@ -22,6 +22,13 @@ public class WaveSpawner : MonoBehaviour
     private int _currentActiveZombiesCount;
     private bool _isIntermission = false;
 
+
+    [Header("UI Data Streams")]
+    [SerializeField] private IntSO _currentWaveVariable;
+    [SerializeField] private IntSO _zombiesRemainingVariable;
+    [SerializeField] private FloatSO _intermissionTimerVariable;
+
+
     private void Start()
     {
         
@@ -42,7 +49,10 @@ public class WaveSpawner : MonoBehaviour
 
         _totalZombiesForCurrentWave = _baseZombieCount + (_currentWave * _zombiesPerWaveMultiplier);
 
-        //Debug.Log($"Wave {_currentWave} Started! Total Zombies: {_totalZombiesForCurrentWave}");
+        if (_currentWaveVariable != null) _currentWaveVariable.Value = _currentWave;
+        if (_zombiesRemainingVariable != null) _zombiesRemainingVariable.Value = _totalZombiesForCurrentWave;
+
+        if (_intermissionTimerVariable != null) _intermissionTimerVariable.Value = 0f;
 
         StartCoroutine(SpawnWaveRoutine());
     }
@@ -102,14 +112,33 @@ public class WaveSpawner : MonoBehaviour
             deadZombieHealth.OnDied -= HandleZombieDeath;
         }
         _currentActiveZombiesCount--;
+
+        if (_zombiesRemainingVariable != null)
+        {
+            int totalLeftToKill = _totalZombiesForCurrentWave - (_zombiesSpawnedSoFar - _currentActiveZombiesCount);
+            _zombiesRemainingVariable.Value = Mathf.Max(0, totalLeftToKill);
+        }
     }
 
     private IEnumerator IntermissionRoutine()
     {
         _isIntermission = true;
-        //Debug.Log($"Wave Clear! Intermission started for {_intermissionDuration} seconds...");
 
-        yield return new WaitForSeconds(_intermissionDuration);
+        float timeRemaining = _intermissionDuration;
+
+        while (timeRemaining > 0)
+        {
+            if (_intermissionTimerVariable != null)
+            {
+                _intermissionTimerVariable.Value = timeRemaining;
+            }
+
+            timeRemaining -= Time.deltaTime;
+            yield return null;
+        }
+
+
+        if (_intermissionTimerVariable != null) _intermissionTimerVariable.Value = 0f;
 
         _isIntermission = false;
         StartNextWave();
