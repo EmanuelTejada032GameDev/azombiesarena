@@ -95,11 +95,9 @@ public class Zombie : MonoBehaviour
     {
         _canAttack = false;
 
-        Debug.Log($"Doing {_attackDamage} to player");
         _playerDamageable.TakeDamage(_attackDamage);
 
         // Visual indicator for graybox: Print to console or flash a color later
-        Debug.Log($"{gameObject.name} bit the player!");
 
         yield return new WaitForSeconds(_attackCooldown);
         _canAttack = true;

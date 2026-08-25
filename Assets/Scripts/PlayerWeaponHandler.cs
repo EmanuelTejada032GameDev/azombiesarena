@@ -10,14 +10,8 @@ public class PlayerWeaponHandler : MonoBehaviour
 
     private void Start()
     {
-        PlayerMovement movementComponent = GetComponent<PlayerMovement>();
-
-        if (movementComponent != null)
-        {
-          
-            _inputs = movementComponent.GetInputInstance();
+            _inputs = Player.Instance.GetInputInstance();
             _inputs.Player.Shoot.performed += OnShootPerformed;
-        }
     }
 
     private void OnDestroy()

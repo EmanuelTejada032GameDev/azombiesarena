@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
+    public static WaveSpawner Instance { get; private set; }    
+
     [Header("References")]
     [SerializeField] private GameObject _zombiePrefab;
     [SerializeField] private Transform[] _spawnEntrances; 
@@ -31,7 +33,14 @@ public class WaveSpawner : MonoBehaviour
 
     private void Start()
     {
-        
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
 
@@ -40,6 +49,7 @@ public class WaveSpawner : MonoBehaviour
         _currentWave = 0;
         StartNextWave();
     }
+
 
     private void StartNextWave()
     {

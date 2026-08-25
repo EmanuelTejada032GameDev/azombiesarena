@@ -36,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        _inputs = new PlayerInput();    
     }
 
     private void Start()
@@ -56,16 +55,16 @@ public class PlayerMovement : MonoBehaviour
                 _standingCenter.z
             );
         }
+
+        _inputs = Player.Instance.GetInputInstance();
     }
 
     private void OnEnable()
     {
-        _inputs.Enable();
     }
 
     private void OnDisable()
     {
-        _inputs.Disable();
     }
 
     private void Update()
@@ -191,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    public PlayerInput GetInputInstance() => _inputs;
+   
 
     private void OnDrawGizmos()
     {

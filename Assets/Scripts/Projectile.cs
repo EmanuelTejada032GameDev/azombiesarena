@@ -11,14 +11,21 @@ public class Projectile : MonoBehaviour
     [SerializeField] private LayerMask _hitLayers;
 
 
-    [Header("Game Juice / Impact Prefabs")]
+    [Header("VFXs Settings")]
     [SerializeField] private GameObject _environmentImpactPrefab;
     [SerializeField] private GameObject _zombieImpactPrefab;
+    [SerializeField] private TrailRenderer _trailRenderer;
+
+
 
     private void OnEnable()
     {
         _currentLifeTimer = _lifeTime;
         _lastPosition = transform.position;
+        if (_trailRenderer != null)
+        {
+            _trailRenderer.Clear();
+        }
     }
 
     private void Update()

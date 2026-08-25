@@ -108,6 +108,8 @@ public class GameManager : MonoBehaviour
                 _mainMenuUI.SetActive(false);
                 _gameOverUI.SetActive(false);
                 _pauseMenuUI.SetActive(false);
+                Player.Instance.GetInputInstance().Enable();
+                _waveSpawner.gameObject.SetActive(true);
                 break;
             case GameState.Paused:
                 Time.timeScale = 0f;
@@ -117,6 +119,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.GameOver:
                 Time.timeScale = 0f;
+                _waveSpawner.gameObject.SetActive(false);
                 _mainMenuUI.SetActive(false);
                 _gameOverUI.SetActive(true);
                 break;
@@ -179,16 +182,12 @@ public class GameManager : MonoBehaviour
         if (_waveSpawner != null)
         {
             _waveSpawner.gameObject.SetActive(false);
-            _waveSpawner.gameObject.SetActive(true);
         }
     }
 
     private void HandlePlayerDeath(object sender, System.EventArgs e)
     {
-        _state = GameState.GameOver;
-
-        Time.timeScale = 0f;
-
+        ChangeState(GameState.GameOver);
         if (_gameOverUI != null)
         {
             _gameOverUI.SetActive(true);
