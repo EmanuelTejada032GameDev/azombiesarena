@@ -10,18 +10,22 @@ public class Projectile : MonoBehaviour
 
     [SerializeField] private LayerMask _hitLayers;
 
-
-    [Header("VFXs Settings")]
-    [SerializeField] private GameObject _environmentImpactPrefab;
-    [SerializeField] private GameObject _zombieImpactPrefab;
+    [Header("Visual Components")]
     [SerializeField] private TrailRenderer _trailRenderer;
 
+    [Header("Game Juice / Impact Prefabs")]
+    [SerializeField] private GameObject _environmentImpactPrefab;
+    [SerializeField] private GameObject _zombieImpactPrefab;
 
-
-    private void OnEnable()
+    private int _damage = 1; 
+   
+    public void InitializeProjectile(int damageValue)
     {
+        _damage = damageValue;
+
         _currentLifeTimer = _lifeTime;
         _lastPosition = transform.position;
+
         if (_trailRenderer != null)
         {
             _trailRenderer.Clear();
@@ -36,13 +40,12 @@ public class Projectile : MonoBehaviour
         // Calculate using math operation faster than relying on collider's OnTriggerEnter for high-speed projectiles
         if (Physics.Raycast(_lastPosition, movementDirection, out RaycastHit hit, moveDistance, _hitLayers))
         {
-            transform.position = hit.point; 
+            transform.position = hit.point;
             HandleImpact(hit.collider, hit.point, hit.normal);
-            return; 
+            return;
         }
 
         transform.Translate(Vector3.forward * moveDistance);
-
         _lastPosition = transform.position;
 
         _currentLifeTimer -= Time.deltaTime;
@@ -52,14 +55,13 @@ public class Projectile : MonoBehaviour
         }
     }
 
- 
     private void HandleImpact(Collider hitCollider, Vector3 hitPoint, Vector3 hitNormal)
     {
         IDamagable damageable = hitCollider.gameObject.GetComponentInParent<IDamagable>();
 
         if (damageable != null)
         {
-            damageable.TakeDamage(1);
+            damageable.TakeDamage(_damage);
             SpawnImpactEffect(_zombieImpactPrefab, hitPoint, hitNormal);
         }
         else

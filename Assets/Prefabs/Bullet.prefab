@@ -337,11 +337,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c826924984029fa45a39b18ff1513c18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
-  _speed: 100
-  _lifeTime: 5
+  _speed: 60
+  _lifeTime: 2
   _hitLayers:
     serializedVersion: 2
     m_Bits: 392
+  _trailRenderer: {fileID: 1527444034065754528}
   _environmentImpactPrefab: {fileID: 2691674519807872610, guid: 0692d1d5109600e46992f95778e6bf61, type: 3}
   _zombieImpactPrefab: {fileID: 2691674519807872610, guid: 6783c6dc62f5b544c871d9b284468532, type: 3}
-  _trailRenderer: {fileID: 1527444034065754528}

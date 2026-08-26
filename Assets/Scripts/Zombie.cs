@@ -19,6 +19,8 @@ public class Zombie : MonoBehaviour
     [SerializeField] private float _attackRange = 1.5f;
     [SerializeField] private float _attackCooldown = 1.0f;
     [SerializeField] private int _attackDamage = 1;
+
+    [Tooltip("Cooldown to check if player still in attack range")]
     [SerializeField] private float _pollingInterval = 0.2f;
 
     private IDamagable _playerDamageable;
