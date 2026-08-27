@@ -15,7 +15,11 @@ MonoBehaviour:
   _weaponName: pistol
   _weaponModelPrefab: {fileID: 1796101793198917877, guid: 21a0a356f309d7b4da12980f128ca425, type: 3}
   _projectilePrefab: {fileID: 5161285532180211351, guid: b4c7dc994b1dc1147a87eddf3704774c, type: 3}
+  _damage: 1
   _firingMode: 0
-  _fireCooldown: 0.4
+  _fireCooldown: 0.2
   _bulletsPerBurst: 1
   _burstDelay: 0.05
+  _pelletCount: 1
+  _spreadAngle: 0
+  _recoilForce: 1

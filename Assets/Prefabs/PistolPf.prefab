@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3423921115679551923}
   - component: {fileID: 6871605501224645685}
   m_Layer: 6
-  m_Name: WeaponPlaceHolder
+  m_Name: PistolPf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   _bulletPool: {fileID: 0}
   _muzzle: {fileID: 4521085035394741927}
+  _config: {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
 --- !u!1 &5163244847360074491
 GameObject:
   m_ObjectHideFlags: 0

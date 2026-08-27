@@ -20,6 +20,6 @@ MonoBehaviour:
   _fireCooldown: 0.8
   _bulletsPerBurst: 10
   _burstDelay: 0.05
-  _pelletCount: 8
-  _spreadAngle: 10
+  _pelletCount: 9
+  _spreadAngle: 11
   _recoilForce: 4

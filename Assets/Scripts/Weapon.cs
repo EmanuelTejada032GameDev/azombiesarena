@@ -15,6 +15,14 @@ public class Weapon : MonoBehaviour
 
     public WeaponDataConfig Config => _config;
 
+    public void InitializeWeapon(WeaponDataConfig configAsset, ObjectPooler matchingPool)
+    {
+        _config = configAsset;
+        _bulletPool = matchingPool;
+        _nextFireTime = 0f;
+        _isBursting = false;
+    }
+
     public void ProcessFireRequest(bool isTriggerHeld)
     {
         if (Time.time < _nextFireTime || _isBursting || _config == null) return;
@@ -44,6 +52,8 @@ public class Weapon : MonoBehaviour
 
     private void ExecuteFireCycle()
     {
+        if (_bulletPool == null) return;
+
         for (int i = 0; i < _config.PelletCount; i++)
         {
             ExecuteSingleShot();
