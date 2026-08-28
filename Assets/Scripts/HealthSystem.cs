@@ -60,6 +60,7 @@ public class HealthSystem : MonoBehaviour, IDamagable
 
     public bool IsFullHealth => _healthAmount == _maxHealthAmount;
     public bool IsDead => _healthAmount <= 0;
+    public int GetHealth() => _healthAmount;
 
     public void SetMaxHealthAmount(int maxHealthAmount, bool setHealthAmount = false)
     {

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class GameManager : MonoBehaviour
     private GameState _state;
 
     public GameState State => _state;
+
+    public event Action<GameState> OnStateChanged;
 
 
     [Header("Scene References")]
@@ -93,6 +96,8 @@ public class GameManager : MonoBehaviour
     public void ChangeState(GameState newState)
     {
         _state = newState;
+
+        OnStateChanged?.Invoke(_state);
 
         switch (_state)
         {
