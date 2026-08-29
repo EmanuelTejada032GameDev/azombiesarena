@@ -48,14 +48,14 @@ public class UI_PlayerHealthDisplay : MonoBehaviour
         }
     }
 
-    private void GameManager_OnStateChanged(GameManager.GameState newState)
+    private void GameManager_OnStateChanged(GameState newState)
     {
         EvaluateVisibility(newState);
     }
 
-    private void EvaluateVisibility(GameManager.GameState state)
+    private void EvaluateVisibility(GameState state)
     {
-        if (state == GameManager.GameState.Playing || state == GameManager.GameState.Paused)
+        if (state == GameState.Playing || state == GameState.Paused)
         {
             Show();
             UpdateHealthUI(); 

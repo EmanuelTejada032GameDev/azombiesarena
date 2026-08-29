@@ -70,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
 
-        if(GameManager.Instance.State == GameManager.GameState.Playing)
+        if(GameManager.Instance.State == GameState.Playing)
         {
             HandleMovement();
             HandleRotation();

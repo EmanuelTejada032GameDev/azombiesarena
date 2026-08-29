@@ -12,10 +12,11 @@ public class PlayerWeaponHandler : MonoBehaviour
 
     [Header("Attachment Anchor points")]
     [SerializeField] private Transform _weaponHoldAnchor; 
-    [SerializeField] private ObjectPooler _defaultBulletPool; 
+    [SerializeField] private ObjectPooler _defaultBulletPool;
 
 
     [Header("References")]
+    [SerializeField] private WeaponDataConfig DefaultStartingWeapon;
     [SerializeField] private Weapon _activeWeaponInstance;
     private int _currentWeaponIndex = 0;
 
@@ -37,7 +38,29 @@ public class PlayerWeaponHandler : MonoBehaviour
         {
             EquipWeaponAtIndex(_currentWeaponIndex);
         }
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnNewMatch += GameManager_OnNewMatch;
+        }
     }
+
+    private void GameManager_OnNewMatch(object sender, EventArgs e)
+    {
+        SetDefaultWeapons();
+    }
+
+    private void SetDefaultWeapons()
+    {
+        _playerCarryInventorySlots.Clear();
+        _currentWeaponIndex = 0;
+        if (DefaultStartingWeapon != null)
+        {
+            _playerCarryInventorySlots.Add(DefaultStartingWeapon);
+            EquipWeaponAtIndex(_currentWeaponIndex);
+        }
+    }
+
 
     private void OnPreviousWeaponPerformed(InputAction.CallbackContext context)
     {
@@ -63,6 +86,11 @@ public class PlayerWeaponHandler : MonoBehaviour
             _inputs.Player.Shoot.canceled -= OnShootCanceled;
             _inputs.Player.NextWeapon.performed -= OnNextWeaponPerformed;
             _inputs.Player.PreviousWeapon.performed -= OnPreviousWeaponPerformed;
+        }
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnNewMatch -= GameManager_OnNewMatch;
         }
     }
 

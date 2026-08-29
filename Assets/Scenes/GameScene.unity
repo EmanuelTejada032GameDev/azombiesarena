@@ -466,6 +466,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
   _weaponHoldAnchor: {fileID: 71071903}
   _defaultBulletPool: {fileID: 1731008875}
+  DefaultStartingWeapon: {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
   _activeWeaponInstance: {fileID: 1244484164}
 --- !u!114 &133011469
 MonoBehaviour:

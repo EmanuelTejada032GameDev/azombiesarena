@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EconomyManager : MonoBehaviour
@@ -20,6 +21,27 @@ public class EconomyManager : MonoBehaviour
             return;
         }
 
+        ResetPoints();
+    }
+
+    private void Start()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnNewMatch += GameManager_OnNewMatch;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnNewMatch -= GameManager_OnNewMatch;
+        }
+    }
+
+    private void GameManager_OnNewMatch(object sender, EventArgs e)
+    {
         ResetPoints();
     }
 

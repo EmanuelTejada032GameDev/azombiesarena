@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -20,6 +21,26 @@ public class Player : MonoBehaviour
         _inputs = new PlayerInput();
     }
 
+    private void Start()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
+        }
+    }
+
+    private void GameManager_OnStateChanged(GameState state)
+    {
+        if (state == GameState.Playing)
+        {
+            _inputs.Enable();
+        }
+        else
+        {
+            _inputs.Disable();
+        }
+    }
+
     private void OnEnable()
     {
         
@@ -28,6 +49,14 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         _inputs.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnStateChanged -= GameManager_OnStateChanged;
+        }
     }
 
 

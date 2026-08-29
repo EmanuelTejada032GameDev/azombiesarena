@@ -5,15 +5,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public enum GameState { Playing, GameOver, Paused, MainMenu }
-
-
     [Header("Current Status")]
     private GameState _state;
 
     public GameState State => _state;
 
     public event Action<GameState> OnStateChanged;
+    public event EventHandler OnNewMatch;
 
 
     [Header("Scene References")]
@@ -113,7 +111,6 @@ public class GameManager : MonoBehaviour
                 _mainMenuUI.SetActive(false);
                 _gameOverUI.SetActive(false);
                 _pauseMenuUI.SetActive(false);
-                Player.Instance.GetInputInstance().Enable();
                 _waveSpawner.gameObject.SetActive(true);
                 break;
             case GameState.Paused:
@@ -168,6 +165,9 @@ public class GameManager : MonoBehaviour
 
     private void ResetMatchData()
     {
+
+        OnNewMatch?.Invoke(this, EventArgs.Empty);
+
         if (_playerTransform != null)
         {
             _playerTransform.position = _playerStartExposition;
@@ -200,3 +200,6 @@ public class GameManager : MonoBehaviour
     }
     
 }
+
+public enum GameState { Playing, GameOver, Paused, MainMenu }
+
