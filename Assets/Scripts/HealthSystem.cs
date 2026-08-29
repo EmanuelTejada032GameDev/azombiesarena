@@ -10,6 +10,10 @@ public class HealthSystem : MonoBehaviour, IDamagable
     private int _healthAmount;
     [SerializeField] private int _maxHealthAmount;
 
+    [SerializeField] private bool _useInvulnerability = false;
+    private bool _isInvulnerable = false;
+    [SerializeField] private float _invulnerabilityTimeFrame = 1.2f;
+    private float _nextAllowedDamageTime = 0f;
 
     public void Awake()
     {
@@ -29,6 +33,17 @@ public class HealthSystem : MonoBehaviour, IDamagable
 
     public void TakeDamage(int damageAmount)
     {
+
+        if (_useInvulnerability && Time.time < _nextAllowedDamageTime)
+        {
+            return; 
+        }
+
+        if (_useInvulnerability)
+        {
+            _nextAllowedDamageTime = Time.time + _invulnerabilityTimeFrame;
+        }
+
         _healthAmount -= damageAmount;
         _healthAmount = Mathf.Clamp(_healthAmount, 0, _maxHealthAmount);
         OnDamaged?.Invoke(this, EventArgs.Empty);

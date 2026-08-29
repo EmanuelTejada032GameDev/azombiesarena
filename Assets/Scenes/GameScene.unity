@@ -481,6 +481,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
   _maxHealthAmount: 5
+  _useInvulnerability: 1
+  _invulnerabilityTimeFrame: 1.2
 --- !u!114 &133011470
 MonoBehaviour:
   m_ObjectHideFlags: 0
