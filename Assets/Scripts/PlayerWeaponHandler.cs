@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerWeaponHandler : MonoBehaviour
 {
+    public static PlayerWeaponHandler Instance { get; private set; }
+
     [Header("Inventory Settings")]
     [Tooltip("Set to -1 for completely infinite weapon storage capacity.")]
     [SerializeField] private int _maxWeaponLimit = 2;
@@ -22,6 +24,20 @@ public class PlayerWeaponHandler : MonoBehaviour
 
     private PlayerInput _inputs;
     private bool _isTriggerHeld;
+
+    public Action<Weapon> OnWeaponSwapped;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -146,6 +162,7 @@ public class PlayerWeaponHandler : MonoBehaviour
         if (_activeWeaponInstance != null)
         {
             _activeWeaponInstance.InitializeWeapon(targetState, _defaultBulletPool);
+            OnWeaponSwapped?.Invoke(_activeWeaponInstance);
         }
         else
         {

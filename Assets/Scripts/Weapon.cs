@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Weapon : MonoBehaviour
 {
@@ -16,6 +18,8 @@ public class Weapon : MonoBehaviour
     public WeaponDataConfig Config => _state?.BlueprintConfig;
     public WeaponInstanceState State => _state;
     public bool IsReloading => _isReloading;
+
+    public EventHandler OnAmmoChanged;
 
     /// <summary>
     /// Injects the runtime data instance packet and ties this physical prefab shell to its unique stats.
@@ -73,6 +77,8 @@ public class Weapon : MonoBehaviour
         {
             ExecuteSingleShot();
         }
+
+        OnAmmoChanged?.Invoke(this, EventArgs.Empty);
     }
 
     private void ExecuteSingleShot()
@@ -125,6 +131,7 @@ public class Weapon : MonoBehaviour
 
         _state.CurrentReserveAmmo -= amountToTransfer;
         _state.CurrentMagazineAmmo += amountToTransfer;
+        OnAmmoChanged?.Invoke(this, EventArgs.Empty);
 
         _isReloading = false;
     }

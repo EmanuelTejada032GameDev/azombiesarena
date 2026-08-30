@@ -12,6 +12,7 @@ public class WeaponDataConfig : ScriptableObject
 {
     [Header("Weapon Identity")]
     [SerializeField] private string _weaponName;
+    [SerializeField] private Sprite _weaponIconSprite;
     [SerializeField] private GameObject _weaponModelPrefab;
     [SerializeField] private GameObject _projectilePrefab;
 
@@ -40,7 +41,10 @@ public class WeaponDataConfig : ScriptableObject
     [SerializeField] private int _maxReserveAmmo = 90;
     [SerializeField] private float _reloadDuration = 2.0f;
 
+
+
     public string WeaponName => _weaponName;
+    public Sprite WeaponIconSprite => _weaponIconSprite;
     public GameObject WeaponModelPrefab => _weaponModelPrefab;
     public GameObject ProjectilePrefab => _projectilePrefab;
     public int Damage => _damage;
@@ -54,5 +58,6 @@ public class WeaponDataConfig : ScriptableObject
     public int MaxMagazineSize => _maxMagazineSize;
     public int MaxReserveAmmo => _maxReserveAmmo;
     public float ReloadDuration => _reloadDuration;
+
 
 }
