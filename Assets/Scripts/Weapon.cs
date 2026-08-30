@@ -7,54 +7,69 @@ public class Weapon : MonoBehaviour
     [SerializeField] private ObjectPooler _bulletPool;
     [SerializeField] private Transform _muzzle;
 
-    [Header("Configuration Asset")]
-    [SerializeField] private WeaponDataConfig _config;
+    private WeaponInstanceState _state;
 
     private float _nextFireTime;
     private bool _isBursting;
+    private bool _isReloading;
 
-    public WeaponDataConfig Config => _config;
+    public WeaponDataConfig Config => _state?.BlueprintConfig;
+    public WeaponInstanceState State => _state;
+    public bool IsReloading => _isReloading;
 
-    public void InitializeWeapon(WeaponDataConfig configAsset, ObjectPooler matchingPool)
+    /// <summary>
+    /// Injects the runtime data instance packet and ties this physical prefab shell to its unique stats.
+    /// </summary>
+    public void InitializeWeapon(WeaponInstanceState instanceState, ObjectPooler matchingPool)
     {
-        _config = configAsset;
+        _state = instanceState;
         _bulletPool = matchingPool;
+
         _nextFireTime = 0f;
         _isBursting = false;
+        _isReloading = false;
     }
 
     public void ProcessFireRequest(bool isTriggerHeld)
     {
-        if (Time.time < _nextFireTime || _isBursting || _config == null) return;
+        if (Time.time < _nextFireTime || _isBursting || _isReloading || _state == null || _state.CurrentMagazineAmmo <= 0) return;
 
-        switch (_config.FiringMode)
+        switch (Config.FiringMode)
         {
             case WeaponFiringMode.SemiAutomatic:
                 ExecuteFireCycle();
-                _nextFireTime = Time.time + _config.FireCooldown;
+                _nextFireTime = Time.time + Config.FireCooldown;
                 break;
 
             case WeaponFiringMode.FullAutomatic:
                 if (isTriggerHeld)
                 {
                     ExecuteFireCycle();
-                    _nextFireTime = Time.time + _config.FireCooldown;
+                    _nextFireTime = Time.time + Config.FireCooldown;
                 }
                 break;
 
             case WeaponFiringMode.Burst:
                 StartCoroutine(ExecuteBurstRoutine());
-                _nextFireTime = Time.time + _config.FireCooldown;
+                _nextFireTime = Time.time + Config.FireCooldown;
                 break;
         }
     }
 
+    public void ProcessReloadRequest()
+    {
+        if (_isReloading || _state == null || _state.CurrentMagazineAmmo == Config.MaxMagazineSize || _state.CurrentReserveAmmo <= 0) return;
+
+        StartCoroutine(ExecuteReloadRoutine());
+    }
 
     private void ExecuteFireCycle()
     {
-        if (_bulletPool == null) return;
+        if (_bulletPool == null || _state.CurrentMagazineAmmo <= 0) return;
 
-        for (int i = 0; i < _config.PelletCount; i++)
+        _state.CurrentMagazineAmmo--;
+
+        for (int i = 0; i < Config.PelletCount; i++)
         {
             ExecuteSingleShot();
         }
@@ -68,19 +83,16 @@ public class Weapon : MonoBehaviour
         {
             bullet.transform.position = _muzzle.position;
 
-            // Calculate random deviation within the configured spread angle cone
-            float randomPitch = Random.Range(-_config.SpreadAngle * 0.5f, _config.SpreadAngle * 0.5f);
-            float randomYaw = Random.Range(-_config.SpreadAngle * 0.5f, _config.SpreadAngle * 0.5f);
+            float randomPitch = Random.Range(-Config.SpreadAngle * 0.5f, Config.SpreadAngle * 0.5f);
+            float randomYaw = Random.Range(-Config.SpreadAngle * 0.5f, Config.SpreadAngle * 0.5f);
 
-            // Combine muzzle orientation with random offset
             Quaternion spreadRotation = Quaternion.Euler(randomPitch, randomYaw, 0f);
             bullet.transform.rotation = _muzzle.rotation * spreadRotation;
 
-            // Initialize damage and wake up the bullet
             Projectile projectileScript = bullet.GetComponent<Projectile>();
             if (projectileScript != null)
             {
-                projectileScript.InitializeProjectile(_config.Damage);
+                projectileScript.InitializeProjectile(Config.Damage);
             }
 
             bullet.SetActive(true);
@@ -91,12 +103,29 @@ public class Weapon : MonoBehaviour
     {
         _isBursting = true;
 
-        for (int i = 0; i < _config.BulletsPerBurst; i++)
+        for (int i = 0; i < Config.BulletsPerBurst; i++)
         {
-            ExecuteFireCycle(); // Supports firing multi-pellet rounds inside bursts!
-            yield return new WaitForSeconds(_config.BurstDelay);
+            if (_state.CurrentMagazineAmmo <= 0) break;
+
+            ExecuteFireCycle();
+            yield return new WaitForSeconds(Config.BurstDelay);
         }
 
         _isBursting = false;
+    }
+
+    private IEnumerator ExecuteReloadRoutine()
+    {
+        _isReloading = true;
+
+        yield return new WaitForSeconds(Config.ReloadDuration);
+
+        int amountNeeded = Config.MaxMagazineSize - _state.CurrentMagazineAmmo;
+        int amountToTransfer = Mathf.Min(amountNeeded, _state.CurrentReserveAmmo);
+
+        _state.CurrentReserveAmmo -= amountToTransfer;
+        _state.CurrentMagazineAmmo += amountToTransfer;
+
+        _isReloading = false;
     }
 }

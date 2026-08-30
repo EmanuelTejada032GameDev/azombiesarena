@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
     public void StartGameFromMenu()
     {
         ChangeState(GameState.Playing);
-
+        OnNewMatch?.Invoke(this, EventArgs.Empty);
         if (_waveSpawner != null)
         {
             _waveSpawner.gameObject.SetActive(true);

@@ -71,4 +71,17 @@ public class EconomyManager : MonoBehaviour
         pointsVariable.Value -= amount;
         return true;
     }
+
+
+    // ==================== DEBUG / UTILITY ====================
+    #region DebugUtility
+    [ContextMenu("Set points to 0")]
+    private void ResetScore() => ResetPoints();
+
+    [ContextMenu("Add 1000")]
+    private void Add1000() => AddPoints(1000);
+
+    [ContextMenu("Add 5000")]
+    private void Add5000() => AddPoints(5000);
+    #endregion
 }

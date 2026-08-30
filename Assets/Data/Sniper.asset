@@ -23,3 +23,6 @@ MonoBehaviour:
   _pelletCount: 1
   _spreadAngle: 0
   _recoilForce: 1
+  _maxMagazineSize: 1
+  _maxReserveAmmo: 22
+  _reloadDuration: 2

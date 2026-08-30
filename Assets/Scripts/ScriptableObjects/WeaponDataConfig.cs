@@ -36,6 +36,10 @@ public class WeaponDataConfig : ScriptableObject
     [Tooltip("Force metric to be read by perspective cameras or mesh displacement solvers.")]
     [SerializeField] private float _recoilForce = 1.0f;
 
+    [SerializeField] private int _maxMagazineSize = 30;
+    [SerializeField] private int _maxReserveAmmo = 90;
+    [SerializeField] private float _reloadDuration = 2.0f;
+
     public string WeaponName => _weaponName;
     public GameObject WeaponModelPrefab => _weaponModelPrefab;
     public GameObject ProjectilePrefab => _projectilePrefab;
@@ -47,5 +51,8 @@ public class WeaponDataConfig : ScriptableObject
     public int PelletCount => _pelletCount;
     public float SpreadAngle => _spreadAngle;
     public float RecoilForce => _recoilForce;
+    public int MaxMagazineSize => _maxMagazineSize;
+    public int MaxReserveAmmo => _maxReserveAmmo;
+    public float ReloadDuration => _reloadDuration;
 
 }

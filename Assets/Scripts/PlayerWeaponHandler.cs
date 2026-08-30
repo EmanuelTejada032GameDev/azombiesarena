@@ -8,12 +8,12 @@ public class PlayerWeaponHandler : MonoBehaviour
     [Header("Inventory Settings")]
     [Tooltip("Set to -1 for completely infinite weapon storage capacity.")]
     [SerializeField] private int _maxWeaponLimit = 2;
-    [SerializeField] private List<WeaponDataConfig> _playerCarryInventorySlots = new List<WeaponDataConfig>();
+
+    [SerializeField] private List<WeaponInstanceState> _playerCarryInventorySlots = new List<WeaponInstanceState>();
 
     [Header("Attachment Anchor points")]
-    [SerializeField] private Transform _weaponHoldAnchor; 
+    [SerializeField] private Transform _weaponHoldAnchor;
     [SerializeField] private ObjectPooler _defaultBulletPool;
-
 
     [Header("References")]
     [SerializeField] private WeaponDataConfig DefaultStartingWeapon;
@@ -33,6 +33,7 @@ public class PlayerWeaponHandler : MonoBehaviour
         _inputs.Player.NextWeapon.performed += OnNextWeaponPerformed;
         _inputs.Player.PreviousWeapon.performed += OnPreviousWeaponPerformed;
 
+        _inputs.Player.Reload.performed += OnReloadPerformed;
 
         if (_playerCarryInventorySlots.Count > 0)
         {
@@ -42,6 +43,14 @@ public class PlayerWeaponHandler : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnNewMatch += GameManager_OnNewMatch;
+        }
+    }
+
+    private void OnReloadPerformed(InputAction.CallbackContext context)
+    {
+        if (_activeWeaponInstance != null)
+        {
+            _activeWeaponInstance.ProcessReloadRequest();
         }
     }
 
@@ -56,11 +65,11 @@ public class PlayerWeaponHandler : MonoBehaviour
         _currentWeaponIndex = 0;
         if (DefaultStartingWeapon != null)
         {
-            _playerCarryInventorySlots.Add(DefaultStartingWeapon);
+            WeaponInstanceState startingGunState = new WeaponInstanceState(DefaultStartingWeapon);
+            _playerCarryInventorySlots.Add(startingGunState);
             EquipWeaponAtIndex(_currentWeaponIndex);
         }
     }
-
 
     private void OnPreviousWeaponPerformed(InputAction.CallbackContext context)
     {
@@ -86,6 +95,7 @@ public class PlayerWeaponHandler : MonoBehaviour
             _inputs.Player.Shoot.canceled -= OnShootCanceled;
             _inputs.Player.NextWeapon.performed -= OnNextWeaponPerformed;
             _inputs.Player.PreviousWeapon.performed -= OnPreviousWeaponPerformed;
+            _inputs.Player.Reload.performed -= OnReloadPerformed;
         }
 
         if (GameManager.Instance != null)
@@ -96,7 +106,7 @@ public class PlayerWeaponHandler : MonoBehaviour
 
     private void Update()
     {
-        if (_activeWeaponInstance != null && _isTriggerHeld)
+        if (_activeWeaponInstance != null && _isTriggerHeld && _activeWeaponInstance.Config.FiringMode == WeaponFiringMode.FullAutomatic)
         {
             _activeWeaponInstance.ProcessFireRequest(_isTriggerHeld);
         }
@@ -105,7 +115,6 @@ public class PlayerWeaponHandler : MonoBehaviour
     private void OnShootStarted(InputAction.CallbackContext context)
     {
         _isTriggerHeld = true;
-
         if (_activeWeaponInstance != null && _activeWeaponInstance.Config.FiringMode != WeaponFiringMode.FullAutomatic)
         {
             _activeWeaponInstance.ProcessFireRequest(_isTriggerHeld);
@@ -117,7 +126,6 @@ public class PlayerWeaponHandler : MonoBehaviour
         _isTriggerHeld = false;
     }
 
-
     private void EquipWeaponAtIndex(int index)
     {
         if (_activeWeaponInstance != null)
@@ -127,15 +135,17 @@ public class PlayerWeaponHandler : MonoBehaviour
 
         if (index < 0 || index >= _playerCarryInventorySlots.Count || _playerCarryInventorySlots[index] == null) return;
 
-        WeaponDataConfig activeConfig = _playerCarryInventorySlots[index];
-        if (activeConfig.WeaponModelPrefab == null) return;
+        WeaponInstanceState targetState = _playerCarryInventorySlots[index];
+        WeaponDataConfig activeConfig = targetState.BlueprintConfig;
+
+        if (activeConfig == null || activeConfig.WeaponModelPrefab == null) return;
 
         GameObject spawnedWeaponObj = Instantiate(activeConfig.WeaponModelPrefab, _weaponHoldAnchor.position, _weaponHoldAnchor.rotation, _weaponHoldAnchor);
         _activeWeaponInstance = spawnedWeaponObj.GetComponent<Weapon>();
 
         if (_activeWeaponInstance != null)
         {
-            _activeWeaponInstance.InitializeWeapon(activeConfig, _defaultBulletPool);
+            _activeWeaponInstance.InitializeWeapon(targetState, _defaultBulletPool);
         }
         else
         {
@@ -143,22 +153,27 @@ public class PlayerWeaponHandler : MonoBehaviour
         }
     }
 
- 
-    public void AddWeaponToInventory(WeaponDataConfig newGun)
+    public void AddWeaponToInventory(WeaponDataConfig newGunBlueprint)
     {
-        if (_playerCarryInventorySlots.Contains(newGun)) return;
+        if (newGunBlueprint == null) return;
+
+        foreach (var slot in _playerCarryInventorySlots)
+        {
+            if (slot.BlueprintConfig == newGunBlueprint) return;
+        }
+
+        WeaponInstanceState freshWeaponInstance = new WeaponInstanceState(newGunBlueprint);
 
         if (_maxWeaponLimit == -1 || _playerCarryInventorySlots.Count < _maxWeaponLimit)
         {
-            _playerCarryInventorySlots.Add(newGun);
+            _playerCarryInventorySlots.Add(freshWeaponInstance);
             _currentWeaponIndex = _playerCarryInventorySlots.Count - 1;
             EquipWeaponAtIndex(_currentWeaponIndex);
         }
         else
         {
-            _playerCarryInventorySlots[_currentWeaponIndex] = newGun;
+            _playerCarryInventorySlots[_currentWeaponIndex] = freshWeaponInstance;
             EquipWeaponAtIndex(_currentWeaponIndex);
         }
     }
-
 }
