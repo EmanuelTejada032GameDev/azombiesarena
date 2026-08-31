@@ -4,7 +4,6 @@ using UnityEngine;
 public class WallBuy : MonoBehaviour, IInteractable
 {
     [SerializeField] private WeaponDataConfig _weaponToGive;
-    [SerializeField] private int _purchaseCost = 500;
 
     public bool CanDoInteractAction(IInteractable.InteractAction interactAction)
     {
@@ -22,13 +21,24 @@ public class WallBuy : MonoBehaviour, IInteractable
         PlayerWeaponHandler weaponHandler = interactorTransform.GetComponent<PlayerWeaponHandler>();
         if (weaponHandler == null) return;
 
-        if (EconomyManager.Instance != null && EconomyManager.Instance.TrySpendPoints(_purchaseCost))
+        bool holdsWeapon = weaponHandler.HasWeaponInInventory(_weaponToGive);
+
+        int activeCost = holdsWeapon ? _weaponToGive.NormalAmmoPrice : _weaponToGive.BasePurchaseCost;
+
+        if (EconomyManager.Instance != null && EconomyManager.Instance.TrySpendPoints(activeCost))
         {
-            weaponHandler.AddWeaponToInventory(_weaponToGive);
+            if (holdsWeapon)
+            {
+                weaponHandler.ReplenishWeaponAmmo(_weaponToGive);
+            }
+            else
+            {
+                weaponHandler.AddWeaponToInventory(_weaponToGive);
+            }
         }
         else
         {
-            // cant get item feedback logic
+            
         }
     }
 
@@ -38,11 +48,19 @@ public class WallBuy : MonoBehaviour, IInteractable
 
         if (_weaponToGive != null)
         {
-            textMap.Add(IInteractable.InteractAction.Primary, $"Press [F] to buy {_weaponToGive.WeaponName} [Cost: {_purchaseCost}]");
+            if (PlayerWeaponHandler.Instance != null && PlayerWeaponHandler.Instance.HasWeaponInInventory(_weaponToGive))
+            {
+                textMap.Add(IInteractable.InteractAction.Primary, $"Replenish ammo: [Cost: ${_weaponToGive.NormalAmmoPrice}]");
+            }
+            else
+            {
+                textMap.Add(IInteractable.InteractAction.Primary, $"Press [F] to buy {_weaponToGive.WeaponName} [Cost: ${_weaponToGive.BasePurchaseCost}]");
+            }
         }
 
         return textMap;
     }
+
 
     public Transform GetTransform()
     {

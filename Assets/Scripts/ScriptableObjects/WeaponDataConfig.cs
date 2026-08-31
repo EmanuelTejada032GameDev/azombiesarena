@@ -41,6 +41,11 @@ public class WeaponDataConfig : ScriptableObject
     [SerializeField] private int _maxReserveAmmo = 90;
     [SerializeField] private float _reloadDuration = 2.0f;
 
+    [Header("Economy Settings")]
+    [SerializeField] private int _basePurchaseCost = 1200;
+    [SerializeField] private int _normalAmmoPrice = 500;
+    [SerializeField] private int _upgradedAmmoPrice = 4500;
+
 
 
     public string WeaponName => _weaponName;
@@ -59,5 +64,8 @@ public class WeaponDataConfig : ScriptableObject
     public int MaxReserveAmmo => _maxReserveAmmo;
     public float ReloadDuration => _reloadDuration;
 
+    public int BasePurchaseCost => _basePurchaseCost;
+    public int NormalAmmoPrice => _normalAmmoPrice;
+    public int UpgradedAmmoPrice => _upgradedAmmoPrice;
 
 }

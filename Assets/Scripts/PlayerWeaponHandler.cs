@@ -193,4 +193,41 @@ public class PlayerWeaponHandler : MonoBehaviour
             EquipWeaponAtIndex(_currentWeaponIndex);
         }
     }
+
+    public bool HasWeaponInInventory(WeaponDataConfig config)
+    {
+        if (config == null) return false;
+
+        foreach (var slot in _playerCarryInventorySlots)
+        {
+            if (slot.BlueprintConfig == config)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public void ReplenishWeaponAmmo(WeaponDataConfig config)
+    {
+        if (config == null) return;
+
+        foreach (var slot in _playerCarryInventorySlots)
+        {
+            if (slot.BlueprintConfig == config)
+            {
+               
+                slot.CurrentReserveAmmo = config.MaxReserveAmmo;
+
+                if (_activeWeaponInstance != null && _activeWeaponInstance.Config == config)
+                {
+                    _activeWeaponInstance.InitializeWeapon(slot, _defaultBulletPool);
+
+                    OnWeaponSwapped?.Invoke(_activeWeaponInstance);
+                }
+                return;
+            }
+        }
+    }
 }

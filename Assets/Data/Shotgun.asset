@@ -27,3 +27,6 @@ MonoBehaviour:
   _maxMagazineSize: 4
   _maxReserveAmmo: 28
   _reloadDuration: 2
+  _basePurchaseCost: 500
+  _normalAmmoPrice: 300
+  _upgradedAmmoPrice: 4500

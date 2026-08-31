@@ -72,6 +72,16 @@ public class EconomyManager : MonoBehaviour
         return true;
     }
 
+    public bool CanAfford(int amount)
+    {
+        if (pointsVariable == null)
+        {
+            return false;
+        }
+
+        return pointsVariable.Value < amount;
+    }
+
 
     // ==================== DEBUG / UTILITY ====================
     #region DebugUtility
