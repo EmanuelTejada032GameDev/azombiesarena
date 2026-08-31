@@ -27,7 +27,9 @@ public class GameManager : MonoBehaviour
 
     private Vector3 _playerStartExposition;
 
-
+    [Header("Cursor Settings")]
+    [SerializeField] private Texture2D _uiMenuCursorTexture;
+    [SerializeField] private Vector2 _uiCursorHotspot = Vector2.zero;
 
     private void Awake()
     {
@@ -104,6 +106,10 @@ public class GameManager : MonoBehaviour
                 _mainMenuUI.SetActive(true);
                 _gameOverUI.SetActive(false);
                 _pauseMenuUI.SetActive(false);
+
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.SetCursor(_uiMenuCursorTexture, _uiCursorHotspot, CursorMode.Auto);
                 break;
 
             case GameState.Playing:
@@ -112,18 +118,32 @@ public class GameManager : MonoBehaviour
                 _gameOverUI.SetActive(false);
                 _pauseMenuUI.SetActive(false);
                 _waveSpawner.gameObject.SetActive(true);
+
+                Cursor.visible = false; 
+                Cursor.lockState = CursorLockMode.Confined; 
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto); 
                 break;
+
             case GameState.Paused:
                 Time.timeScale = 0f;
                 _mainMenuUI.SetActive(false);
                 _gameOverUI.SetActive(false);
                 _pauseMenuUI.SetActive(true);
+
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.SetCursor(_uiMenuCursorTexture, _uiCursorHotspot, CursorMode.Auto);
                 break;
+
             case GameState.GameOver:
                 Time.timeScale = 0f;
                 _waveSpawner.gameObject.SetActive(false);
                 _mainMenuUI.SetActive(false);
                 _gameOverUI.SetActive(true);
+
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.SetCursor(_uiMenuCursorTexture, _uiCursorHotspot, CursorMode.Auto);
                 break;
         }
     }
