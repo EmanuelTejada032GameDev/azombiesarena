@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,11 +10,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform _playerVisual;
     [SerializeField] private Transform _weaponHoldAnchor;
 
+
     [Header("Movement Settings")]
+    [SerializeField] private bool _canSprint = true;
     [SerializeField] private float _currentPlayerSpeed = 5f;
     [SerializeField] private float _walkPlayerSpeed = 5f;
     [SerializeField] private float _sprintPlayerSpeed = 8f;
     [SerializeField] private float _crouchPlayerSpeed = 3f;
+
+    [SerializeField] private bool _canJump = false;
     [SerializeField] private float defaultGravity = 9.81f;
     private float _verticalVelocity;
 
@@ -22,17 +27,39 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _rotationSpeed = 15f;
 
     [Header("Crouch Settings")]
+    [SerializeField] private bool _canCrouch = false;
     [SerializeField] private float _crouchTransitionSpeed = 10f; 
     private float _standingHeight = 2f;
     private float _crouchingHeight = 1f;
     private Vector3 _standingCenter = new Vector3(0f, 0f, 0f);
     private Vector3 _crouchingCenter = new Vector3(0f, -0.5f, 0f); // Shifts down so feet don't float
 
+    [Header("Stamina Settings")]
+    [SerializeField] private bool _useStamina = true;
+    [SerializeField] private float _maxStamina = 100f;
+    [SerializeField] private float _sprintStaminaDrain = 10f;
+    [SerializeField] private float _staminaRegenRate = 15f;
+    [SerializeField] private float _crouchStaminaRegenRate = 25f;
+    [SerializeField] private float _staminaRegenDelay = 0.75f;
+
+    private float _currentStamina;
+    private float _staminaRegenTimer;
+
 
     [Header("Ceiling Detection")]
     [SerializeField] private LayerMask _ceilingLayer;
     private float _ceilingCheckRadius = 0.4f;
     private Vector3 _lastCeilingCheckPos;
+
+    [SerializeField] private PlayerMovementState _movementState;
+
+    public enum PlayerMovementState
+    {
+        Idle,
+        Walking,
+        Sprinting,
+        Crouching
+    }
 
 
     private void Awake()
@@ -42,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _mainCamera = Camera.main.transform;
+        _currentStamina = _maxStamina;
 
         if (_characterController != null)
         {
@@ -73,12 +101,12 @@ public class PlayerMovement : MonoBehaviour
 
         if(GameManager.Instance.State == GameState.Playing)
         {
-            HandleMovement();
-            HandleRotation();
+            Vector3 moveDirection = HandleMovement();
+            HandleRotation(moveDirection);
         }
     }
 
-    private void HandleMovement()
+    private Vector3 HandleMovement()
     {
         Vector2 inputVector = _inputs.Player.Move.ReadValue<Vector2>();
         Vector3 cameraForward = _mainCamera.forward;
@@ -93,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
         if (_characterController.isGrounded)
         {
             _verticalVelocity = -2f;
-            if (_inputs.Player.Jump.WasPressedThisFrame())
+            if (_inputs.Player.Jump.WasPressedThisFrame() && _canJump)
             {
                 _verticalVelocity = 5.5f;
             }
@@ -127,24 +155,33 @@ public class PlayerMovement : MonoBehaviour
         Vector3 targetCenter = _standingCenter;
 
         Vector3 targetVisualScale = new Vector3(1f, 1f, 1f);
-        Vector3 targetVisualPosition = Vector3.zero; 
+        Vector3 targetVisualPosition = Vector3.zero;
 
-        if (shouldBeCrouched)
+        if (shouldBeCrouched && _canCrouch)
         {
+            _movementState = PlayerMovementState.Crouching;
             _currentPlayerSpeed = _crouchPlayerSpeed;
+
             targetHeight = _crouchingHeight;
             targetCenter = _crouchingCenter;
 
             targetVisualScale = new Vector3(1f, 0.5f, 1f);
             targetVisualPosition = new Vector3(0f, -0.5f, 0f);
         }
-        else if (isSprintPressed && inputVector.y > 0f) //Temporarily only sprint forward
+        else if (isSprintPressed && _canSprint &&  inputVector.sqrMagnitude > 0.01f && (!_useStamina || _currentStamina > 0f))
         {
+            _movementState = PlayerMovementState.Sprinting;
             _currentPlayerSpeed = _sprintPlayerSpeed;
+        }
+        else if (inputVector.sqrMagnitude > 0.01f)
+        {
+            _movementState = PlayerMovementState.Walking;
+            _currentPlayerSpeed = _walkPlayerSpeed;
         }
         else
         {
-            _currentPlayerSpeed = _walkPlayerSpeed;
+            _movementState = PlayerMovementState.Idle;
+            _currentPlayerSpeed = 0f;
         }
 
         _characterController.height = Mathf.Lerp(_characterController.height, targetHeight, Time.deltaTime * _crouchTransitionSpeed);
@@ -159,11 +196,35 @@ public class PlayerMovement : MonoBehaviour
         Vector3 finalMovementVector = moveDirection * _currentPlayerSpeed;
         finalMovementVector.y = _verticalVelocity;
 
+        if (_useStamina && _movementState == PlayerMovementState.Sprinting)
+        {
+            ConsumeStamina(_sprintStaminaDrain * Time.deltaTime);
+        }
+
+        HandleStaminaRegeneration();
+
         _characterController.Move(finalMovementVector * Time.deltaTime);
+
+        return moveDirection;
     }
 
-    private void HandleRotation()
+    private void HandleRotation(Vector3 moveDirection)
     {
+        // Rotate towards player input direction when sprinting, otherwise rotate towards mouse position
+        if (_movementState == PlayerMovementState.Sprinting &&
+        moveDirection.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                Time.deltaTime * _rotationSpeed
+            );
+
+            return;
+        }
+
         // STEP 1: Shoot a physical ray from the mouse position through the camera lens
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -198,7 +259,32 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void ConsumeStamina(float amount)
+    {
+        _currentStamina -= amount;
+        _currentStamina = Mathf.Clamp(_currentStamina, 0f, _maxStamina);
 
+        _staminaRegenTimer = _staminaRegenDelay;
+    }
+
+    private void HandleStaminaRegeneration()
+    {
+        if (!_useStamina)
+            return;
+
+        if (_staminaRegenTimer > 0f)
+        {
+            _staminaRegenTimer -= Time.deltaTime;
+            return;
+        }
+
+        float regenRate = _movementState == PlayerMovementState.Crouching
+            ? _crouchStaminaRegenRate
+            : _staminaRegenRate;
+
+        _currentStamina += regenRate * Time.deltaTime;
+        _currentStamina = Mathf.Clamp(_currentStamina, 0f, _maxStamina);
+    }
 
     private void OnDrawGizmos()
     {
