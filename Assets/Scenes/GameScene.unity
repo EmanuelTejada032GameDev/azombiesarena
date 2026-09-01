@@ -436,6 +436,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   _characterController: {fileID: 133011466}
   _playerVisual: {fileID: 863516286}
+  _weaponHoldAnchor: {fileID: 0}
   _currentPlayerSpeed: 5
   _walkPlayerSpeed: 5
   _sprintPlayerSpeed: 9
@@ -1448,7 +1449,7 @@ RectTransform:
   m_GameObject: {fileID: 425761098}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2124374113}
@@ -1508,7 +1509,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d891f21d763eef4fa5f867d466ee899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InGameCursor
-  _crosshairRectTransform: {fileID: 425761099}
 --- !u!1 &432822726
 GameObject:
   m_ObjectHideFlags: 0
@@ -2420,13 +2420,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578268609}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.52573115, y: 0.000000044917318, z: -0.000000027760429, w: 0.85065085}
+  m_LocalRotation: {x: 0.5257311, y: 0.000000028343694, z: -0.000000017517365, w: 0.85065085}
   m_LocalPosition: {x: -4.96, y: 14, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 60, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 63.7, y: 0, z: 0}
 --- !u!1 &594926285
 GameObject:
   m_ObjectHideFlags: 0

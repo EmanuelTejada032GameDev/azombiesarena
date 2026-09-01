@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     private Transform _mainCamera;
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private Transform _playerVisual;
+    [SerializeField] private Transform _weaponHoldAnchor;
 
     [Header("Movement Settings")]
     [SerializeField] private float _currentPlayerSpeed = 5f;
@@ -166,18 +167,26 @@ public class PlayerMovement : MonoBehaviour
         // STEP 1: Shoot a physical ray from the mouse position through the camera lens
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        // STEP 2: Ask Unity if that ray hit our specific floor layer
-        // 'out RaycastHit hit' is just a container where Unity saves the information of the collision
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _floorLayer))
-        {
-            // STEP 3: Find the direction from the player's current position to the floor hit point
-            // (Target position minus Current position)
-            Vector3 targetDirection = hit.point - transform.position;
+        // STEP 2: Determine our target aiming height dynamically based on the active weapon anchor point
+        // If no anchor point is found, default to a standard chest height of 1.2 units.
+        float weaponAimHeight = _weaponHoldAnchor != null ? _weaponHoldAnchor.position.y : 1.2f;
 
-            // STEP 4: The Sanitization! Force the Y axis to zero so the capsule never tilts down
+        // STEP 3: Create an invisible mathematical plane facing upwards, located at our weapon's exact height
+        Plane aimingPlane = new Plane(Vector3.up, new Vector3(0f, weaponAimHeight, 0f));
+
+        // STEP 4: Calculate exactly where the screen ray crosses this invisible height plane
+        if (aimingPlane.Raycast(ray, out float enterDistance))
+        {
+            // Get the precise 3D point on the weapon-height plane where the ray hit
+            Vector3 worldHitPoint = ray.GetPoint(enterDistance);
+
+            // STEP 5: Find the direction from the player's current position to our height-aligned point
+            Vector3 targetDirection = worldHitPoint - transform.position;
+
+            // STEP 6: The Sanitization! Force the Y axis to zero so the capsule never tilts up or down
             targetDirection.y = 0f;
 
-            // STEP 5: Check if the direction is valid (to avoid errors if the mouse is exactly on the player)
+            // STEP 7: Check if the direction is valid to avoid errors if aiming straight down at yourself
             if (targetDirection.sqrMagnitude > 0.001f)
             {
                 // Turn our flat direction vector into a target rotation state
@@ -190,7 +199,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-   
 
     private void OnDrawGizmos()
     {
