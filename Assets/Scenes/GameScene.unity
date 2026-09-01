@@ -369,11 +369,11 @@ GameObject:
   - component: {fileID: 133011465}
   - component: {fileID: 133011466}
   - component: {fileID: 133011472}
+  - component: {fileID: 133011470}
   - component: {fileID: 133011467}
+  - component: {fileID: 133011471}
   - component: {fileID: 133011468}
   - component: {fileID: 133011469}
-  - component: {fileID: 133011470}
-  - component: {fileID: 133011471}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -437,19 +437,35 @@ MonoBehaviour:
   _characterController: {fileID: 133011466}
   _playerVisual: {fileID: 863516286}
   _weaponHoldAnchor: {fileID: 0}
+  _canSprint: 1
   _currentPlayerSpeed: 5
   _walkPlayerSpeed: 5
   _sprintPlayerSpeed: 9
   _crouchPlayerSpeed: 3
+  _canJump: 0
   defaultGravity: 20
+  _jumpStaminaCost: 10
   _floorLayer:
     serializedVersion: 2
     m_Bits: 8
   _rotationSpeed: 15
+  _canCrouch: 0
   _crouchTransitionSpeed: 10
+  _canSlide: 1
+  _slideSpeed: 10
+  _slideDuration: 0.7
+  _slideCooldown: 1
+  _slideStaminaCost: 20
+  _useStamina: 1
+  _maxStamina: 100
+  _sprintStaminaDrain: 10
+  _staminaRegenRate: 15
+  _crouchStaminaRegenRate: 25
+  _staminaRegenDelay: 2
   _ceilingLayer:
     serializedVersion: 2
     m_Bits: 1
+  _movementState: 0
 --- !u!114 &133011468
 MonoBehaviour:
   m_ObjectHideFlags: 0
