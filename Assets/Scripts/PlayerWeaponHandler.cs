@@ -130,7 +130,9 @@ public class PlayerWeaponHandler : MonoBehaviour
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
-        _isTriggerHeld = true;
+        if (PlayerMovement.Instance.GetManeuverState() != PlayerMovement.ManeuverState.None || PlayerMovement.Instance.GetLocomotionState() == PlayerMovement.LocomotionState.Sprinting) return;
+
+            _isTriggerHeld = true;
         if (_activeWeaponInstance != null && _activeWeaponInstance.Config.FiringMode != WeaponFiringMode.FullAutomatic)
         {
             _activeWeaponInstance.ProcessFireRequest(_isTriggerHeld);

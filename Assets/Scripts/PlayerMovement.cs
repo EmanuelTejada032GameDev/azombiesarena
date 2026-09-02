@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IHasProgress
 {
+    public static PlayerMovement Instance { get; private set; }
+
     private PlayerInput _inputs;
     private Transform _mainCamera;
 
@@ -24,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Locomotion State")]
     [SerializeField] private LocomotionState _locomotionState;
+    public LocomotionState GetLocomotionState() => _locomotionState;
+
 
     public enum LocomotionState
     {
@@ -48,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Maneuver")]
     [SerializeField] private ManeuverState _maneuverState;
+    public ManeuverState GetManeuverState() => _maneuverState;
 
     public enum ManeuverState
     {
@@ -82,6 +88,20 @@ public class PlayerMovement : MonoBehaviour
 
     private float _ceilingCheckRadius = 0.4f;
     private Vector3 _lastCeilingCheckPos;
+
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -609,6 +629,11 @@ public class PlayerMovement : MonoBehaviour
                 _maxStamina
             );
 
+        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+        {
+            progressNormalized = _currentStamina / _maxStamina
+        });
+
         _staminaRegenTimer =
             _staminaRegenDelay;
     }
@@ -642,6 +667,12 @@ public class PlayerMovement : MonoBehaviour
                 0f,
                 _maxStamina
             );
+
+
+        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+        {
+            progressNormalized = _currentStamina / _maxStamina
+        });
     }
 
     private void OnDrawGizmos()
