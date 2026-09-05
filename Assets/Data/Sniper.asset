@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Sniper
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataConfig
   _weaponName: sniper
+  _weaponIconSprite: {fileID: 0}
   _weaponModelPrefab: {fileID: 1796101793198917877, guid: 21a0a356f309d7b4da12980f128ca425, type: 3}
   _projectilePrefab: {fileID: 5161285532180211351, guid: b4c7dc994b1dc1147a87eddf3704774c, type: 3}
-  _damage: 1
+  _damage: 6
+  _maxTargetPierceCount: 3
   _firingMode: 0
   _fireCooldown: 1.5
   _bulletsPerBurst: 1
@@ -26,3 +28,6 @@ MonoBehaviour:
   _maxMagazineSize: 1
   _maxReserveAmmo: 22
   _reloadDuration: 2
+  _basePurchaseCost: 4000
+  _normalAmmoPrice: 500
+  _upgradedAmmoPrice: 4500

@@ -18,6 +18,8 @@ public class WeaponDataConfig : ScriptableObject
 
     [Header("Combat Stat Attributes")]
     [SerializeField] private int _damage = 1;
+    [SerializeField] private int _maxTargetPierceCount = 0;
+
 
     [Header("Firing Mechanics")]
     [SerializeField] private WeaponFiringMode _firingMode = WeaponFiringMode.SemiAutomatic;
@@ -41,6 +43,7 @@ public class WeaponDataConfig : ScriptableObject
     [SerializeField] private int _maxReserveAmmo = 90;
     [SerializeField] private float _reloadDuration = 2.0f;
 
+
     [Header("Economy Settings")]
     [SerializeField] private int _basePurchaseCost = 1200;
     [SerializeField] private int _normalAmmoPrice = 500;
@@ -53,6 +56,7 @@ public class WeaponDataConfig : ScriptableObject
     public GameObject WeaponModelPrefab => _weaponModelPrefab;
     public GameObject ProjectilePrefab => _projectilePrefab;
     public int Damage => _damage;
+    public int MaxTargetPierceCount => _maxTargetPierceCount;
     public WeaponFiringMode FiringMode => _firingMode;
     public float FireCooldown => _fireCooldown;
     public int BulletsPerBurst => _bulletsPerBurst;

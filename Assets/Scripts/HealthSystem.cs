@@ -12,8 +12,11 @@ public class HealthSystem : MonoBehaviour, IDamagable
 
     [SerializeField] private bool _useInvulnerability = false;
     private bool _isInvulnerable = false;
+
     [SerializeField] private float _invulnerabilityTimeFrame = 1.2f;
     private float _nextAllowedDamageTime = 0f;
+
+    [SerializeField] private bool _destroyOnDeath = false;
 
     public void Awake()
     {
@@ -71,6 +74,9 @@ public class HealthSystem : MonoBehaviour, IDamagable
     {
         if (!IsDead) TakeDamage(_healthAmount);
         OnDied?.Invoke(this, EventArgs.Empty);
+
+        if(_destroyOnDeath)
+            Destroy(gameObject);
     }
 
     public bool IsFullHealth => _healthAmount == _maxHealthAmount;

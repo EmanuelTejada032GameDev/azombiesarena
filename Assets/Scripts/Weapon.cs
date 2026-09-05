@@ -98,7 +98,7 @@ public class Weapon : MonoBehaviour
             Projectile projectileScript = bullet.GetComponent<Projectile>();
             if (projectileScript != null)
             {
-                projectileScript.InitializeProjectile(Config.Damage);
+                projectileScript.InitializeProjectile(Config.Damage, Config.MaxTargetPierceCount);
             }
 
             bullet.SetActive(true);

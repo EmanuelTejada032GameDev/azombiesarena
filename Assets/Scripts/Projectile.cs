@@ -5,10 +5,15 @@ public class Projectile : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float _speed = 30f;
     [SerializeField] private float _lifeTime = 3f;
+    private int _maxTargetPierceCount = 1;
+
     private float _currentLifeTimer;
     private Vector3 _lastPosition;
+    private int _currentTargetPierceCount = 0;
 
     [SerializeField] private LayerMask _hitLayers;
+
+    [SerializeField] private LayerMask _environmentLayer;
 
     [Header("Visual Components")]
     [SerializeField] private TrailRenderer _trailRenderer;
@@ -17,14 +22,21 @@ public class Projectile : MonoBehaviour
     [SerializeField] private GameObject _environmentImpactPrefab;
     [SerializeField] private GameObject _zombieImpactPrefab;
 
-    private int _damage = 1; 
-   
-    public void InitializeProjectile(int damageValue)
+    private int _damage = 1;
+
+    private readonly RaycastHit[] _hitBuffer = new RaycastHit[5];
+
+    private Collider _lastDamagedCollider;
+
+    public void InitializeProjectile(int damageValue, int maxTargetPierceCount)
     {
         _damage = damageValue;
-
+        _maxTargetPierceCount = maxTargetPierceCount;
         _currentLifeTimer = _lifeTime;
         _lastPosition = transform.position;
+
+        _currentTargetPierceCount = 0;
+        _lastDamagedCollider = null;
 
         if (_trailRenderer != null)
         {
@@ -37,12 +49,47 @@ public class Projectile : MonoBehaviour
         float moveDistance = _speed * Time.deltaTime;
         Vector3 movementDirection = transform.forward;
 
-        // Calculate using math operation faster than relying on collider's OnTriggerEnter for high-speed projectiles
-        if (Physics.Raycast(_lastPosition, movementDirection, out RaycastHit hit, moveDistance, _hitLayers))
+
+        int hitCount = Physics.RaycastNonAlloc(_lastPosition, movementDirection, _hitBuffer, moveDistance, _hitLayers);
+
+        if (hitCount > 0)
         {
-            transform.position = hit.point;
-            HandleImpact(hit.collider, hit.point, hit.normal);
-            return;
+            SortHitsByDistance(hitCount);
+
+            for (int i = 0; i < hitCount; i++)
+            {
+                RaycastHit hit = _hitBuffer[i];
+
+                if (((1 << hit.collider.gameObject.layer) & _environmentLayer) != 0)
+                {
+                    transform.position = hit.point;
+                    SpawnImpactEffect(_environmentImpactPrefab, hit.point, hit.normal);
+                    Deactivate();
+                    return; // Terminate execution immediately
+                }
+
+                if (hit.collider == _lastDamagedCollider)
+                {
+                    continue;
+                }
+
+                IDamagable damageable = hit.collider.gameObject.GetComponentInParent<IDamagable>();
+                if (damageable != null)
+                {
+                    damageable.TakeDamage(_damage);
+                    SpawnImpactEffect(_zombieImpactPrefab, hit.point, hit.normal);
+
+                    _lastDamagedCollider = hit.collider;
+                    _currentTargetPierceCount++;
+
+                    if (_currentTargetPierceCount >= _maxTargetPierceCount)
+                    {
+                        transform.position = hit.point;
+                        Deactivate();
+                        return;
+                    }
+                }
+            }
         }
 
         transform.Translate(Vector3.forward * moveDistance);
@@ -55,22 +102,28 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void HandleImpact(Collider hitCollider, Vector3 hitPoint, Vector3 hitNormal)
+    private void SortHitsByDistance(int count)
     {
-        IDamagable damageable = hitCollider.gameObject.GetComponentInParent<IDamagable>();
-
-        if (damageable != null)
+        for (int i = 0; i < count - 1; i++)
         {
-            damageable.TakeDamage(_damage);
-            SpawnImpactEffect(_zombieImpactPrefab, hitPoint, hitNormal);
-        }
-        else
-        {
-            SpawnImpactEffect(_environmentImpactPrefab, hitPoint, hitNormal);
-        }
+            int closestIndex = i;
+            for (int j = i + 1; j < count; j++)
+            {
+                if (_hitBuffer[j].distance < _hitBuffer[closestIndex].distance)
+                {
+                    closestIndex = j;
+                }
+            }
 
-        Deactivate();
+            if (closestIndex != i)
+            {
+                RaycastHit temp = _hitBuffer[i];
+                _hitBuffer[i] = _hitBuffer[closestIndex];
+                _hitBuffer[closestIndex] = temp;
+            }
+        }
     }
+  
 
     private void SpawnImpactEffect(GameObject prefab, Vector3 position, Vector3 normal)
     {
