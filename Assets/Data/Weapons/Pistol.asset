@@ -17,6 +17,7 @@ MonoBehaviour:
   _weaponModelPrefab: {fileID: 1796101793198917877, guid: 21a0a356f309d7b4da12980f128ca425, type: 3}
   _projectilePrefab: {fileID: 5161285532180211351, guid: b4c7dc994b1dc1147a87eddf3704774c, type: 3}
   _damage: 1
+  _maxTargetPierceCount: 0
   _firingMode: 0
   _fireCooldown: 0.08
   _bulletsPerBurst: 1
@@ -27,3 +28,8 @@ MonoBehaviour:
   _maxMagazineSize: 8
   _maxReserveAmmo: 48
   _reloadDuration: 1.5
+  _basePurchaseCost: 1200
+  _normalAmmoPrice: 500
+  _upgradedAmmoPrice: 4500
+  _shootEvent: {fileID: 11400000, guid: e3d1e7282468b1b4f9d157ccb740cc80, type: 2}
+  _reloadEvent: {fileID: 11400000, guid: 78fff4dd4ba6c3c44a694d37d4acc1de, type: 2}

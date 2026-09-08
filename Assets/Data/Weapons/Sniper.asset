@@ -10,19 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02e5bc9bf8fd665469a80e1ca2c1f707, type: 3}
-  m_Name: BurstRifle
+  m_Name: Sniper
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataConfig
-  _weaponName: pistol
+  _weaponName: sniper
+  _weaponIconSprite: {fileID: 21300000, guid: 6bf68046eaaf8144393a08db6f062d28, type: 3}
   _weaponModelPrefab: {fileID: 1796101793198917877, guid: 21a0a356f309d7b4da12980f128ca425, type: 3}
   _projectilePrefab: {fileID: 5161285532180211351, guid: b4c7dc994b1dc1147a87eddf3704774c, type: 3}
-  _damage: 1
-  _firingMode: 2
-  _fireCooldown: 0.8
-  _bulletsPerBurst: 4
-  _burstDelay: 0.07
+  _damage: 6
+  _maxTargetPierceCount: 3
+  _firingMode: 0
+  _fireCooldown: 1.5
+  _bulletsPerBurst: 1
+  _burstDelay: 0.05
   _pelletCount: 1
-  _spreadAngle: 6
+  _spreadAngle: 0
   _recoilForce: 1
-  _maxMagazineSize: 28
-  _maxReserveAmmo: 160
+  _maxMagazineSize: 1
+  _maxReserveAmmo: 22
   _reloadDuration: 2
+  _basePurchaseCost: 4000
+  _normalAmmoPrice: 500
+  _upgradedAmmoPrice: 4500
+  _shootEvent: {fileID: 11400000, guid: e3d1e7282468b1b4f9d157ccb740cc80, type: 2}
+  _reloadEvent: {fileID: 11400000, guid: 78fff4dd4ba6c3c44a694d37d4acc1de, type: 2}

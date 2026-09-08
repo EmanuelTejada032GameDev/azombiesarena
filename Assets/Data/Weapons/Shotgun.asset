@@ -10,24 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02e5bc9bf8fd665469a80e1ca2c1f707, type: 3}
-  m_Name: Sniper
+  m_Name: Shotgun
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataConfig
-  _weaponName: sniper
-  _weaponIconSprite: {fileID: 0}
+  _weaponName: shotgun
+  _weaponIconSprite: {fileID: 21300000, guid: 4760088800501694bae27f419b04f942, type: 3}
   _weaponModelPrefab: {fileID: 1796101793198917877, guid: 21a0a356f309d7b4da12980f128ca425, type: 3}
   _projectilePrefab: {fileID: 5161285532180211351, guid: b4c7dc994b1dc1147a87eddf3704774c, type: 3}
-  _damage: 6
-  _maxTargetPierceCount: 3
+  _damage: 1
+  _maxTargetPierceCount: 0
   _firingMode: 0
-  _fireCooldown: 1.5
-  _bulletsPerBurst: 1
+  _fireCooldown: 0.8
+  _bulletsPerBurst: 10
   _burstDelay: 0.05
-  _pelletCount: 1
-  _spreadAngle: 0
-  _recoilForce: 1
-  _maxMagazineSize: 1
-  _maxReserveAmmo: 22
+  _pelletCount: 9
+  _spreadAngle: 11
+  _recoilForce: 4
+  _maxMagazineSize: 4
+  _maxReserveAmmo: 28
   _reloadDuration: 2
-  _basePurchaseCost: 4000
-  _normalAmmoPrice: 500
+  _basePurchaseCost: 500
+  _normalAmmoPrice: 300
   _upgradedAmmoPrice: 4500
+  _shootEvent: {fileID: 11400000, guid: e3d1e7282468b1b4f9d157ccb740cc80, type: 2}
+  _reloadEvent: {fileID: 11400000, guid: 78fff4dd4ba6c3c44a694d37d4acc1de, type: 2}

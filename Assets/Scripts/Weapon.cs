@@ -9,6 +9,9 @@ public class Weapon : MonoBehaviour
     [SerializeField] private ObjectPooler _bulletPool;
     [SerializeField] private Transform _muzzle;
 
+    [Header("Audio Components")]
+    [SerializeField] private AudioSource _weaponAudioSource;
+
     private WeaponInstanceState _state;
 
     private float _nextFireTime;
@@ -72,6 +75,7 @@ public class Weapon : MonoBehaviour
         if (_bulletPool == null || _state.CurrentMagazineAmmo <= 0) return;
 
         _state.CurrentMagazineAmmo--;
+        Config.ShootEvent.Play(_weaponAudioSource);
 
         for (int i = 0; i < Config.PelletCount; i++)
         {
@@ -123,6 +127,8 @@ public class Weapon : MonoBehaviour
     private IEnumerator ExecuteReloadRoutine()
     {
         _isReloading = true;
+
+        Config.ReloadEvent.Play(_weaponAudioSource);
 
         yield return new WaitForSeconds(Config.ReloadDuration);
 

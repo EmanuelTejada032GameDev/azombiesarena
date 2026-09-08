@@ -49,6 +49,12 @@ public class WeaponDataConfig : ScriptableObject
     [SerializeField] private int _normalAmmoPrice = 500;
     [SerializeField] private int _upgradedAmmoPrice = 4500;
 
+    [Header("Audio Events")]
+    [SerializeField] private AudioEvent _shootEvent;
+    [SerializeField] private AudioEvent _reloadEvent;
+
+
+
 
 
     public string WeaponName => _weaponName;
@@ -71,5 +77,8 @@ public class WeaponDataConfig : ScriptableObject
     public int BasePurchaseCost => _basePurchaseCost;
     public int NormalAmmoPrice => _normalAmmoPrice;
     public int UpgradedAmmoPrice => _upgradedAmmoPrice;
+    
+    public AudioEvent ShootEvent => _shootEvent;
+    public AudioEvent ReloadEvent => _reloadEvent;
 
 }
