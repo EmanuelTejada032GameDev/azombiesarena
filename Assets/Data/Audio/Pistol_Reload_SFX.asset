@@ -13,10 +13,16 @@ MonoBehaviour:
   m_Name: Pistol_Reload_SFX
   m_EditorClassIdentifier: Assembly-CSharp::SimpleAudioEvent
   clips:
-  - {fileID: 8300000, guid: 890bbdcfd117b9246bc7218073ca46d7, type: 3}
-  mixerGroup: {fileID: 0}
+  - {fileID: 8300000, guid: b408f789ac2608a439bc552b16f68369, type: 3}
+  - {fileID: 8300000, guid: 633ca826c360a3742b61281fc1b6fde0, type: 3}
+  - {fileID: 8300000, guid: eb25652f9d34fd8419acfaf1d2dda815, type: 3}
+  - {fileID: 8300000, guid: af1b70aa52a96f74da38c51197ce5685, type: 3}
+  - {fileID: 8300000, guid: 4151b90ab727e84498821d24313e7d1c, type: 3}
+  - {fileID: 8300000, guid: 80980668ec199f14eb2a7be83376547d, type: 3}
+  - {fileID: 8300000, guid: e546f5f919d087b4dbc274d52397d494, type: 3}
+  mixerGroup: {fileID: 6565116360004749728, guid: 6773907b7488e7c4d98d8924dac9ff31, type: 2}
   minVolume: 1
   maxVolume: 1
   minPitch: 1
   maxPitch: 1
-  spatialBlend: 0
+  spatialBlend: 1

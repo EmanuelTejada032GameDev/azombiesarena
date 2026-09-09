@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Pistol_Shoot_SFX
   m_EditorClassIdentifier: Assembly-CSharp::SimpleAudioEvent
   clips:
-  - {fileID: 8300000, guid: dc0d417452c01c14baded97a17400789, type: 3}
-  mixerGroup: {fileID: 0}
+  - {fileID: 8300000, guid: 20ec9ba4bcf91ec4b955f6bee22003d3, type: 3}
+  - {fileID: 8300000, guid: 7760127ffbb39984396415d0811874f6, type: 3}
+  mixerGroup: {fileID: 6565116360004749728, guid: 6773907b7488e7c4d98d8924dac9ff31, type: 2}
   minVolume: 1
   maxVolume: 1
   minPitch: 1
   maxPitch: 1
-  spatialBlend: 0
+  spatialBlend: 1

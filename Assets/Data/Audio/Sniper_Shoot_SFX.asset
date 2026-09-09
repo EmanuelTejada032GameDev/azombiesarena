@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6bdf60fdad83648a48eef9e2694dc5, type: 3}
+  m_Name: Sniper_Shoot_SFX
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleAudioEvent
+  clips:
+  - {fileID: 8300000, guid: b7664eb134e0fbb4c9d9098b18b3ed1c, type: 3}
+  - {fileID: 8300000, guid: 869083264d78898478098ddd3afe304c, type: 3}
+  - {fileID: 8300000, guid: 523e7440df3b9d94e9951b0244d45659, type: 3}
+  - {fileID: 8300000, guid: 681075be779134042bbc7874a54f195d, type: 3}
+  mixerGroup: {fileID: 6565116360004749728, guid: 6773907b7488e7c4d98d8924dac9ff31, type: 2}
+  minVolume: 1
+  maxVolume: 1
+  minPitch: 1
+  maxPitch: 1
+  spatialBlend: 1

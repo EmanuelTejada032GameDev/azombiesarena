@@ -27,9 +27,9 @@ MonoBehaviour:
   _recoilForce: 1
   _maxMagazineSize: 30
   _maxReserveAmmo: 120
-  _reloadDuration: 2
+  _reloadDuration: 0.4
   _basePurchaseCost: 2500
   _normalAmmoPrice: 1500
   _upgradedAmmoPrice: 4500
-  _shootEvent: {fileID: 11400000, guid: e3d1e7282468b1b4f9d157ccb740cc80, type: 2}
-  _reloadEvent: {fileID: 11400000, guid: 78fff4dd4ba6c3c44a694d37d4acc1de, type: 2}
+  _shootEvent: {fileID: 11400000, guid: 5d328890fb029fc4cbc7a20f28207fa8, type: 2}
+  _reloadEvent: {fileID: 11400000, guid: 6722ce77e24ec1045a34931427a1999b, type: 2}

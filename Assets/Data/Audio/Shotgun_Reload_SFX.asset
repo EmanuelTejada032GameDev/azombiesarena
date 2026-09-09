@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6bdf60fdad83648a48eef9e2694dc5, type: 3}
+  m_Name: Shotgun_Reload_SFX
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleAudioEvent
+  clips:
+  - {fileID: 8300000, guid: 4d8742387563096478ebf0b45d0f55f0, type: 3}
+  - {fileID: 8300000, guid: 8d6d2d345e8414a42a34f2014fd5a0b7, type: 3}
+  - {fileID: 8300000, guid: 0ba5429d7215832429761b38f9158edb, type: 3}
+  - {fileID: 8300000, guid: 62d480bdd821ac74f89b8bfab23cb446, type: 3}
+  - {fileID: 8300000, guid: 5d5e2a693f804454282cf1ad58f7fb7c, type: 3}
+  mixerGroup: {fileID: 6565116360004749728, guid: 6773907b7488e7c4d98d8924dac9ff31, type: 2}
+  minVolume: 1
+  maxVolume: 1
+  minPitch: 1
+  maxPitch: 1
+  spatialBlend: 1
