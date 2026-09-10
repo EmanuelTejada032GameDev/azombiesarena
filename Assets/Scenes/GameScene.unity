@@ -1055,6 +1055,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5443878867762829486, guid: 4db9fd59352c7684aa7c3fc8dfa73ea1, type: 3}
+      propertyPath: _weaponPickupPrefabShell
+      value: 
+      objectReference: {fileID: 1796101793198917877, guid: f900e199ad5ce9849979947efac5f95e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1413,6 +1417,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6679905681668365718, guid: 45120ec6d32e2514fb65ac90e39be7cb, type: 3}
+      propertyPath: _weaponPickupPrefabShell
+      value: 
+      objectReference: {fileID: 1796101793198917877, guid: f900e199ad5ce9849979947efac5f95e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5372,6 +5380,10 @@ PrefabInstance:
       propertyPath: _purchaseCost
       value: 2500
       objectReference: {fileID: 0}
+    - target: {fileID: -3997836130902989854, guid: b8302d680fb004045b6510d67f3190c5, type: 3}
+      propertyPath: _weaponPickupPrefabShell
+      value: 
+      objectReference: {fileID: 1796101793198917877, guid: f900e199ad5ce9849979947efac5f95e, type: 3}
     - target: {fileID: 1796101793198917877, guid: b8302d680fb004045b6510d67f3190c5, type: 3}
       propertyPath: m_Name
       value: RifleWallBuy
@@ -5517,6 +5529,10 @@ PrefabInstance:
       propertyPath: _purchaseCost
       value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 1798602696921373104, guid: e54c78541f2d0224cb4932b5fe744f0f, type: 3}
+      propertyPath: _weaponPickupPrefabShell
+      value: 
+      objectReference: {fileID: 1796101793198917877, guid: f900e199ad5ce9849979947efac5f95e, type: 3}
     - target: {fileID: 3423921115679551923, guid: e54c78541f2d0224cb4932b5fe744f0f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -37.784

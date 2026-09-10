@@ -4,6 +4,7 @@ using UnityEngine;
 public class WallBuy : MonoBehaviour, IInteractable
 {
     [SerializeField] private WeaponDataConfig _weaponToGive;
+    [SerializeField] private GameObject _weaponPickupPrefabShell;
 
     public bool CanDoInteractAction(IInteractable.InteractAction interactAction)
     {
@@ -33,13 +34,27 @@ public class WallBuy : MonoBehaviour, IInteractable
             }
             else
             {
-                weaponHandler.AddWeaponToInventory(_weaponToGive);
+                WeaponInstanceState droppedState = weaponHandler.AddWeaponStateToInventory(new WeaponInstanceState(_weaponToGive));
+
+                if (droppedState != null && _weaponPickupPrefabShell != null)
+                {
+                    GameObject newPickupObj = Instantiate(_weaponPickupPrefabShell, interactorTransform.position, Quaternion.identity);
+                    WeaponPickup newPickupScript = newPickupObj.GetComponent<WeaponPickup>();
+
+                    newPickupScript.InitializePickup(droppedState, 15f);
+
+                    if (newPickupObj.TryGetComponent(out Rigidbody rb))
+                    {
+                        Vector3 upwardForce = Vector3.up * 3f;
+                        Vector3 randomHorizontalDirection = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized;
+                        Vector3 forwardForce = randomHorizontalDirection * 4f;
+
+                        rb.AddForce(upwardForce + forwardForce, ForceMode.Impulse);
+                    }
+                }
             }
         }
-        else
-        {
-            
-        }
+       
     }
 
     public Dictionary<IInteractable.InteractAction, string> GetInteractTextDictionary()

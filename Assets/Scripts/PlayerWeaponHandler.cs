@@ -172,13 +172,13 @@ public class PlayerWeaponHandler : MonoBehaviour
         }
     }
 
-    public void AddWeaponToInventory(WeaponDataConfig newGunBlueprint)
+    public WeaponInstanceState AddWeaponToInventory(WeaponDataConfig newGunBlueprint)
     {
-        if (newGunBlueprint == null) return;
+        if (newGunBlueprint == null) return null;
 
         foreach (var slot in _playerCarryInventorySlots)
         {
-            if (slot.BlueprintConfig == newGunBlueprint) return;
+            if (slot.BlueprintConfig == newGunBlueprint) return null;
         }
 
         WeaponInstanceState freshWeaponInstance = new WeaponInstanceState(newGunBlueprint);
@@ -188,13 +188,47 @@ public class PlayerWeaponHandler : MonoBehaviour
             _playerCarryInventorySlots.Add(freshWeaponInstance);
             _currentWeaponIndex = _playerCarryInventorySlots.Count - 1;
             EquipWeaponAtIndex(_currentWeaponIndex);
+            return null; // No weapon replaced , player has room for new weapon
         }
         else
         {
+
+            WeaponInstanceState droppedWeaponState = _playerCarryInventorySlots[_currentWeaponIndex];
+
             _playerCarryInventorySlots[_currentWeaponIndex] = freshWeaponInstance;
             EquipWeaponAtIndex(_currentWeaponIndex);
+
+            return droppedWeaponState;
         }
     }
+
+    public WeaponInstanceState AddWeaponStateToInventory(WeaponInstanceState dynamicState)
+    {
+        if (dynamicState == null || dynamicState.BlueprintConfig == null) return null;
+
+        foreach (var slot in _playerCarryInventorySlots)
+        {
+            if (slot.BlueprintConfig == dynamicState.BlueprintConfig) return null;
+        }
+
+        if (_maxWeaponLimit == -1 || _playerCarryInventorySlots.Count < _maxWeaponLimit)
+        {
+            _playerCarryInventorySlots.Add(dynamicState);
+            _currentWeaponIndex = _playerCarryInventorySlots.Count - 1;
+            EquipWeaponAtIndex(_currentWeaponIndex);
+            return null;
+        }
+        else
+        {
+            WeaponInstanceState droppedWeaponState = _playerCarryInventorySlots[_currentWeaponIndex];
+
+            _playerCarryInventorySlots[_currentWeaponIndex] = dynamicState;
+            EquipWeaponAtIndex(_currentWeaponIndex);
+
+            return droppedWeaponState;
+        }
+    }
+
 
     public bool HasWeaponInInventory(WeaponDataConfig config)
     {

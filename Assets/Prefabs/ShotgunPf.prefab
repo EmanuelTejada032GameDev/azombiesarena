@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3423921115679551923}
   - component: {fileID: 6871605501224645685}
   - component: {fileID: 3974639585393964449}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: ShotgunPf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 5160190693241800874}
   - component: {fileID: 7416295198812145655}
   - component: {fileID: 643048094824675450}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,7 +268,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4521085035394741927}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: muzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
