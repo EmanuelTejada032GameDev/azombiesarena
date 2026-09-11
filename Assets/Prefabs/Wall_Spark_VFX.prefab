@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 898495995872226282}
   - component: {fileID: 6422313018515616366}
   m_Layer: 0
-  m_Name: FX_Wall_Spark
+  m_Name: Wall_Spark_VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

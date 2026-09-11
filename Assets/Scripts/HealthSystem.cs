@@ -55,6 +55,28 @@ public class HealthSystem : MonoBehaviour, IDamagable
             Die();
     }
 
+    public void TakeDamage(float damageAmount)
+    {
+        if (_useInvulnerability && Time.time < _nextAllowedDamageTime)
+        {
+            return;
+        }
+
+        if (_useInvulnerability)
+        {
+            _nextAllowedDamageTime = Time.time + _invulnerabilityTimeFrame;
+        }
+
+        int integerDamage = Mathf.RoundToInt(damageAmount);
+
+        _healthAmount -= integerDamage;
+        _healthAmount = Mathf.Clamp(_healthAmount, 0, _maxHealthAmount);
+        OnDamaged?.Invoke(this, EventArgs.Empty);
+
+        if (_healthAmount <= 0)
+            Die();
+    }
+
     public void Heal(int amount)
     {
         _healthAmount += amount;
