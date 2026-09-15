@@ -76,6 +76,11 @@ public class Weapon : MonoBehaviour
         }
 
         OnAmmoChanged?.Invoke(this, EventArgs.Empty);
+
+        if (_state.CurrentMagazineAmmo <= 0 && PlayerWeaponHandler.Instance != null && PlayerWeaponHandler.Instance.AutoReload)
+        {
+            ProcessReloadRequest();
+        }
     }
 
     private void ExecuteSingleShot()

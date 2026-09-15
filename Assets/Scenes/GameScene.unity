@@ -484,6 +484,7 @@ MonoBehaviour:
   _defaultBulletPool: {fileID: 1731008875}
   DefaultStartingWeapon: {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
   _activeWeaponInstance: {fileID: 0}
+  _autoReload: 1
 --- !u!114 &133011469
 MonoBehaviour:
   m_ObjectHideFlags: 0
