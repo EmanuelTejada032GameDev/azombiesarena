@@ -122,9 +122,9 @@ public class PlayerWeaponHandler : MonoBehaviour
 
     private void Update()
     {
-        if (_activeWeaponInstance != null && _isTriggerHeld && _activeWeaponInstance.Config.FiringMode == WeaponFiringMode.FullAutomatic)
+        if (_activeWeaponInstance != null && _isTriggerHeld && _activeWeaponInstance.Config.FireOnHold)
         {
-            _activeWeaponInstance.ProcessFireRequest(_isTriggerHeld);
+            _activeWeaponInstance.ProcessFireRequest();
         }
     }
 
@@ -132,10 +132,10 @@ public class PlayerWeaponHandler : MonoBehaviour
     {
         if (PlayerMovement.Instance.GetManeuverState() != PlayerMovement.ManeuverState.None || PlayerMovement.Instance.GetLocomotionState() == PlayerMovement.LocomotionState.Sprinting) return;
 
-            _isTriggerHeld = true;
-        if (_activeWeaponInstance != null && _activeWeaponInstance.Config.FiringMode != WeaponFiringMode.FullAutomatic)
+        _isTriggerHeld = true;
+        if (_activeWeaponInstance != null)
         {
-            _activeWeaponInstance.ProcessFireRequest(_isTriggerHeld);
+            _activeWeaponInstance.ProcessFireRequest();
         }
     }
 

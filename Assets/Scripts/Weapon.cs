@@ -37,23 +37,16 @@ public class Weapon : MonoBehaviour
         _isReloading = false;
     }
 
-    public void ProcessFireRequest(bool isTriggerHeld)
+    public void ProcessFireRequest()
     {
         if (Time.time < _nextFireTime || _isBursting || _isReloading || _state == null || _state.CurrentMagazineAmmo <= 0) return;
 
         switch (Config.FiringMode)
         {
             case WeaponFiringMode.SemiAutomatic:
+            case WeaponFiringMode.FullAutomatic:
                 ExecuteFireCycle();
                 _nextFireTime = Time.time + Config.FireCooldown;
-                break;
-
-            case WeaponFiringMode.FullAutomatic:
-                if (isTriggerHeld)
-                {
-                    ExecuteFireCycle();
-                    _nextFireTime = Time.time + Config.FireCooldown;
-                }
                 break;
 
             case WeaponFiringMode.Burst:

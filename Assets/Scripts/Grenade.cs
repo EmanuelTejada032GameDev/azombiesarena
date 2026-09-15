@@ -39,8 +39,6 @@ public class Grenade : MonoBehaviour
 
             HealthSystem health = zombieCollider.GetComponentInParent<HealthSystem>();
 
-            Debug.Log($"Zombie: {zombieCollider.name}, Distance: {distance}, Normalized Distance: {normalizedDistance}, helathComponent is null: {health == null}");
-
             if (health != null)
             {
                 float normalZombieMaxHP = 6;

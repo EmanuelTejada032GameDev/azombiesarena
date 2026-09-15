@@ -19,6 +19,7 @@ MonoBehaviour:
   _damage: 1
   _maxTargetPierceCount: 0
   _firingMode: 1
+  _fireOnHold: 1
   _fireCooldown: 0.1
   _bulletsPerBurst: 1
   _burstDelay: 0.05

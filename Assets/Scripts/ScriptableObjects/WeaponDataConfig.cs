@@ -23,6 +23,7 @@ public class WeaponDataConfig : ScriptableObject
 
     [Header("Firing Mechanics")]
     [SerializeField] private WeaponFiringMode _firingMode = WeaponFiringMode.SemiAutomatic;
+    [SerializeField] private bool _fireOnHold = false;
     [SerializeField] private float _fireCooldown = 0.2f; // Generic Cooldown
 
     [Header("Burst Settings (Only if Firing Mode is Burst)")]
@@ -64,6 +65,7 @@ public class WeaponDataConfig : ScriptableObject
     public int Damage => _damage;
     public int MaxTargetPierceCount => _maxTargetPierceCount;
     public WeaponFiringMode FiringMode => _firingMode;
+    public bool FireOnHold => _fireOnHold;
     public float FireCooldown => _fireCooldown;
     public int BulletsPerBurst => _bulletsPerBurst;
     public float BurstDelay => _burstDelay;
@@ -80,5 +82,6 @@ public class WeaponDataConfig : ScriptableObject
     
     public AudioEvent ShootEvent => _shootEvent;
     public AudioEvent ReloadEvent => _reloadEvent;
+
 
 }

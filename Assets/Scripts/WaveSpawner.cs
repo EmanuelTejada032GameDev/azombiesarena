@@ -47,7 +47,7 @@ public class WaveSpawner : MonoBehaviour
     private void OnEnable()
     {
         _currentWave = 0;
-        StartNextWave();
+        //StartNextWave();
     }
 
 
