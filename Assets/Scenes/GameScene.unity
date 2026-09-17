@@ -375,6 +375,7 @@ GameObject:
   - component: {fileID: 133011468}
   - component: {fileID: 133011469}
   - component: {fileID: 133011473}
+  - component: {fileID: 133011474}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -397,6 +398,7 @@ Transform:
   m_Children:
   - {fileID: 863516286}
   - {fileID: 1886972926}
+  - {fileID: 948499955}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &133011466
@@ -458,7 +460,7 @@ MonoBehaviour:
   _slideCooldown: 1
   _slideStaminaCost: 20
   _useStamina: 1
-  _maxStamina: 100
+  _maxStamina: 100000
   _sprintStaminaDrain: 10
   _staminaRegenRate: 15
   _crouchStaminaRegenRate: 25
@@ -575,6 +577,31 @@ MonoBehaviour:
   _showDebugGizmos: 1
   _trajectoryResolution: 30
   _timeStepBetweenPoints: 0.05
+--- !u!114 &133011474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133011464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e31d2099fedf6f4bb499244ac5d46ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeController
+  _playerMovement: {fileID: 133011467}
+  _hitbox: {fileID: 948499957}
+  _damage: 50
+  _maxTargetsPerSwing: 3
+  _hitLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  _windupDuration: 0.05
+  _activeDuration: 0.12
+  _recoveryDuration: 0.4
+  _staminaCost: 5
+  _slashVFXPrefab: {fileID: 4885471022005174213, guid: 92b9d12a5bf1e7242b3ee4fb2886866f, type: 3}
+  _vfxSpawnPoint: {fileID: 576023709}
 --- !u!1 &147605815
 GameObject:
   m_ObjectHideFlags: 0
@@ -2562,6 +2589,37 @@ MonoBehaviour:
   _showUI: 1
   _zombiesRemainingVariable: {fileID: 11400000, guid: df7181657c2f07b458234db9d073098c, type: 2}
   _counterText: {fileID: 2038113898}
+--- !u!1 &576023708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 576023709}
+  m_Layer: 6
+  m_Name: meleeVfxSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &576023709
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576023708}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.606}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 948499955}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &578268609
 GameObject:
   m_ObjectHideFlags: 0
@@ -3921,6 +3979,102 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1131444740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &948499954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 948499955}
+  - component: {fileID: 948499957}
+  - component: {fileID: 948499956}
+  - component: {fileID: 948499958}
+  m_Layer: 6
+  m_Name: meleeAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &948499955
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948499954}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.031, z: 0.856}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 576023709}
+  m_Father: {fileID: 133011465}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &948499956
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948499954}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.43, y: 1, z: 1.7}
+  m_Center: {x: 0, y: 0, z: 0.7}
+--- !u!114 &948499957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948499954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aea609207f48f34aa9c18301d8e2ff4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeleeHitbox
+  _collider: {fileID: 948499956}
+--- !u!54 &948499958
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948499954}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &951466126
 GameObject:
   m_ObjectHideFlags: 0
@@ -8877,8 +9031,8 @@ SceneRoots:
   - {fileID: 1131444740}
   - {fileID: 116606688}
   - {fileID: 1696612679}
-  - {fileID: 2124374113}
-  - {fileID: 450975066}
-  - {fileID: 612031397}
-  - {fileID: 1323308443}
   - {fileID: 603743998}
+  - {fileID: 612031397}
+  - {fileID: 450975066}
+  - {fileID: 2124374113}
+  - {fileID: 1323308443}

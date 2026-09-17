@@ -618,6 +618,19 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         _slideTimer = 0f;
     }
 
+    public bool TrySpendStamina(float amount)
+    {
+        if (!_useStamina)
+            return true;
+
+        if (_currentStamina < amount)
+            return false;
+
+        ConsumeStamina(amount);
+        return true;
+    }
+
+
     private void ConsumeStamina(float amount)
     {
         _currentStamina -= amount;
@@ -637,6 +650,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         _staminaRegenTimer =
             _staminaRegenDelay;
     }
+
 
     private void HandleStaminaRegeneration()
     {
