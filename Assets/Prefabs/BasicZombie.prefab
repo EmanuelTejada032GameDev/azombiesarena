@@ -48,6 +48,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
   _maxHealthAmount: 5
+  _useInvulnerability: 0
+  _invulnerabilityTimeFrame: 1.2
+  _destroyOnDeath: 0
 --- !u!114 &6250274282297431110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,6 +70,7 @@ MonoBehaviour:
   _pollingInterval: 0.2
   _pointsPerHit: 10
   _pointsOnDeath: 60
+  _renderer: {fileID: 6828840652051151173}
 --- !u!195 &6113013402654549863
 NavMeshAgent:
   m_ObjectHideFlags: 0

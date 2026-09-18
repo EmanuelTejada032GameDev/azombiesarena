@@ -486,7 +486,7 @@ MonoBehaviour:
   _defaultBulletPool: {fileID: 1731008875}
   DefaultStartingWeapon: {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
   _activeWeaponInstance: {fileID: 0}
-  _autoReload: 1
+  _autoReload: 0
 --- !u!114 &133011469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4033,8 +4033,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.43, y: 1, z: 1.7}
-  m_Center: {x: 0, y: 0, z: 0.7}
+  m_Size: {x: 2.43, y: 1, z: 1.45}
+  m_Center: {x: 0, y: 0, z: 0.38}
 --- !u!114 &948499957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5061,11 +5061,16 @@ MonoBehaviour:
   - {fileID: 1143779699}
   - {fileID: 941877638}
   _playerTarget: {fileID: 133011465}
+  _zombieTypes:
+  - {fileID: 11400000, guid: bdd17211cc60c344b96b891b8438ce5a, type: 2}
+  - {fileID: 11400000, guid: 91058bc2b34bb2e488a8be16c73ec3c0, type: 2}
+  - {fileID: 11400000, guid: a7531624d45227a449fc93b6fe5c6217, type: 2}
   _baseZombieCount: 20
   _zombiesPerWaveMultiplier: 3
   _timeBetweenSpawns: 1.5
   _intermissionDuration: 5
   _maxActiveZombiesCap: 24
+  _continuousMode: 1
   _currentWaveVariable: {fileID: 11400000, guid: 1ad6fc888649e364d8ca26b0d9353814, type: 2}
   _zombiesRemainingVariable: {fileID: 11400000, guid: df7181657c2f07b458234db9d073098c, type: 2}
   _intermissionTimerVariable: {fileID: 11400000, guid: 5f2e1e39f54bdde49a244c91a23fcbbc, type: 2}

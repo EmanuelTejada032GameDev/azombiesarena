@@ -9,7 +9,8 @@ public class WaveSpawner : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject _zombiePrefab;
     [SerializeField] private Transform[] _spawnEntrances; 
-    [SerializeField] private Transform _playerTarget;     
+    [SerializeField] private Transform _playerTarget;
+    [SerializeField] private ZombieSO[] _zombieTypes;
 
     [Header("Wave Configuration")]
     [SerializeField] private int _baseZombieCount = 5;
@@ -17,6 +18,7 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private float _timeBetweenSpawns = 1.5f;
     [SerializeField] private float _intermissionDuration = 5.0f;
     [SerializeField] private int _maxActiveZombiesCap = 24;
+    [SerializeField] private bool _continuousMode = false;
 
     private int _currentWave = 0;
     private int _totalZombiesForCurrentWave;
@@ -55,7 +57,7 @@ public class WaveSpawner : MonoBehaviour
     {
         _currentWave++;
         _zombiesSpawnedSoFar = 0;
-        _currentActiveZombiesCount = 0;
+        if (!_continuousMode) _currentActiveZombiesCount = 0;
 
         _totalZombiesForCurrentWave = _baseZombieCount + (_currentWave * _zombiesPerWaveMultiplier);
 
@@ -85,9 +87,12 @@ public class WaveSpawner : MonoBehaviour
             }
         }
 
-        while (_currentActiveZombiesCount > 0)
+        if (!_continuousMode)
         {
-            yield return null;
+            while (_currentActiveZombiesCount > 0)
+            {
+                yield return null;
+            }
         }
 
         StartCoroutine(IntermissionRoutine());
@@ -104,6 +109,8 @@ public class WaveSpawner : MonoBehaviour
 
         if (zombieScript != null)
         {
+            ZombieSO chosenType = _zombieTypes[Random.Range(0, _zombieTypes.Length)];
+            zombieScript.ApplyZombieSO(chosenType);
             zombieScript.InitializeTarget(_playerTarget);
         }
 
@@ -134,7 +141,7 @@ public class WaveSpawner : MonoBehaviour
     {
         _isIntermission = true;
 
-        float timeRemaining = _intermissionDuration;
+        float timeRemaining = _continuousMode ? 0f : _intermissionDuration;
 
         while (timeRemaining > 0)
         {

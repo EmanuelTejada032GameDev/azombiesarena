@@ -30,6 +30,8 @@ public class Zombie : MonoBehaviour
     [SerializeField] private int _pointsPerHit = 10;
     [SerializeField] private int _pointsOnDeath = 60;
 
+    [SerializeField] private Renderer _renderer;
+
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -48,6 +50,24 @@ public class Zombie : MonoBehaviour
             _healthSystem.OnDied += HandleDeath;
             _healthSystem.OnDamaged += HandleDamaged;
         }
+    }
+
+
+    public void ApplyZombieSO(ZombieSO zombieSO)
+    {
+        _agent.speed = zombieSO.MoveSpeed;
+        _healthSystem.Initialize(zombieSO.MaxHealth);
+
+        if (_renderer != null)
+            _renderer.sharedMaterial = zombieSO.Material;
+
+        transform.localScale = Vector3.one * zombieSO.ScaleMultiplier;
+
+        _attackDamage = zombieSO.AttackDamage;
+        _attackCooldown = zombieSO.AttackCooldown;
+        _attackRange = zombieSO.AttackRange;
+        _pointsPerHit = zombieSO.PointsPerHit;
+        _pointsOnDeath = zombieSO.PointsOnDeath;
     }
 
     private void HandleDamaged(object sender, EventArgs e)

@@ -19,11 +19,12 @@ MonoBehaviour:
   _damage: 1
   _maxTargetPierceCount: 0
   _firingMode: 0
+  _fireOnHold: 0
   _fireCooldown: 0.8
-  _bulletsPerBurst: 10
+  _bulletsPerBurst: 8
   _burstDelay: 0.05
-  _pelletCount: 9
-  _spreadAngle: 11
+  _pelletCount: 8
+  _spreadAngle: 20
   _recoilForce: 4
   _maxMagazineSize: 4
   _maxReserveAmmo: 28
