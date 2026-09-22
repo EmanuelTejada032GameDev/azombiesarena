@@ -140,7 +140,7 @@ public class Zombie : MonoBehaviour
             _agent.enabled = false; 
         }
 
-        EconomyManager.Instance.AddPoints(_pointsOnDeath);
+        EconomyManager.Instance.AddPoints(Mathf.RoundToInt(PlayerStats.Get(PlayerStats.StatType.CoinsPerKill, _pointsOnDeath)));
         // Trigger zombie death logic and FXs here
         Destroy(gameObject, .4f);
     }

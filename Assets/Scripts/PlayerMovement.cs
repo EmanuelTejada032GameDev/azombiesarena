@@ -80,6 +80,9 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     [SerializeField] private float _crouchStaminaRegenRate = 25f;
     [SerializeField] private float _staminaRegenDelay = 0.75f;
 
+    private float EffectiveMaxStamina =>
+    PlayerStats.Get(PlayerStats.StatType.MaxStamina, _maxStamina);
+
     private float _currentStamina;
     private float _staminaRegenTimer;
 
@@ -107,7 +110,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     {
         _mainCamera = Camera.main.transform;
 
-        _currentStamina = _maxStamina;
+        _currentStamina = EffectiveMaxStamina;
 
         if (_characterController != null)
         {
@@ -273,8 +276,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
             _locomotionState =
                 LocomotionState.Crouching;
 
-            _currentPlayerSpeed =
-                _crouchPlayerSpeed;
+            _currentPlayerSpeed = PlayerStats.Get(PlayerStats.StatType.MoveSpeed, _crouchPlayerSpeed);
 
             return;
         }
@@ -287,8 +289,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
             _locomotionState =
                 LocomotionState.Sprinting;
 
-            _currentPlayerSpeed =
-                _sprintPlayerSpeed;
+            _currentPlayerSpeed = PlayerStats.Get(PlayerStats.StatType.MoveSpeed, _sprintPlayerSpeed);
 
             return;
         }
@@ -298,8 +299,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
             _locomotionState =
                 LocomotionState.Walking;
 
-            _currentPlayerSpeed =
-                _walkPlayerSpeed;
+            _currentPlayerSpeed = PlayerStats.Get(PlayerStats.StatType.MoveSpeed, _walkPlayerSpeed);
 
             return;
         }
@@ -639,12 +639,12 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
             Mathf.Clamp(
                 _currentStamina,
                 0f,
-                _maxStamina
+                EffectiveMaxStamina
             );
 
         OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
         {
-            progressNormalized = _currentStamina / _maxStamina
+            progressNormalized = _currentStamina / EffectiveMaxStamina
         });
 
         _staminaRegenTimer =
@@ -671,6 +671,8 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
                 ? _crouchStaminaRegenRate
                 : _staminaRegenRate;
 
+        regenRate = PlayerStats.Get(PlayerStats.StatType.StaminaRegen, regenRate);
+
         _currentStamina +=
             regenRate *
             Time.deltaTime;
@@ -679,13 +681,13 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
             Mathf.Clamp(
                 _currentStamina,
                 0f,
-                _maxStamina
+                EffectiveMaxStamina
             );
 
 
         OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
         {
-            progressNormalized = _currentStamina / _maxStamina
+            progressNormalized = _currentStamina / EffectiveMaxStamina
         });
     }
 

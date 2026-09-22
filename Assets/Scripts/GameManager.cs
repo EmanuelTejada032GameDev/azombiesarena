@@ -208,6 +208,8 @@ public class GameManager : MonoBehaviour
         {
             _waveSpawner.gameObject.SetActive(false);
         }
+
+        PlayerStats.Instance.ResetStats();
     }
 
     private void HandlePlayerDeath(object sender, System.EventArgs e)
