@@ -210,6 +210,7 @@ public class GameManager : MonoBehaviour
         }
 
         PlayerStats.Instance.ResetStats();
+        XPManager.Instance.ResetXP();
     }
 
     private void HandlePlayerDeath(object sender, System.EventArgs e)

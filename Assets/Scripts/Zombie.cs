@@ -29,6 +29,7 @@ public class Zombie : MonoBehaviour
     [Header("Economy Rewards")]
     [SerializeField] private int _pointsPerHit = 10;
     [SerializeField] private int _pointsOnDeath = 60;
+    [SerializeField] private int _xpOnDeath = 20;
 
     [SerializeField] private Renderer _renderer;
 
@@ -68,6 +69,7 @@ public class Zombie : MonoBehaviour
         _attackRange = zombieSO.AttackRange;
         _pointsPerHit = zombieSO.PointsPerHit;
         _pointsOnDeath = zombieSO.PointsOnDeath;
+        _xpOnDeath = zombieSO.XpReward;
     }
 
     private void HandleDamaged(object sender, EventArgs e)
@@ -141,6 +143,8 @@ public class Zombie : MonoBehaviour
         }
 
         EconomyManager.Instance.AddPoints(Mathf.RoundToInt(PlayerStats.Get(PlayerStats.StatType.CoinsPerKill, _pointsOnDeath)));
+        XPManager.Instance.AddXP(Mathf.RoundToInt(PlayerStats.Get(PlayerStats.StatType.XpPerKill, _xpOnDeath)));
+
         // Trigger zombie death logic and FXs here
         Destroy(gameObject, .4f);
     }

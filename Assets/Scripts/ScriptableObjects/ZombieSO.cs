@@ -18,6 +18,7 @@ public class ZombieSO : ScriptableObject
     [Header("Economy")]
     [SerializeField] private int _pointsPerHit = 10;
     [SerializeField] private int _pointsOnDeath = 60;
+    [SerializeField] private int _xpReward = 20;
 
     [Header("Visuals")]
     [SerializeField] private Material _material;
@@ -33,4 +34,7 @@ public class ZombieSO : ScriptableObject
     public int PointsOnDeath => _pointsOnDeath;
     public Material Material => _material;
     public float ScaleMultiplier => _scaleMultiplier;
+
+
+    public int XpReward => _xpReward;
 }
