@@ -60,4 +60,15 @@ public class PlayerStats : MonoBehaviour
         _flatBonus.Clear();
         _percentBonus.Clear();
     }
+
+    [ContextMenu("Log Current Stats")]
+    private void LogCurrentStats()
+    {
+        foreach (StatType type in System.Enum.GetValues(typeof(StatType)))
+        {
+            float flat = _flatBonus.TryGetValue(type, out float f) ? f : 0f;
+            float percent = _percentBonus.TryGetValue(type, out float p) ? p : 0f;
+            Debug.Log($"{type}: +{flat} flat, +{percent * 100f}% percent");
+        }
+    }
 }

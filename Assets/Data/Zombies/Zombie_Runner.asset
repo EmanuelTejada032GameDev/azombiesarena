@@ -18,7 +18,8 @@ MonoBehaviour:
   _attackDamage: 1
   _attackCooldown: 1
   _attackRange: 1.5
-  _pointsPerHit: 5
-  _pointsOnDeath: 80
+  _pointsPerHit: 10
+  _pointsOnDeath: 60
+  _xpReward: 20
   _material: {fileID: 2100000, guid: 0ff2a05571ad49d4cbb47d0933b36553, type: 2}
   _scaleMultiplier: 1

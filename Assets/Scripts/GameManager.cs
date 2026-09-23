@@ -135,6 +135,15 @@ public class GameManager : MonoBehaviour
                 Cursor.SetCursor(_uiMenuCursorTexture, _uiCursorHotspot, CursorMode.Auto);
                 break;
 
+
+            case GameState.LevelUp:
+                Time.timeScale = 0f;
+
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.SetCursor(_uiMenuCursorTexture, _uiCursorHotspot, CursorMode.Auto);
+                break;
+
             case GameState.GameOver:
                 Time.timeScale = 0f;
                 _waveSpawner.gameObject.SetActive(false);
@@ -211,6 +220,9 @@ public class GameManager : MonoBehaviour
 
         PlayerStats.Instance.ResetStats();
         XPManager.Instance.ResetXP();
+
+        if (_playerHealth != null)
+            _playerHealth.RefreshMaxHealthFromStats();
     }
 
     private void HandlePlayerDeath(object sender, System.EventArgs e)
@@ -224,5 +236,5 @@ public class GameManager : MonoBehaviour
     
 }
 
-public enum GameState { Playing, GameOver, Paused, MainMenu }
+public enum GameState { Playing, GameOver, Paused, MainMenu, LevelUp }
 

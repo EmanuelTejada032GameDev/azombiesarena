@@ -9,6 +9,8 @@ public class HealthSystem : MonoBehaviour, IDamagable
 
     private int _healthAmount;
     [SerializeField] private int _maxHealthAmount;
+    private int _baseMaxHealth;
+    private bool _baseCaptured;
 
     [SerializeField] private bool _useInvulnerability = false;
     private bool _isInvulnerable = false;
@@ -109,5 +111,24 @@ public class HealthSystem : MonoBehaviour, IDamagable
     {
         _maxHealthAmount = maxHealthAmount;
         if (setHealthAmount) HealFull();
+    }
+
+    public void RefreshMaxHealthFromStats()
+    {
+        if (!_baseCaptured)
+        {
+            _baseMaxHealth = _maxHealthAmount;
+            _baseCaptured = true;
+        }
+
+        int newMax = Mathf.RoundToInt(
+            PlayerStats.Get(PlayerStats.StatType.MaxHealth, _baseMaxHealth));
+
+        int deficit = _maxHealthAmount - _healthAmount;
+
+        _maxHealthAmount = newMax;
+        _healthAmount = Mathf.Clamp(newMax - deficit, 0, newMax);
+
+        OnHealed?.Invoke(this, EventArgs.Empty);
     }
 }
