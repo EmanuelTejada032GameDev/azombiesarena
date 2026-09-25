@@ -54,17 +54,19 @@ public class Zombie : MonoBehaviour
     }
 
 
-    public void ApplyZombieSO(ZombieSO zombieSO)
+    public void ApplyZombieSO(ZombieSO zombieSO, float healthMultiplier = 1f, float damageMultiplier = 1f, int damageBonus = 0)
     {
         _agent.speed = zombieSO.MoveSpeed;
-        _healthSystem.Initialize(zombieSO.MaxHealth);
+
+        int scaledHealth = Mathf.Max(1, Mathf.RoundToInt(zombieSO.MaxHealth * healthMultiplier));
+        _healthSystem.Initialize(scaledHealth);
 
         if (_renderer != null)
             _renderer.sharedMaterial = zombieSO.Material;
 
         transform.localScale = Vector3.one * zombieSO.ScaleMultiplier;
 
-        _attackDamage = zombieSO.AttackDamage;
+        _attackDamage = Mathf.Max(1, Mathf.RoundToInt(zombieSO.AttackDamage * damageMultiplier) + damageBonus);
         _attackCooldown = zombieSO.AttackCooldown;
         _attackRange = zombieSO.AttackRange;
         _pointsPerHit = zombieSO.PointsPerHit;

@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
-    public static WaveSpawner Instance { get; private set; }    
+    public static WaveSpawner Instance { get; private set; }
 
     [Header("References")]
     [SerializeField] private GameObject _zombiePrefab;
-    [SerializeField] private Transform[] _spawnEntrances; 
+    [SerializeField] private Transform[] _spawnEntrances;
     [SerializeField] private Transform _playerTarget;
-    [SerializeField] private ZombieSO[] _zombieTypes;
+    [SerializeField] private WaveProgressionSO _waveProgression;
 
     [Header("Wave Configuration")]
-    [SerializeField] private int _baseZombieCount = 5;
-    [SerializeField] private int _zombiesPerWaveMultiplier = 3;
     [SerializeField] private float _timeBetweenSpawns = 1.5f;
     [SerializeField] private float _intermissionDuration = 5.0f;
     [SerializeField] private int _maxActiveZombiesCap = 24;
@@ -25,6 +23,9 @@ public class WaveSpawner : MonoBehaviour
     private int _zombiesSpawnedSoFar;
     private int _currentActiveZombiesCount;
     private bool _isIntermission = false;
+    private WavePlan _currentPlan;
+
+    public WavePlan CurrentPlan => _currentPlan;
 
 
     [Header("UI Data Streams")]
@@ -55,11 +56,18 @@ public class WaveSpawner : MonoBehaviour
 
     private void StartNextWave()
     {
+        if (_waveProgression == null)
+        {
+            Debug.LogError("[WaveSpawner] No WaveProgressionSO assigned.", this);
+            return;
+        }
+
         _currentWave++;
         _zombiesSpawnedSoFar = 0;
         if (!_continuousMode) _currentActiveZombiesCount = 0;
 
-        _totalZombiesForCurrentWave = _baseZombieCount + (_currentWave * _zombiesPerWaveMultiplier);
+        _currentPlan = _waveProgression.BuildPlan(_currentWave);
+        _totalZombiesForCurrentWave = _currentPlan.ZombieCount;
 
         if (_currentWaveVariable != null) _currentWaveVariable.Value = _currentWave;
         if (_zombiesRemainingVariable != null) _zombiesRemainingVariable.Value = _totalZombiesForCurrentWave;
@@ -71,11 +79,25 @@ public class WaveSpawner : MonoBehaviour
 
     private IEnumerator SpawnWaveRoutine()
     {
+        if (_totalZombiesForCurrentWave <= 0)
+        {
+            yield return null;
+        }
+
         while (_zombiesSpawnedSoFar < _totalZombiesForCurrentWave)
         {
             if (_currentActiveZombiesCount < _maxActiveZombiesCap)
             {
-                SpawnZombie();
+                ZombieSO nextType = GetNextZombieType();
+
+                if (nextType == null)
+                {
+                    Debug.LogWarning($"[WaveSpawner] No zombie type available on wave {_currentWave}. Ending spawns early.", this);
+                    _totalZombiesForCurrentWave = _zombiesSpawnedSoFar;
+                    break;
+                }
+
+                SpawnZombie(nextType);
                 _zombiesSpawnedSoFar++;
                 _currentActiveZombiesCount++;
 
@@ -98,7 +120,17 @@ public class WaveSpawner : MonoBehaviour
         StartCoroutine(IntermissionRoutine());
     }
 
-    private void SpawnZombie()
+    private ZombieSO GetNextZombieType()
+    {
+        if (_currentPlan.IsBossWave && _zombiesSpawnedSoFar == 0)
+        {
+            return _currentPlan.BossType;
+        }
+
+        return _currentPlan.PickType();
+    }
+
+    private void SpawnZombie(ZombieSO zombieType)
     {
         int randomGateIndex = Random.Range(0, _spawnEntrances.Length);
         Transform chosenGate = _spawnEntrances[randomGateIndex];
@@ -109,8 +141,7 @@ public class WaveSpawner : MonoBehaviour
 
         if (zombieScript != null)
         {
-            ZombieSO chosenType = _zombieTypes[Random.Range(0, _zombieTypes.Length)];
-            zombieScript.ApplyZombieSO(chosenType);
+            zombieScript.ApplyZombieSO(zombieType, _currentPlan.HealthMultiplier, _currentPlan.DamageMultiplier, _currentPlan.DamageBonus);
             zombieScript.InitializeTarget(_playerTarget);
         }
 

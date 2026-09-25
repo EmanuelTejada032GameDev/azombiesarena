@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZombieSO
   _displayName: tough
   _maxHealth: 10
-  _moveSpeed: 2.5
+  _moveSpeed: 3.2
   _attackDamage: 1
   _attackCooldown: 1
   _attackRange: 1.5

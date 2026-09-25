@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a4df17e95777dd4e856148813e70f65, type: 3}
-  m_Name: Zombie_Runner
+  m_Name: Zombie_BOSS
   m_EditorClassIdentifier: Assembly-CSharp::ZombieSO
-  _displayName: runner
-  _maxHealth: 4
-  _moveSpeed: 5
-  _attackDamage: 1
-  _attackCooldown: 1
-  _attackRange: 1.5
+  _displayName: first boss
+  _maxHealth: 300
+  _moveSpeed: 3
+  _attackDamage: 2
+  _attackCooldown: 1.5
+  _attackRange: 2.5
   _pointsPerHit: 10
-  _pointsOnDeath: 60
-  _xpReward: 20
-  _material: {fileID: 2100000, guid: 0ff2a05571ad49d4cbb47d0933b36553, type: 2}
-  _scaleMultiplier: 1
+  _pointsOnDeath: 500
+  _xpReward: 200
+  _material: {fileID: 2100000, guid: de80750e43611b84ab2727f8985efb6e, type: 2}
+  _scaleMultiplier: 3

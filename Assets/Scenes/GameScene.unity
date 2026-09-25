@@ -2930,7 +2930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_XPBar
   _barImage: {fileID: 412414258}
-  _levelText: {fileID: 0}
+  _levelText: {fileID: 1243241437}
 --- !u!1 &554858399
 GameObject:
   m_ObjectHideFlags: 0
@@ -5697,12 +5697,7 @@ MonoBehaviour:
   - {fileID: 1143779699}
   - {fileID: 941877638}
   _playerTarget: {fileID: 133011465}
-  _zombieTypes:
-  - {fileID: 11400000, guid: bdd17211cc60c344b96b891b8438ce5a, type: 2}
-  - {fileID: 11400000, guid: 91058bc2b34bb2e488a8be16c73ec3c0, type: 2}
-  - {fileID: 11400000, guid: a7531624d45227a449fc93b6fe5c6217, type: 2}
-  _baseZombieCount: 20
-  _zombiesPerWaveMultiplier: 3
+  _waveProgression: {fileID: 11400000, guid: cb412631385a6e549a300ce0f99b25c5, type: 2}
   _timeBetweenSpawns: 1.5
   _intermissionDuration: 5
   _maxActiveZombiesCap: 24

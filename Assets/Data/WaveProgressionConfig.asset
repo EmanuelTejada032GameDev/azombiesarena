@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab4d003f88d845246a0355c9d80c0d82, type: 3}
+  m_Name: WaveProgressionConfig
+  m_EditorClassIdentifier: Assembly-CSharp::WaveProgressionSO
+  _baseZombieCount: 5
+  _zombiesPerWave: 3
+  _zombieTypes:
+  - _zombieType: {fileID: 11400000, guid: bdd17211cc60c344b96b891b8438ce5a, type: 2}
+    _unlockWave: 1
+    _startWeight: 10
+    _weightPerWave: 0
+    _maxWeight: 10
+    _canBeSpecialWave: 1
+  - _zombieType: {fileID: 11400000, guid: 91058bc2b34bb2e488a8be16c73ec3c0, type: 2}
+    _unlockWave: 3
+    _startWeight: 2
+    _weightPerWave: 0.5
+    _maxWeight: 6
+    _canBeSpecialWave: 1
+  - _zombieType: {fileID: 11400000, guid: a7531624d45227a449fc93b6fe5c6217, type: 2}
+    _unlockWave: 6
+    _startWeight: 1
+    _weightPerWave: 0.3
+    _maxWeight: 4
+    _canBeSpecialWave: 1
+  _enableSpecialWaves: 1
+  _specialWaveInterval: 4
+  _enableBoss: 1
+  _bossType: {fileID: 11400000, guid: 27710c554b4c66a4981fe979d42bbcff, type: 2}
+  _bossWaveInterval: 5
+  _bossAlone: 0
+  _bossHordeFraction: 0.5
+  _healthPercentPerWave: 0.1
+  _maxHealthMultiplier: 5
+  _damageScalingMode: 1
+  _damagePercentPerWave: 0.05
+  _maxDamageMultiplier: 3
+  _wavesPerDamageStep: 5
+  _maxDamageBonus: 3

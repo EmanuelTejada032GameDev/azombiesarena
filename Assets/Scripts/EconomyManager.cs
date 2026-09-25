@@ -23,7 +23,7 @@ public class EconomyManager : MonoBehaviour
 
         ResetPoints();
 
-        startingPoints = 5000;
+        //startingPoints = 5000;
     }
 
     private void Start()
