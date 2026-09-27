@@ -34,7 +34,7 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private FloatSO _intermissionTimerVariable;
 
 
-    private void Start()
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -44,6 +44,11 @@ public class WaveSpawner : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        
     }
 
 

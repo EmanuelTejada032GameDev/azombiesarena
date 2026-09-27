@@ -153,7 +153,12 @@ public class Zombie : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_healthSystem != null) _healthSystem.OnDied -= HandleDeath;
+        if (_healthSystem != null)
+        {
+            _healthSystem.OnDied -= HandleDeath;
+            _healthSystem.OnDamaged -= HandleDamaged;
+        }
+
         if (_trackingCoroutine != null) StopCoroutine(_trackingCoroutine);
     }
 }
