@@ -247,6 +247,18 @@ public class PlayerWeaponHandler : MonoBehaviour
         return false;
     }
 
+    public bool HasCategoryInInventory(WeaponCategory category)
+    {
+        foreach (var slot in _playerCarryInventorySlots)
+        {
+            if (slot.BlueprintConfig != null && slot.BlueprintConfig.Category == category)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public void ReplenishWeaponAmmo(WeaponDataConfig config)
     {
@@ -256,8 +268,9 @@ public class PlayerWeaponHandler : MonoBehaviour
         {
             if (slot.BlueprintConfig == config)
             {
-               
-                slot.CurrentReserveAmmo = config.MaxReserveAmmo;
+
+                int effectiveMaxReserve = Mathf.RoundToInt(WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.ReserveAmmo, config.Category, config.MaxReserveAmmo));
+                slot.CurrentReserveAmmo = effectiveMaxReserve;
 
                 if (_activeWeaponInstance != null && _activeWeaponInstance.Config == config)
                 {

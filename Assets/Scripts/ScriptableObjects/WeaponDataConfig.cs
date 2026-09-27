@@ -2,9 +2,18 @@ using UnityEngine;
 
 public enum WeaponFiringMode
 {
-    SemiAutomatic, 
-    FullAutomatic, 
-    Burst         
+    SemiAutomatic,
+    FullAutomatic,
+    Burst
+}
+
+public enum WeaponCategory
+{
+    AR,
+    SMG,
+    Shotgun,
+    Pistol,
+    Sniper
 }
 
 [CreateAssetMenu(fileName = "NewWeaponProfile", menuName = "Weapons/Weapon Config")]
@@ -15,10 +24,17 @@ public class WeaponDataConfig : ScriptableObject
     [SerializeField] private Sprite _weaponIconSprite;
     [SerializeField] private GameObject _weaponModelPrefab;
     [SerializeField] private GameObject _projectilePrefab;
+    [SerializeField] private WeaponCategory _category;
 
     [Header("Combat Stat Attributes")]
     [SerializeField] private int _damage = 1;
     [SerializeField] private int _maxTargetPierceCount = 0;
+
+    [Header("Critical Hits")]
+    [Tooltip("Base chance (0-1) for a shot from this weapon to crit before any upgrades.")]
+    [SerializeField] private float _critChance = 0.05f;
+    [Tooltip("Base bonus damage multiplier on a crit before any upgrades (1.0 = +100%, i.e. double damage).")]
+    [SerializeField] private float _critDamageBonus = 1.0f;
 
 
     [Header("Firing Mechanics")]
@@ -62,8 +78,11 @@ public class WeaponDataConfig : ScriptableObject
     public Sprite WeaponIconSprite => _weaponIconSprite;
     public GameObject WeaponModelPrefab => _weaponModelPrefab;
     public GameObject ProjectilePrefab => _projectilePrefab;
+    public WeaponCategory Category => _category;
     public int Damage => _damage;
     public int MaxTargetPierceCount => _maxTargetPierceCount;
+    public float CritChance => _critChance;
+    public float CritDamageBonus => _critDamageBonus;
     public WeaponFiringMode FiringMode => _firingMode;
     public bool FireOnHold => _fireOnHold;
     public float FireCooldown => _fireCooldown;
@@ -79,7 +98,7 @@ public class WeaponDataConfig : ScriptableObject
     public int BasePurchaseCost => _basePurchaseCost;
     public int NormalAmmoPrice => _normalAmmoPrice;
     public int UpgradedAmmoPrice => _upgradedAmmoPrice;
-    
+
     public AudioEvent ShootEvent => _shootEvent;
     public AudioEvent ReloadEvent => _reloadEvent;
 

@@ -9,14 +9,14 @@ public class UI_UpgradeCard : MonoBehaviour
     [SerializeField] private TMP_Text _descriptionText;
     [SerializeField] private Button _button;
 
-    private UpgradeSO _upgrade;
+    private UpgradeCardSO _upgrade;
 
     private void Awake()
     {
         _button.onClick.AddListener(HandleClick);
     }
 
-    public void Setup(UpgradeSO upgrade)
+    public void Setup(UpgradeCardSO upgrade)
     {
         _upgrade = upgrade;
 

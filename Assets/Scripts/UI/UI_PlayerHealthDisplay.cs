@@ -13,7 +13,6 @@ public class UI_PlayerHealthDisplay : MonoBehaviour
 
     private void Awake()
     {
-        Hide();
     }
 
     private void Start()
@@ -32,6 +31,8 @@ public class UI_PlayerHealthDisplay : MonoBehaviour
             
             UpdateHealthUI();
         }
+
+        Hide();
     }
 
     private void OnDestroy()

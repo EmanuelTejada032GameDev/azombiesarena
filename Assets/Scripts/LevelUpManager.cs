@@ -7,10 +7,10 @@ public class LevelUpManager : MonoBehaviour
 {
     public static LevelUpManager Instance { get; private set; }
 
-    [SerializeField] private List<UpgradeSO> _pool = new List<UpgradeSO>();
+    [SerializeField] private List<UpgradeCardSO> _pool = new List<UpgradeCardSO>();
     [SerializeField] private int _cardsPerLevel = 3;
 
-    public event Action<List<UpgradeSO>> OnUpgradesOffered;
+    public event Action<List<UpgradeCardSO>> OnUpgradesOffered;
 
     [SerializeField] private HealthSystem _playerHealth;
 
@@ -44,15 +44,15 @@ public class LevelUpManager : MonoBehaviour
 
     private void OfferNext()
     {
-        List<UpgradeSO> trio = DrawUpgrades(_cardsPerLevel);
+        List<UpgradeCardSO> trio = DrawUpgrades(_cardsPerLevel);
         OnUpgradesOffered?.Invoke(trio);
     }
 
-    public void SelectUpgrade(UpgradeSO upgrade)
+    public void SelectUpgrade(UpgradeCardSO upgrade)
     {
-        PlayerStats.Instance.ApplyModifier(upgrade.StatType, upgrade.ModifierKind, upgrade.Amount);
+        upgrade.Apply();
 
-        if (upgrade.StatType == PlayerStats.StatType.MaxHealth && _playerHealth != null)
+        if (upgrade is UpgradeSO playerCard && playerCard.StatType == PlayerStats.StatType.MaxHealth && _playerHealth != null)
             _playerHealth.RefreshMaxHealthFromStats();
 
         XPManager.Instance.ConsumePendingLevelUp();
@@ -63,25 +63,37 @@ public class LevelUpManager : MonoBehaviour
             GameManager.Instance.ChangeState(GameState.Playing);
     }
 
-    private List<UpgradeSO> DrawUpgrades(int count)
+    private List<UpgradeCardSO> DrawUpgrades(int count)
     {
-        List<IGrouping<PlayerStats.StatType, UpgradeSO>> byType = _pool
-            .GroupBy(upgrade => upgrade.StatType)
+        List<UpgradeCardSO> eligiblePool = _pool.Where(IsEligible).ToList();
+
+        List<IGrouping<object, UpgradeCardSO>> byGroup = eligiblePool
+            .GroupBy(upgrade => upgrade.GroupKey)
             .ToList();
 
-        int drawCount = Mathf.Min(count, byType.Count);
+        int drawCount = Mathf.Min(count, byGroup.Count);
 
-        IEnumerable<IGrouping<PlayerStats.StatType, UpgradeSO>> chosenTypes = byType
+        IEnumerable<IGrouping<object, UpgradeCardSO>> chosenGroups = byGroup
             .OrderBy(_ => UnityEngine.Random.value)
             .Take(drawCount);
 
-        List<UpgradeSO> result = new List<UpgradeSO>();
-        foreach (IGrouping<PlayerStats.StatType, UpgradeSO> group in chosenTypes)
+        List<UpgradeCardSO> result = new List<UpgradeCardSO>();
+        foreach (IGrouping<object, UpgradeCardSO> group in chosenGroups)
         {
-            List<UpgradeSO> options = group.ToList();
+            List<UpgradeCardSO> options = group.ToList();
             result.Add(options[UnityEngine.Random.Range(0, options.Count)]);
         }
 
         return result;
+    }
+
+    private bool IsEligible(UpgradeCardSO card)
+    {
+        if (card is WeaponUpgradeSO weaponCard && weaponCard.Scope == WeaponStatsHub.ModifierScope.Category)
+        {
+            return PlayerWeaponHandler.Instance != null && PlayerWeaponHandler.Instance.HasCategoryInInventory(weaponCard.Category);
+        }
+
+        return true;
     }
 }

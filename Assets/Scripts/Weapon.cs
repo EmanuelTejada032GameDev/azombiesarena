@@ -22,6 +22,13 @@ public class Weapon : MonoBehaviour
     public WeaponInstanceState State => _state;
     public bool IsReloading => _isReloading;
 
+    public int EffectiveMaxMagazineSize => Config == null
+        ? 0
+        : Mathf.RoundToInt(WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.MagSize, Config.Category, Config.MaxMagazineSize));
+
+    private float EffectiveFireCooldown => WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.FireRate, Config.Category, Config.FireCooldown);
+    private float EffectiveReloadDuration => WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.ReloadSpeed, Config.Category, Config.ReloadDuration);
+
     public EventHandler OnAmmoChanged;
 
     /// <summary>
@@ -46,19 +53,19 @@ public class Weapon : MonoBehaviour
             case WeaponFiringMode.SemiAutomatic:
             case WeaponFiringMode.FullAutomatic:
                 ExecuteFireCycle();
-                _nextFireTime = Time.time + Config.FireCooldown;
+                _nextFireTime = Time.time + EffectiveFireCooldown;
                 break;
 
             case WeaponFiringMode.Burst:
                 StartCoroutine(ExecuteBurstRoutine());
-                _nextFireTime = Time.time + Config.FireCooldown;
+                _nextFireTime = Time.time + EffectiveFireCooldown;
                 break;
         }
     }
 
     public void ProcessReloadRequest()
     {
-        if (_isReloading || _state == null || _state.CurrentMagazineAmmo == Config.MaxMagazineSize || _state.CurrentReserveAmmo <= 0) return;
+        if (_isReloading || _state == null || _state.CurrentMagazineAmmo >= EffectiveMaxMagazineSize || _state.CurrentReserveAmmo <= 0) return;
 
         StartCoroutine(ExecuteReloadRoutine());
     }
@@ -100,11 +107,28 @@ public class Weapon : MonoBehaviour
             Projectile projectileScript = bullet.GetComponent<Projectile>();
             if (projectileScript != null)
             {
-                projectileScript.InitializeProjectile(Config.Damage, Config.MaxTargetPierceCount);
+                int finalDamage = GetEffectiveDamageForShot();
+                projectileScript.InitializeProjectile(finalDamage, Config.MaxTargetPierceCount);
             }
 
             bullet.SetActive(true);
         }
+    }
+
+    private int GetEffectiveDamageForShot()
+    {
+        float baseDamage = WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.Damage, Config.Category, Config.Damage);
+
+        float critChance = WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.CritChance, Config.Category, Config.CritChance);
+        bool isCrit = Random.value < critChance;
+
+        if (isCrit)
+        {
+            float critDamageBonus = WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.CritDamage, Config.Category, Config.CritDamageBonus);
+            baseDamage *= (1f + critDamageBonus);
+        }
+
+        return Mathf.RoundToInt(baseDamage);
     }
 
     private IEnumerator ExecuteBurstRoutine()
@@ -128,9 +152,9 @@ public class Weapon : MonoBehaviour
 
         Config.ReloadEvent.Play(_weaponAudioSource);
 
-        yield return new WaitForSeconds(Config.ReloadDuration);
+        yield return new WaitForSeconds(EffectiveReloadDuration);
 
-        int amountNeeded = Config.MaxMagazineSize - _state.CurrentMagazineAmmo;
+        int amountNeeded = EffectiveMaxMagazineSize - _state.CurrentMagazineAmmo;
         int amountToTransfer = Mathf.Min(amountNeeded, _state.CurrentReserveAmmo);
 
         _state.CurrentReserveAmmo -= amountToTransfer;

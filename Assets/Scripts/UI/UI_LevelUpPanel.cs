@@ -27,7 +27,7 @@ public class UI_LevelUpPanel : MonoBehaviour
             GameManager.Instance.OnStateChanged -= HandleStateChanged;
     }
 
-    private void HandleUpgradesOffered(List<UpgradeSO> upgrades)
+    private void HandleUpgradesOffered(List<UpgradeCardSO> upgrades)
     {
         _panel.SetActive(true);
 
