@@ -6,6 +6,7 @@ public class HealthSystem : MonoBehaviour, IDamagable
     public event EventHandler OnDamaged;
     public event EventHandler OnHealed;
     public event EventHandler OnDied;
+    public event EventHandler<DamageEventArgs> OnDamageDealt;
 
     private int _healthAmount;
     [SerializeField] private int _maxHealthAmount;
@@ -36,28 +37,18 @@ public class HealthSystem : MonoBehaviour, IDamagable
     public int MaxHealth => _maxHealthAmount;
     public float NormalizedHealthAmount => (float)_healthAmount / _maxHealthAmount;
 
+
     public void TakeDamage(int damageAmount)
     {
-
-        if (_useInvulnerability && Time.time < _nextAllowedDamageTime)
-        {
-            return; 
-        }
-
-        if (_useInvulnerability)
-        {
-            _nextAllowedDamageTime = Time.time + _invulnerabilityTimeFrame;
-        }
-
-        _healthAmount -= damageAmount;
-        _healthAmount = Mathf.Clamp(_healthAmount, 0, _maxHealthAmount);
-        OnDamaged?.Invoke(this, EventArgs.Empty);
-
-        if (_healthAmount <= 0)
-            Die();
+        TakeDamage(damageAmount, false);
     }
 
     public void TakeDamage(float damageAmount)
+    {
+        TakeDamage(Mathf.RoundToInt(damageAmount), false);
+    }
+
+    public void TakeDamage(int damageAmount, bool isCrit)
     {
         if (_useInvulnerability && Time.time < _nextAllowedDamageTime)
         {
@@ -69,15 +60,15 @@ public class HealthSystem : MonoBehaviour, IDamagable
             _nextAllowedDamageTime = Time.time + _invulnerabilityTimeFrame;
         }
 
-        int integerDamage = Mathf.RoundToInt(damageAmount);
-
-        _healthAmount -= integerDamage;
+        _healthAmount -= damageAmount;
         _healthAmount = Mathf.Clamp(_healthAmount, 0, _maxHealthAmount);
         OnDamaged?.Invoke(this, EventArgs.Empty);
+        OnDamageDealt?.Invoke(this, new DamageEventArgs(damageAmount, isCrit));
 
         if (_healthAmount <= 0)
             Die();
     }
+
 
     public void Heal(int amount)
     {
@@ -130,5 +121,19 @@ public class HealthSystem : MonoBehaviour, IDamagable
         _healthAmount = Mathf.Clamp(newMax - deficit, 0, newMax);
 
         OnHealed?.Invoke(this, EventArgs.Empty);
+    }
+}
+
+
+
+public class DamageEventArgs : EventArgs
+{
+    public int Amount { get; }
+    public bool IsCrit { get; }
+
+    public DamageEventArgs(int amount, bool isCrit)
+    {
+        Amount = amount;
+        IsCrit = isCrit;
     }
 }

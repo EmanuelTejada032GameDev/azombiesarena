@@ -107,20 +107,20 @@ public class Weapon : MonoBehaviour
             Projectile projectileScript = bullet.GetComponent<Projectile>();
             if (projectileScript != null)
             {
-                int finalDamage = GetEffectiveDamageForShot();
-                projectileScript.InitializeProjectile(finalDamage, Config.MaxTargetPierceCount);
+                int finalDamage = GetEffectiveDamageForShot(out bool isCrit);
+                projectileScript.InitializeProjectile(finalDamage, Config.MaxTargetPierceCount, isCrit);
             }
 
             bullet.SetActive(true);
         }
     }
 
-    private int GetEffectiveDamageForShot()
+    private int GetEffectiveDamageForShot(out bool isCrit)
     {
         float baseDamage = WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.Damage, Config.Category, Config.Damage);
 
         float critChance = WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.CritChance, Config.Category, Config.CritChance);
-        bool isCrit = Random.value < critChance;
+        isCrit = Random.value < critChance;
 
         if (isCrit)
         {

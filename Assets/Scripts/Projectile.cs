@@ -23,14 +23,16 @@ public class Projectile : MonoBehaviour
     [SerializeField] private GameObject _zombieImpactPrefab;
 
     private int _damage = 1;
+    private bool _isCrit;
 
     private readonly RaycastHit[] _hitBuffer = new RaycastHit[5];
 
     private Collider _lastDamagedCollider;
 
-    public void InitializeProjectile(int damageValue, int maxTargetPierceCount)
+    public void InitializeProjectile(int damageValue, int maxTargetPierceCount, bool isCrit = false)
     {
         _damage = damageValue;
+        _isCrit = isCrit;
         _maxTargetPierceCount = maxTargetPierceCount;
         _currentLifeTimer = _lifeTime;
         _lastPosition = transform.position;
@@ -76,7 +78,7 @@ public class Projectile : MonoBehaviour
                 IDamagable damageable = hit.collider.gameObject.GetComponentInParent<IDamagable>();
                 if (damageable != null)
                 {
-                    damageable.TakeDamage(_damage);
+                    damageable.TakeDamage(_damage, _isCrit);
                     SpawnImpactEffect(_zombieImpactPrefab, hit.point, hit.normal);
 
                     _lastDamagedCollider = hit.collider;

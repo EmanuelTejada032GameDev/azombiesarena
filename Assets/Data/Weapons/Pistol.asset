@@ -19,7 +19,7 @@ MonoBehaviour:
   _category: 3
   _damage: 1
   _maxTargetPierceCount: 0
-  _critChance: 0.05
+  _critChance: 1
   _critDamageBonus: 1
   _firingMode: 0
   _fireOnHold: 0
