@@ -54,6 +54,8 @@ public class PlayerWeaponHandler : MonoBehaviour
 
         _inputs.Player.Reload.performed += OnReloadPerformed;
 
+        _inputs.Player.Sprint.performed += OnShootCanceled;
+
         if (_playerCarryInventorySlots.Count > 0)
         {
             EquipWeaponAtIndex(_currentWeaponIndex);

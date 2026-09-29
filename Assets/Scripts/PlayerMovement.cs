@@ -691,16 +691,16 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         });
     }
 
-    private void OnDrawGizmos()
-    {
-        if (!Application.isPlaying)
-            return;
+    //private void OnDrawGizmos()
+    //{
+    //    if (!Application.isPlaying)
+    //        return;
 
-        Gizmos.color = Color.red;
+    //    Gizmos.color = Color.red;
 
-        Gizmos.DrawWireSphere(
-            _lastCeilingCheckPos,
-            _ceilingCheckRadius
-        );
-    }
+    //    Gizmos.DrawWireSphere(
+    //        _lastCeilingCheckPos,
+    //        _ceilingCheckRadius
+    //    );
+    //}
 }

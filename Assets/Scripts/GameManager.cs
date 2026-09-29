@@ -1,4 +1,5 @@
 using System;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -24,9 +25,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform _playerTransform;
     [SerializeField] private WaveSpawner _waveSpawner;
 
+    [SerializeField] private CinemachineCamera _camera;
 
-    private Vector3 _playerStartExposition;
 
+    private Vector3 _playerStartPosition;
+    private Quaternion _playerStartRotation;
+
+   
     [Header("Cursor Settings")]
     [SerializeField] private Texture2D _uiMenuCursorTexture;
     [SerializeField] private Vector2 _uiCursorHotspot = Vector2.zero;
@@ -44,7 +49,8 @@ public class GameManager : MonoBehaviour
 
         if (_playerTransform != null)
         {
-            _playerStartExposition = _playerTransform.position;
+            _playerStartPosition = _playerTransform.position;
+            _playerStartRotation = _playerTransform.rotation;
         }
     }
 
@@ -199,7 +205,8 @@ public class GameManager : MonoBehaviour
 
         if (_playerTransform != null)
         {
-            _playerTransform.position = _playerStartExposition;
+            _playerTransform.position = _playerStartPosition;
+            _playerTransform.rotation = _playerStartRotation;
         }
 
         if (_playerHealth != null)
