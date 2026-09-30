@@ -21,5 +21,5 @@ MonoBehaviour:
   _pointsPerHit: 10
   _pointsOnDeath: 500
   _xpReward: 200
-  _material: {fileID: 2100000, guid: de80750e43611b84ab2727f8985efb6e, type: 2}
-  _scaleMultiplier: 2
+  _prefab: {fileID: 2985613078062470518, guid: 5b2ff4170b8ef37419c5726ea47d3801, type: 3}
+  _scaleMultiplier: 1

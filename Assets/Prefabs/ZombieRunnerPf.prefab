@@ -1,0 +1,138 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5858146946082441277
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7461956875752247643}
+    m_Modifications:
+    - target: {fileID: 1916796579201672, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_Name
+      value: SM_Chr_Zombie_Footballer_Male_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 95057615463316896, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: b820140694b8a3b4399489cb4b5f6ead, type: 2}
+    - target: {fileID: 95057615463316896, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+--- !u!4 &5855534718366510217 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4319231604384948, guid: c40219a9f4014f74c9f6a2375760c085, type: 3}
+  m_PrefabInstance: {fileID: 5858146946082441277}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7218407123326958353
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7831621363111074353, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      propertyPath: m_Name
+      value: ZombieRunnerPf
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 2212099831299256769, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 5855534718366510217}
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+--- !u!4 &7461956875752247643 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 262014956138031690, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
+  m_PrefabInstance: {fileID: 7218407123326958353}
+  m_PrefabAsset: {fileID: 0}

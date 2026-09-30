@@ -21,7 +21,7 @@ public class ZombieSO : ScriptableObject
     [SerializeField] private int _xpReward = 20;
 
     [Header("Visuals")]
-    [SerializeField] private Material _material;
+    [SerializeField] private GameObject _prefab;
     [SerializeField] private float _scaleMultiplier = 1f;
 
     public string DisplayName => _displayName;
@@ -32,7 +32,7 @@ public class ZombieSO : ScriptableObject
     public float AttackRange => _attackRange;
     public int PointsPerHit => _pointsPerHit;
     public int PointsOnDeath => _pointsOnDeath;
-    public Material Material => _material;
+    public GameObject Prefab => _prefab;
     public float ScaleMultiplier => _scaleMultiplier;
 
 

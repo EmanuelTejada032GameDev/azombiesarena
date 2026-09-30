@@ -31,17 +31,30 @@ public class Zombie : MonoBehaviour
     [SerializeField] private int _pointsOnDeath = 60;
     [SerializeField] private int _xpOnDeath = 20;
 
-    [SerializeField] private Renderer _renderer;
+
+    [Header("Animation")]
+    [SerializeField] private float _speedDampTime = 0.1f;
+
+    private Animator _animator;
+    private static readonly int SpeedHash = Animator.StringToHash("Speed");
 
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _healthSystem = GetComponent<HealthSystem>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
     {
         StartCoroutine(AttackCheckRoutine());
+    }
+
+    private void Update()
+    {
+        if (_animator == null || _agent == null || !_agent.enabled) return;
+
+        _animator.SetFloat(SpeedHash, _agent.velocity.magnitude, _speedDampTime, Time.deltaTime);
     }
 
     private void OnEnable()
@@ -60,9 +73,6 @@ public class Zombie : MonoBehaviour
 
         int scaledHealth = Mathf.Max(1, Mathf.RoundToInt(zombieSO.MaxHealth * healthMultiplier));
         _healthSystem.Initialize(scaledHealth);
-
-        if (_renderer != null)
-            _renderer.sharedMaterial = zombieSO.Material;
 
         transform.localScale = Vector3.one * zombieSO.ScaleMultiplier;
 

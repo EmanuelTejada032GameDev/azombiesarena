@@ -48,13 +48,13 @@ public class PlayerWeaponHandler : MonoBehaviour
 
         _inputs.Player.Shoot.started += OnShootStarted;
         _inputs.Player.Shoot.canceled += OnShootCanceled;
+        _inputs.Player.Sprint.performed += OnShootCanceled;
 
         _inputs.Player.NextWeapon.performed += OnNextWeaponPerformed;
         _inputs.Player.PreviousWeapon.performed += OnPreviousWeaponPerformed;
 
         _inputs.Player.Reload.performed += OnReloadPerformed;
 
-        _inputs.Player.Sprint.performed += OnShootCanceled;
 
         if (_playerCarryInventorySlots.Count > 0)
         {

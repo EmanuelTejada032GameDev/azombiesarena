@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZombieSO
   _displayName: standard
   _maxHealth: 5
-  _moveSpeed: 3.5
+  _moveSpeed: 2
   _attackDamage: 1
   _attackCooldown: 1
   _attackRange: 1.5
   _pointsPerHit: 10
   _pointsOnDeath: 40
   _xpReward: 10
-  _material: {fileID: 2100000, guid: c4c478f0cf754b540ad0e06f67fb0498, type: 2}
+  _prefab: {fileID: 7831621363111074353, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
   _scaleMultiplier: 1

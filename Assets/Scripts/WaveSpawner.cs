@@ -7,7 +7,6 @@ public class WaveSpawner : MonoBehaviour
     public static WaveSpawner Instance { get; private set; }
 
     [Header("References")]
-    [SerializeField] private GameObject _zombiePrefab;
     [SerializeField] private Transform[] _spawnEntrances;
     [SerializeField] private Transform _playerTarget;
     [SerializeField] private WaveProgressionSO _waveProgression;
@@ -102,9 +101,16 @@ public class WaveSpawner : MonoBehaviour
                     break;
                 }
 
-                SpawnZombie(nextType);
-                _zombiesSpawnedSoFar++;
-                _currentActiveZombiesCount++;
+                if (SpawnZombie(nextType))
+                {
+                    _zombiesSpawnedSoFar++;
+                    _currentActiveZombiesCount++;
+                }
+                else
+                {
+                    _totalZombiesForCurrentWave = _zombiesSpawnedSoFar;
+                    break;
+                }
 
                 yield return new WaitForSeconds(_timeBetweenSpawns);
             }
@@ -135,12 +141,18 @@ public class WaveSpawner : MonoBehaviour
         return _currentPlan.PickType();
     }
 
-    private void SpawnZombie(ZombieSO zombieType)
+    private bool SpawnZombie(ZombieSO zombieType)
     {
+        if (zombieType.Prefab == null)
+        {
+            Debug.LogWarning($"[WaveSpawner] {zombieType.name} has no prefab assigned.", zombieType);
+            return false;
+        }
+
         int randomGateIndex = Random.Range(0, _spawnEntrances.Length);
         Transform chosenGate = _spawnEntrances[randomGateIndex];
 
-        GameObject newZombie = Instantiate(_zombiePrefab, chosenGate.position, chosenGate.rotation);
+        GameObject newZombie = Instantiate(zombieType.Prefab, chosenGate.position, chosenGate.rotation);
 
         Zombie zombieScript = newZombie.GetComponent<Zombie>();
 
@@ -155,6 +167,8 @@ public class WaveSpawner : MonoBehaviour
         {
             zombieHealth.OnDied += HandleZombieDeath;
         }
+
+        return true;
     }
 
     private void HandleZombieDeath(object sender, System.EventArgs e)
