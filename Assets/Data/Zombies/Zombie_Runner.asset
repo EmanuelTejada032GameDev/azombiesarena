@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Zombie_Runner
   m_EditorClassIdentifier: Assembly-CSharp::ZombieSO
   _displayName: runner
-  _maxHealth: 4
+  _maxHealth: 10
   _moveSpeed: 4
   _attackDamage: 1
   _attackCooldown: 1

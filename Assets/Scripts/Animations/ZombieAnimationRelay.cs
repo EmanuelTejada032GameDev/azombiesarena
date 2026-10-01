@@ -18,4 +18,9 @@ public class ZombieAnimationRelay : MonoBehaviour
     {
         if (_zombie != null) _zombie.OnAttackEnd();
     }
+
+    public void OnHitReactEnd()
+    {
+        if (_zombie != null) _zombie.OnHitReactEnd();
+    }
 }

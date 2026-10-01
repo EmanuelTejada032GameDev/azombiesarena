@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Zombie_Standard
   m_EditorClassIdentifier: Assembly-CSharp::ZombieSO
   _displayName: standard
-  _maxHealth: 5
+  _maxHealth: 10
   _moveSpeed: 2
   _attackDamage: 1
   _attackCooldown: 1

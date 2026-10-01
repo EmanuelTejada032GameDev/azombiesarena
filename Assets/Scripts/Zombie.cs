@@ -50,7 +50,8 @@ public class Zombie : MonoBehaviour
     private Coroutine _attackTimeoutCoroutine;
 
     private static readonly int DeathHash = Animator.StringToHash("Death");
-
+    private static readonly int HitHash = Animator.StringToHash("Hit");
+    private bool _wasHitRecently = false;
 
 
     private void Awake()
@@ -115,7 +116,13 @@ public class Zombie : MonoBehaviour
     private void HandleDamaged(object sender, EventArgs e)
     {
         EconomyManager.Instance.AddPoints(_pointsPerHit);
-        // Damage Logic or visual effects
+
+        Debug.Log($"OnHitReact value : {_wasHitRecently}");
+        if (_isDead || _isAttacking || _animator == null || _wasHitRecently) return;
+
+        _wasHitRecently = true;
+        Debug.Log($"OnHitReact trigger");
+        _animator.SetTrigger(HitHash);
     }
 
     public void InitializeTarget(Transform playerTransform)
@@ -147,7 +154,6 @@ public class Zombie : MonoBehaviour
             {
                 float distance = Vector3.Distance(transform.position, _targetPlayer.position);
 
-                Debug.Log($"distance <= _attackRange {distance <= _attackRange}");
                 if (distance <= _attackRange)
                 {
                     StartAttack();
@@ -215,6 +221,12 @@ public class Zombie : MonoBehaviour
     public void OnAttackEnd()
     {
         FinishAttack();
+    }
+
+    public void OnHitReactEnd()
+    {
+        Debug.Log("OnHitReact will set to false");
+        _wasHitRecently = false;
     }
 
     private void HandleDeath(object sender, EventArgs e)
