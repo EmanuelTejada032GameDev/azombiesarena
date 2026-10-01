@@ -5709,7 +5709,7 @@ MonoBehaviour:
   _waveProgression: {fileID: 11400000, guid: cb412631385a6e549a300ce0f99b25c5, type: 2}
   _timeBetweenSpawns: 1.5
   _intermissionDuration: 5
-  _maxActiveZombiesCap: 24
+  _maxActiveZombiesCap: 3
   _continuousMode: 1
   _currentWaveVariable: {fileID: 11400000, guid: 1ad6fc888649e364d8ca26b0d9353814, type: 2}
   _zombiesRemainingVariable: {fileID: 11400000, guid: df7181657c2f07b458234db9d073098c, type: 2}

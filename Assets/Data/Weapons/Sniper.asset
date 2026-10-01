@@ -29,8 +29,8 @@ MonoBehaviour:
   _pelletCount: 1
   _spreadAngle: 0
   _recoilForce: 1
-  _maxMagazineSize: 1
-  _maxReserveAmmo: 22
+  _maxMagazineSize: 3
+  _maxReserveAmmo: 21
   _reloadDuration: 0.2
   _basePurchaseCost: 4000
   _normalAmmoPrice: 500

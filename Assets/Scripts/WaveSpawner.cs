@@ -54,9 +54,18 @@ public class WaveSpawner : MonoBehaviour
     private void OnEnable()
     {
         _currentWave = 0;
+        ResetSpawner();
         StartNextWave();
     }
 
+    private void ResetSpawner()
+    {
+        _currentWave = 0;
+        _zombiesSpawnedSoFar = 0;
+        _currentActiveZombiesCount = 0;
+        _currentPlan = null;
+        _isIntermission = false;
+    }
 
     private void StartNextWave()
     {
