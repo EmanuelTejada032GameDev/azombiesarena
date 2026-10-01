@@ -22,24 +22,24 @@ MonoBehaviour:
     _maxWeight: 10
     _canBeSpecialWave: 1
   - _zombieType: {fileID: 11400000, guid: 91058bc2b34bb2e488a8be16c73ec3c0, type: 2}
-    _unlockWave: 1
+    _unlockWave: 3
     _startWeight: 2
     _weightPerWave: 0.5
     _maxWeight: 6
     _canBeSpecialWave: 1
   - _zombieType: {fileID: 11400000, guid: a7531624d45227a449fc93b6fe5c6217, type: 2}
-    _unlockWave: 1
+    _unlockWave: 6
     _startWeight: 1
     _weightPerWave: 0.3
     _maxWeight: 4
     _canBeSpecialWave: 1
   _enableSpecialWaves: 1
-  _specialWaveInterval: 4
+  _specialWaveInterval: 5
   _enableBoss: 1
   _bossType: {fileID: 11400000, guid: 27710c554b4c66a4981fe979d42bbcff, type: 2}
-  _bossWaveInterval: 1
-  _bossAlone: 0
-  _bossHordeFraction: 0.5
+  _bossWaveInterval: 5
+  _bossAlone: 1
+  _bossHordeFraction: 0
   _healthPercentPerWave: 0.1
   _maxHealthMultiplier: 5
   _damageScalingMode: 1

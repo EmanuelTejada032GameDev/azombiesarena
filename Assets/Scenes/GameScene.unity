@@ -5700,7 +5700,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 620ccf2422aa17b4c969cd823fb486a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveSpawner
-  _zombiePrefab: {fileID: 7831621363111074353, guid: d08cdf964f6589a4783d236b137bad94, type: 3}
   _spawnEntrances:
   - {fileID: 2059214089}
   - {fileID: 1233734402}

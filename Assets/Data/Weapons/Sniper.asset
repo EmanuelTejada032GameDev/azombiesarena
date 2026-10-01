@@ -17,7 +17,7 @@ MonoBehaviour:
   _weaponModelPrefab: {fileID: 1796101793198917877, guid: bac4dd1cfa51b5d4eb15847249c5fca6, type: 3}
   _projectilePrefab: {fileID: 5161285532180211351, guid: b4c7dc994b1dc1147a87eddf3704774c, type: 3}
   _category: 4
-  _damage: 6
+  _damage: 15
   _maxTargetPierceCount: 3
   _critChance: 0.05
   _critDamageBonus: 1

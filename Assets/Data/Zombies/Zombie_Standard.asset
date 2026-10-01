@@ -17,7 +17,7 @@ MonoBehaviour:
   _moveSpeed: 2
   _attackDamage: 1
   _attackCooldown: 1
-  _attackRange: 1.5
+  _attackRange: 2
   _pointsPerHit: 10
   _pointsOnDeath: 40
   _xpReward: 10

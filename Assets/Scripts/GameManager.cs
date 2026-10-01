@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
                 _pauseMenuUI.SetActive(false);
 
                 Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                //Cursor.lockState = CursorLockMode.None;
                 Cursor.SetCursor(_uiMenuCursorTexture, _uiCursorHotspot, CursorMode.Auto);
                 break;
 
@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
                 _waveSpawner.gameObject.SetActive(true);
 
                 Cursor.visible = false; 
-                Cursor.lockState = CursorLockMode.Confined; 
+                //Cursor.lockState = CursorLockMode.Confined; 
                 Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto); 
                 break;
 
@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
                 _pauseMenuUI.SetActive(true);
 
                 Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                //Cursor.lockState = CursorLockMode.None;
                 Cursor.SetCursor(_uiMenuCursorTexture, _uiCursorHotspot, CursorMode.Auto);
                 break;
 
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 0f;
 
                 Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                //Cursor.lockState = CursorLockMode.None;
                 Cursor.SetCursor(_uiMenuCursorTexture, _uiCursorHotspot, CursorMode.Auto);
                 break;
 
@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
                 _gameOverUI.SetActive(true);
 
                 Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                //Cursor.lockState = CursorLockMode.None;
                 Cursor.SetCursor(_uiMenuCursorTexture, _uiCursorHotspot, CursorMode.Auto);
                 break;
         }

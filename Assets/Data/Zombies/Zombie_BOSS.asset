@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZombieSO
   _displayName: first boss
   _maxHealth: 300
-  _moveSpeed: 3
+  _moveSpeed: 2
   _attackDamage: 2
   _attackCooldown: 1.5
-  _attackRange: 4
+  _attackRange: 3.5
   _pointsPerHit: 10
   _pointsOnDeath: 500
   _xpReward: 200
   _prefab: {fileID: 2985613078062470518, guid: 5b2ff4170b8ef37419c5726ea47d3801, type: 3}
-  _scaleMultiplier: 1
+  _scaleMultiplier: 3

@@ -14,6 +14,7 @@ public class Zombie : MonoBehaviour
     private Coroutine _trackingCoroutine;
 
     private HealthSystem _healthSystem;
+    private Collider _collider;
 
     [Header("Attack Configuration")]
     [SerializeField] private float _attackRange = 1.5f;
@@ -38,11 +39,26 @@ public class Zombie : MonoBehaviour
     private Animator _animator;
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
 
+    [Header("Attack Animation")]
+    [SerializeField] private float _attackConeAngle = 90f;
+    [SerializeField] private float _attackTurnSpeed = 180f;
+    [SerializeField] private float _attackTimeout = 3f;
+
+    private static readonly int AttackHash = Animator.StringToHash("Attack");
+    private bool _isAttacking;
+    private bool _isDead;
+    private Coroutine _attackTimeoutCoroutine;
+
+    private static readonly int DeathHash = Animator.StringToHash("Death");
+
+
+
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _healthSystem = GetComponent<HealthSystem>();
         _animator = GetComponentInChildren<Animator>();
+        _collider = GetComponentInChildren<Collider>();
     }
 
     private void Start()
@@ -52,6 +68,18 @@ public class Zombie : MonoBehaviour
 
     private void Update()
     {
+        if (_isAttacking && _targetPlayer != null)
+        {
+            Vector3 direction = _targetPlayer.position - transform.position;
+            direction.y = 0f;
+
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _attackTurnSpeed * Time.deltaTime);
+            }
+        }
+
         if (_animator == null || _agent == null || !_agent.enabled) return;
 
         _animator.SetFloat(SpeedHash, _agent.velocity.magnitude, _speedDampTime, Time.deltaTime);
@@ -114,34 +142,95 @@ public class Zombie : MonoBehaviour
     {
         while (true)
         {
-            if (_targetPlayer != null && _playerDamageable != null && _canAttack)
+
+            if (!_isDead && _targetPlayer != null && _playerDamageable != null && _canAttack)
             {
                 float distance = Vector3.Distance(transform.position, _targetPlayer.position);
 
+                Debug.Log($"distance <= _attackRange {distance <= _attackRange}");
                 if (distance <= _attackRange)
                 {
-                    StartCoroutine(PerformAttackRoutine());
+                    StartAttack();
                 }
             }
             yield return new WaitForSeconds(_pollingInterval);
         }
     }
 
-    private IEnumerator PerformAttackRoutine()
+    private void StartAttack()
     {
         _canAttack = false;
+        _isAttacking = true;
+
+        if (_agent.enabled && _agent.isOnNavMesh) _agent.isStopped = true;
+
+        if (_animator != null) _animator.SetTrigger(AttackHash);
+
+        _attackTimeoutCoroutine = StartCoroutine(AttackTimeoutRoutine());
+    }
+
+    private IEnumerator AttackTimeoutRoutine()
+    {
+        yield return new WaitForSeconds(_attackTimeout);
+        _attackTimeoutCoroutine = null;
+        FinishAttack();
+    }
+
+    private IEnumerator CooldownRoutine()
+    {
+        yield return new WaitForSeconds(_attackCooldown);
+        if (!_isDead) _canAttack = true;
+    }
+
+    private void FinishAttack()
+    {
+        if (!_isAttacking) return;
+
+        _isAttacking = false;
+
+        if (_attackTimeoutCoroutine != null)
+        {
+            StopCoroutine(_attackTimeoutCoroutine);
+            _attackTimeoutCoroutine = null;
+        }
+
+        if (_agent != null && _agent.enabled && _agent.isOnNavMesh) _agent.isStopped = false;
+
+        if (!_isDead) StartCoroutine(CooldownRoutine());
+    }
+
+    public void OnAttackHit()
+    {
+        if (!_isAttacking || _isDead || _targetPlayer == null || _playerDamageable == null) return;
+
+        Vector3 toPlayer = _targetPlayer.position - transform.position;
+        toPlayer.y = 0f;
+
+        if (toPlayer.magnitude > _attackRange) return;
+        if (Vector3.Angle(transform.forward, toPlayer) > _attackConeAngle * 0.5f) return;
 
         _playerDamageable.TakeDamage(_attackDamage);
+    }
 
-        // Visual indicator for graybox: Print to console or flash a color later
-
-        yield return new WaitForSeconds(_attackCooldown);
-        _canAttack = true;
+    public void OnAttackEnd()
+    {
+        FinishAttack();
     }
 
     private void HandleDeath(object sender, EventArgs e)
     {
         _healthSystem.OnDied -= HandleDeath;
+        _isDead = true;
+        _isAttacking = false;
+        _collider.enabled = false;
+
+        _animator.SetTrigger(DeathHash);
+
+        if (_attackTimeoutCoroutine != null)
+        {
+            StopCoroutine(_attackTimeoutCoroutine);
+            _attackTimeoutCoroutine = null;
+        }
 
         if (_trackingCoroutine != null)
         {
@@ -158,7 +247,7 @@ public class Zombie : MonoBehaviour
         XPManager.Instance.AddXP(Mathf.RoundToInt(PlayerStats.Get(PlayerStats.StatType.XpPerKill, _xpOnDeath)));
 
         // Trigger zombie death logic and FXs here
-        Destroy(gameObject, .4f);
+        Destroy(gameObject, 10f);
     }
 
     private void OnDisable()

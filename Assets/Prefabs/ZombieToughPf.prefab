@@ -122,13 +122,37 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: b820140694b8a3b4399489cb4b5f6ead, type: 2}
+    - target: {fileID: 95099348023929264, guid: 4cecd56fd7642b64bbd3e9029ef618af, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1069217425750644, guid: 4cecd56fd7642b64bbd3e9029ef618af, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2837399150281237038}
   m_SourcePrefab: {fileID: 100100000, guid: 4cecd56fd7642b64bbd3e9029ef618af, type: 3}
 --- !u!4 &3084634828483938278 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4887046762188466, guid: 4cecd56fd7642b64bbd3e9029ef618af, type: 3}
   m_PrefabInstance: {fileID: 3089345884263516500}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3088417954217259808 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1069217425750644, guid: 4cecd56fd7642b64bbd3e9029ef618af, type: 3}
+  m_PrefabInstance: {fileID: 3089345884263516500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2837399150281237038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3088417954217259808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700b17fc4e2b3c84dad41949d51e9367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieAnimationRelay

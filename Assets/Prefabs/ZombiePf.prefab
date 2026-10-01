@@ -449,7 +449,7 @@ MonoBehaviour:
   _pointsPerHit: 10
   _pointsOnDeath: 60
   _xpOnDeath: 20
-  _renderer: {fileID: 7520321538498266785}
+  _speedDampTime: 0.1
 --- !u!114 &8132415878731735372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,10 +589,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1713425991072746, guid: 1093ca3190ae63b40a5d6b39d1a8daac, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3315169818958654410}
   m_SourcePrefab: {fileID: 100100000, guid: 1093ca3190ae63b40a5d6b39d1a8daac, type: 3}
 --- !u!4 &2208390531415581239 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4824885756717084, guid: 1093ca3190ae63b40a5d6b39d1a8daac, type: 3}
   m_PrefabInstance: {fileID: 2212643222298085931}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2212099831299256769 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1713425991072746, guid: 1093ca3190ae63b40a5d6b39d1a8daac, type: 3}
+  m_PrefabInstance: {fileID: 2212643222298085931}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3315169818958654410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2212099831299256769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700b17fc4e2b3c84dad41949d51e9367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieAnimationRelay
