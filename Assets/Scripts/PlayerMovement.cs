@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     private Transform _mainCamera;
 
     [SerializeField] private CharacterController _characterController;
-    [SerializeField] private Transform _playerVisual;
     [SerializeField] private Transform _weaponHoldAnchor;
 
     [Header("Movement Settings")]
@@ -362,7 +361,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     }
 
     private void HandleCrouchPosture(
-        bool shouldBeCrouched)
+    bool shouldBeCrouched)
     {
         bool isActuallyCrouching =
             _locomotionState ==
@@ -374,12 +373,6 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         Vector3 targetCenter =
             _standingCenter;
 
-        Vector3 targetVisualScale =
-            Vector3.one;
-
-        Vector3 targetVisualPosition =
-            Vector3.zero;
-
         if (isActuallyCrouching)
         {
             targetHeight =
@@ -387,65 +380,26 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
 
             targetCenter =
                 _crouchingCenter;
-
-            targetVisualScale =
-                new Vector3(
-                    1f,
-                    0.5f,
-                    1f
-                );
-
-            targetVisualPosition =
-                new Vector3(
-                    0f,
-                    -0.5f,
-                    0f
-                );
         }
 
         ApplyPosture(
             targetHeight,
-            targetCenter,
-            targetVisualScale,
-            targetVisualPosition
+            targetCenter
         );
     }
 
     private void ApplySlidePosture()
     {
-        float targetHeight =
-            _crouchingHeight;
-
-        Vector3 targetCenter =
-            _crouchingCenter;
-
-        Vector3 targetVisualScale =
-            new Vector3(
-                1f,
-                0.5f,
-                1f
-            );
-
-        Vector3 targetVisualPosition =
-            new Vector3(
-                0f,
-                -0.5f,
-                0f
-            );
-
         ApplyPosture(
-            targetHeight,
-            targetCenter,
-            targetVisualScale,
-            targetVisualPosition
+            _crouchingHeight,
+            _crouchingCenter
         );
     }
 
+
     private void ApplyPosture(
         float targetHeight,
-        Vector3 targetCenter,
-        Vector3 targetVisualScale,
-        Vector3 targetVisualPosition)
+        Vector3 targetCenter)
     {
         _characterController.height =
             Mathf.Lerp(
@@ -462,25 +416,6 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
                 Time.deltaTime *
                 _crouchTransitionSpeed
             );
-
-        if (_playerVisual != null)
-        {
-            _playerVisual.localScale =
-                Vector3.Lerp(
-                    _playerVisual.localScale,
-                    targetVisualScale,
-                    Time.deltaTime *
-                    _crouchTransitionSpeed
-                );
-
-            _playerVisual.localPosition =
-                Vector3.Lerp(
-                    _playerVisual.localPosition,
-                    targetVisualPosition,
-                    Time.deltaTime *
-                    _crouchTransitionSpeed
-                );
-        }
     }
 
     private void HandleRotation(Vector3 moveDirection)

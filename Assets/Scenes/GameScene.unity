@@ -8616,6 +8616,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1131444740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2064390014 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1092095155634855643, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+  m_PrefabInstance: {fileID: 5556387378441985409}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2064390018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064390014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5975729c842201b48b861339a998d7a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationHandler
+  _animator: {fileID: 0}
+  _walkRing: 0.5
+  _sprintRing: 1
+  _dampTime: 0.1
+  _minSpeed: 0.1
 --- !u!1 &2090469509
 GameObject:
   m_ObjectHideFlags: 0
@@ -8976,6 +8998,10 @@ PrefabInstance:
       propertyPath: _defaultBulletPool
       value: 
       objectReference: {fileID: 1731008875}
+    - target: {fileID: 1208861912701890219, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: _maxStamina
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 3578524425810942756, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: m_Name
       value: Player
@@ -9023,7 +9049,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1092095155634855643, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2064390018}
   m_SourcePrefab: {fileID: 100100000, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
