@@ -166,7 +166,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1093768210179787917}
-  - {fileID: 3897064523232131937}
+  - {fileID: 599601635412562920}
   - {fileID: 8205414416434634137}
   - {fileID: 3454422665040386862}
   m_Father: {fileID: 0}
@@ -248,8 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   _characterController: {fileID: 8895553891503125331}
-  _playerVisual: {fileID: 0}
-  _weaponHoldAnchor: {fileID: 0}
+  _weaponHoldAnchor: {fileID: 599601635412562920}
   _canSprint: 1
   _currentPlayerSpeed: 5
   _walkPlayerSpeed: 3.5
@@ -305,7 +304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponHandler
   _maxWeaponLimit: 2
   _playerCarryInventorySlots: []
-  _weaponHoldAnchor: {fileID: 3897064523232131937}
+  _weaponHoldAnchor: {fileID: 599601635412562920}
   _defaultBulletPool: {fileID: 0}
   DefaultStartingWeapon: {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
   _activeWeaponInstance: {fileID: 0}
@@ -372,7 +371,7 @@ MonoBehaviour:
   _staminaCost: 5
   _slashVFXPrefab: {fileID: 4885471022005174213, guid: 92b9d12a5bf1e7242b3ee4fb2886866f, type: 3}
   _vfxSpawnPoint: {fileID: 3369653180941596817}
---- !u!1 &3876481796694896497
+--- !u!1 &6535661710914430809
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -380,7 +379,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3897064523232131937}
+  - component: {fileID: 599601635412562920}
   m_Layer: 6
   m_Name: Hand
   m_TagString: Untagged
@@ -388,16 +387,16 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3897064523232131937
+--- !u!4 &599601635412562920
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3876481796694896497}
+  m_GameObject: {fileID: 6535661710914430809}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0.58}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.358, z: 0.414}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

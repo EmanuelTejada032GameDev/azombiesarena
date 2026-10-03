@@ -1049,7 +1049,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60.000004
+  field of view: 40
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1075,8 +1075,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5257311, y: 0.000000028343697, z: -0.000000017517367, w: 0.85065085}
-  m_LocalPosition: {x: -4.96, y: 14, z: -6}
+  m_LocalRotation: {x: 0.5299192, y: 0, z: 0, w: 0.8480481}
+  m_LocalPosition: {x: -4.96, y: 16, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1606,6 +1606,10 @@ PrefabInstance:
     - target: {fileID: 1796101793198917877, guid: 45120ec6d32e2514fb65ac90e39be7cb, type: 3}
       propertyPath: m_Name
       value: SniperWallBuy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796101793198917877, guid: 45120ec6d32e2514fb65ac90e39be7cb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3423921115679551923, guid: 45120ec6d32e2514fb65ac90e39be7cb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2810,7 +2814,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 12, z: -6}
+  FollowOffset: {x: 0, y: 14, z: -6}
 --- !u!114 &578268612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2835,7 +2839,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 40
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -2862,13 +2866,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578268609}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5257311, y: 0.000000012675687, z: -0.000000007834005, w: 0.85065085}
-  m_LocalPosition: {x: -4.96, y: 14, z: -6}
+  m_LocalRotation: {x: 0.5299192, y: 0, z: 0, w: 0.8480481}
+  m_LocalPosition: {x: -4.96, y: 16, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 65.3, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 64, y: 0, z: 0}
 --- !u!1 &594926285
 GameObject:
   m_ObjectHideFlags: 0
@@ -6116,6 +6120,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3423921115679551923, guid: e54c78541f2d0224cb4932b5fe744f0f, type: 3}
   m_PrefabInstance: {fileID: 1315833925}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1317887404 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 599601635412562920, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+  m_PrefabInstance: {fileID: 5556387378441985409}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1323308442
 GameObject:
   m_ObjectHideFlags: 0
@@ -8995,6 +9004,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: _weaponHoldAnchor
+      value: 
+      objectReference: {fileID: 1317887404}
+    - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _defaultBulletPool
       value: 
       objectReference: {fileID: 1731008875}
@@ -9002,6 +9015,10 @@ PrefabInstance:
       propertyPath: _maxStamina
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 1208861912701890219, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: _weaponHoldAnchor
+      value: 
+      objectReference: {fileID: 1317887404}
     - target: {fileID: 3578524425810942756, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: m_Name
       value: Player
@@ -9047,7 +9064,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3876481796694896497, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1092095155634855643, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
