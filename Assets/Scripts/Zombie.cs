@@ -225,7 +225,6 @@ public class Zombie : MonoBehaviour
 
     public void OnHitReactEnd()
     {
-        Debug.Log("OnHitReact will set to false");
         _wasHitRecently = false;
     }
 

@@ -17,7 +17,7 @@ MonoBehaviour:
   _weaponModelPrefab: {fileID: 1796101793198917877, guid: 21a0a356f309d7b4da12980f128ca425, type: 3}
   _projectilePrefab: {fileID: 5161285532180211351, guid: b4c7dc994b1dc1147a87eddf3704774c, type: 3}
   _category: 3
-  _damage: 1
+  _damage: 4
   _maxTargetPierceCount: 0
   _critChance: 0.2
   _critDamageBonus: 1
@@ -29,8 +29,8 @@ MonoBehaviour:
   _pelletCount: 1
   _spreadAngle: 0
   _recoilForce: 1
-  _maxMagazineSize: 12
-  _maxReserveAmmo: 80
+  _maxMagazineSize: 100000
+  _maxReserveAmmo: 100000
   _reloadDuration: 0.4
   _basePurchaseCost: 1200
   _normalAmmoPrice: 500

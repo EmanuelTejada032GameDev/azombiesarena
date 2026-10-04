@@ -37,7 +37,7 @@ MonoBehaviour:
   _specialWaveInterval: 5
   _enableBoss: 1
   _bossType: {fileID: 11400000, guid: 27710c554b4c66a4981fe979d42bbcff, type: 2}
-  _bossWaveInterval: 5
+  _bossWaveInterval: 10
   _bossAlone: 1
   _bossHordeFraction: 0
   _healthPercentPerWave: 0.1

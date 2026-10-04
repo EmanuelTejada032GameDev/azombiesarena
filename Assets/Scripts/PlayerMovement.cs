@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
 
     [Header("Rotation Settings")]
     [SerializeField] private float _rotationSpeed = 15f;
+    [SerializeField] private float _aimRotationSpeed = 200f;
 
     [Header("Crouch Settings")]
     [SerializeField] private bool _canCrouch = false;
@@ -421,6 +422,8 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     private void HandleRotation(Vector3 moveDirection)
     {
         Vector3 targetDirection;
+        float rotationSpeed = _rotationSpeed;
+
 
         if (_maneuverState ==
             ManeuverState.Sliding)
@@ -436,6 +439,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         }
         else
         {
+            rotationSpeed = _aimRotationSpeed;
             Ray ray =
                 Camera.main.ScreenPointToRay(
                     Input.mousePosition
@@ -486,7 +490,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
                     transform.rotation,
                     targetRotation,
                     Time.deltaTime *
-                    _rotationSpeed
+                    rotationSpeed
                 );
         }
     }

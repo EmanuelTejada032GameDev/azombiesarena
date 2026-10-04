@@ -163,7 +163,7 @@ public class PlayerWeaponHandler : MonoBehaviour
 
         if (activeConfig == null || activeConfig.WeaponModelPrefab == null) return;
 
-        GameObject spawnedWeaponObj = Instantiate(activeConfig.WeaponModelPrefab, _weaponHoldAnchor.position, _weaponHoldAnchor.rotation, _weaponHoldAnchor);
+        GameObject spawnedWeaponObj = Instantiate(activeConfig.WeaponModelPrefab, _weaponHoldAnchor, false);
         _activeWeaponInstance = spawnedWeaponObj.GetComponent<Weapon>();
 
         if (_activeWeaponInstance != null)
