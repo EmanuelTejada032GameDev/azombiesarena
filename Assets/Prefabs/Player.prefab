@@ -370,7 +370,7 @@ MonoBehaviour:
   _playerCarryInventorySlots: []
   _weaponHoldAnchor: {fileID: 6705330919165885838}
   _defaultBulletPool: {fileID: 0}
-  DefaultStartingWeapon: {fileID: 11400000, guid: 79a02356624d12d4c9389bd650ffe46a, type: 2}
+  DefaultStartingWeapon: {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
   _activeWeaponInstance: {fileID: 0}
   _autoReload: 0
 --- !u!114 &3844589736176721437
