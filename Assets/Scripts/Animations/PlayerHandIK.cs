@@ -5,20 +5,26 @@ public class PlayerHandIK : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private Transform _rightHandTarget;
     [SerializeField] private Transform _weaponSocket;
-    [SerializeField] private string _upperBodyLayer = "UpperBody";
+    [SerializeField] private string _twoHandedLayer = "UpperBody";
+    [SerializeField] private string _oneHandedLayer = "RightArm";
     [SerializeField] private float _blendSpeed = 10f;
-    private Weapon _currentWeapon;
+    [SerializeField] private float _layerBlendSpeed = 8f;
 
-    private int _layerIndex;
+    private int _twoHandedIndex;
+    private int _oneHandedIndex;
+    private Weapon _currentWeapon;
     private Transform _leftHandGrip;
     private float _weight;
+
+    private bool IsOneHanded => _currentWeapon != null && _leftHandGrip == null;
 
     private void Awake()
     {
         if (_animator == null)
             _animator = GetComponent<Animator>();
 
-        _layerIndex = _animator.GetLayerIndex(_upperBodyLayer);
+        _twoHandedIndex = _animator.GetLayerIndex(_twoHandedLayer);
+        _oneHandedIndex = _animator.GetLayerIndex(_oneHandedLayer);
     }
 
     private void Update()
@@ -28,13 +34,24 @@ public class PlayerHandIK : MonoBehaviour
         if (movement == null)
             return;
 
+        RefreshWeaponTargets();
+
         bool aiming =
             movement.GetLocomotionState() != PlayerMovement.LocomotionState.Sprinting &&
             movement.GetManeuverState() == PlayerMovement.ManeuverState.None;
 
         _weight = Mathf.MoveTowards(_weight, aiming ? 1f : 0f, _blendSpeed * Time.deltaTime);
 
-        RefreshWeaponTargets();
+        float step = _layerBlendSpeed * Time.deltaTime;
+
+        BlendLayer(_twoHandedIndex, IsOneHanded ? 0f : 1f, step);
+        BlendLayer(_oneHandedIndex, IsOneHanded ? 1f : 0f, step);
+    }
+
+    private void BlendLayer(int index, float target, float step)
+    {
+        float current = _animator.GetLayerWeight(index);
+        _animator.SetLayerWeight(index, Mathf.MoveTowards(current, target, step));
     }
 
     private void RefreshWeaponTargets()
@@ -66,7 +83,9 @@ public class PlayerHandIK : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        if (layerIndex != _layerIndex)
+        int activeLayer = IsOneHanded ? _oneHandedIndex : _twoHandedIndex;
+
+        if (layerIndex != activeLayer)
             return;
 
         ApplyHand(AvatarIKGoal.RightHand, _rightHandTarget);

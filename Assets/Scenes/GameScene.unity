@@ -5106,7 +5106,7 @@ MonoBehaviour:
   _waveProgression: {fileID: 11400000, guid: cb412631385a6e549a300ce0f99b25c5, type: 2}
   _timeBetweenSpawns: 1.5
   _intermissionDuration: 5
-  _maxActiveZombiesCap: 24
+  _maxActiveZombiesCap: 0
   _continuousMode: 1
   _currentWaveVariable: {fileID: 11400000, guid: 1ad6fc888649e364d8ca26b0d9353814, type: 2}
   _zombiesRemainingVariable: {fileID: 11400000, guid: df7181657c2f07b458234db9d073098c, type: 2}
@@ -6713,7 +6713,19 @@ PrefabInstance:
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: DefaultStartingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
+      objectReference: {fileID: 11400000, guid: dc0cf0d26f8b3884e924e8a84eb5c0d4, type: 2}
+    - target: {fileID: 1208861912701890219, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: _maxStamina
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454422665040386862, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454422665040386862, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3578524425810942756, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: m_Name
       value: Player
@@ -6757,6 +6769,18 @@ PrefabInstance:
     - target: {fileID: 5418186720227646319, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8205414416434634137, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8205414416434634137, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8205414416434634137, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -7433,8 +7457,8 @@ MonoBehaviour:
   _gameOverUI: {fileID: 907854783}
   _mainMenuUI: {fileID: 832361050}
   _pauseMenuUI: {fileID: 507761780}
-  _playerHealth: {fileID: 0}
-  _playerTransform: {fileID: 0}
+  _playerHealth: {fileID: 1818118120}
+  _playerTransform: {fileID: 1818118127}
   _waveSpawner: {fileID: 1131444741}
   _camera: {fileID: 578268612}
   _uiMenuCursorTexture: {fileID: 2800000, guid: 197c658cfb2622d40972f7119ff88900, type: 3}

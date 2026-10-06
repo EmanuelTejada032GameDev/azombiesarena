@@ -157,7 +157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4249788956781831804}
   m_Layer: 10
-  m_Name: LeftHandGrip
+  m_Name: NoLeftHandGrip(onehand)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,13 +236,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6886008820794257173}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.048894405, y: -0.048894405, z: -0.70541435, w: 0.70541435}
-  m_LocalPosition: {x: 0.069, y: 1.3, z: 0.388}
+  m_LocalRotation: {x: 0.11061589, y: -0.12278772, z: -0.6984011, w: 0.6963643}
+  m_LocalPosition: {x: 0.03, y: 1.3, z: 0.668}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3423921115679551923}
-  m_LocalEulerAnglesHint: {x: 0, y: -7.93, z: -90}
+  m_LocalEulerAnglesHint: {x: -1, y: -19, z: -90}
 --- !u!1 &7538877356421170776
 GameObject:
   m_ObjectHideFlags: 0

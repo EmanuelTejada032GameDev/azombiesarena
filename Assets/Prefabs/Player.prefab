@@ -600,8 +600,10 @@ MonoBehaviour:
   _animator: {fileID: 1040373153903232069}
   _rightHandTarget: {fileID: 8308003432906358905}
   _weaponSocket: {fileID: 6705330919165885838}
-  _upperBodyLayer: UpperBody
+  _twoHandedLayer: UpperBody
+  _oneHandedLayer: RightArm
   _blendSpeed: 10
+  _layerBlendSpeed: 8
 --- !u!4 &1093768210179787917 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4159284702230274, guid: 7056e079f697bf84f997118e38623adb, type: 3}

@@ -117,11 +117,9 @@ public class Zombie : MonoBehaviour
     {
         EconomyManager.Instance.AddPoints(_pointsPerHit);
 
-        Debug.Log($"OnHitReact value : {_wasHitRecently}");
         if (_isDead || _isAttacking || _animator == null || _wasHitRecently) return;
 
         _wasHitRecently = true;
-        Debug.Log($"OnHitReact trigger");
         _animator.SetTrigger(HitHash);
     }
 
