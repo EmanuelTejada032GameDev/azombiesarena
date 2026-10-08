@@ -30,6 +30,7 @@ public class Weapon : MonoBehaviour
     private float EffectiveReloadDuration => WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.ReloadSpeed, Config.Category, Config.ReloadDuration);
 
     public EventHandler OnAmmoChanged;
+    public static event Action<float> OnShoot;
 
     /// <summary>
     /// Injects the runtime data instance packet and ties this physical prefab shell to its unique stats.
@@ -74,7 +75,10 @@ public class Weapon : MonoBehaviour
     {
         if (_bulletPool == null || _state.CurrentMagazineAmmo <= 0) return;
 
+
         _state.CurrentMagazineAmmo--;
+        OnShoot?.Invoke(Config.RecoilForce);
+
         Config.ShootEvent.Play(_weaponAudioSource);
 
         for (int i = 0; i < Config.PelletCount; i++)

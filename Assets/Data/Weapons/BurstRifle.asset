@@ -28,7 +28,7 @@ MonoBehaviour:
   _burstDelay: 0.07
   _pelletCount: 1
   _spreadAngle: 6
-  _recoilForce: 1
+  _recoilForce: 0.5
   _maxMagazineSize: 10000
   _maxReserveAmmo: 10000
   _reloadDuration: 0.4

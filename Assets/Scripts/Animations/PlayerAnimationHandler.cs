@@ -17,6 +17,9 @@ public class PlayerAnimationHandler : MonoBehaviour
     private static readonly int IsSprintingHash = Animator.StringToHash("IsSprinting");
     private static readonly int IsSlidingHash = Animator.StringToHash("IsSliding");
 
+    private int _recoilLayerIndex;
+    private static readonly int ShootHash = Animator.StringToHash("Shoot");
+
     private CharacterController _controller;
     private Transform _root;
 
@@ -27,6 +30,27 @@ public class PlayerAnimationHandler : MonoBehaviour
 
         _controller = GetComponentInParent<CharacterController>();
         _root = _controller.transform;
+    }
+
+    private void Start()
+    {
+        _recoilLayerIndex = _animator.GetLayerIndex("Recoil");
+    }
+
+    private void OnEnable()
+    {
+        Weapon.OnShoot += HandleShoot;
+    }
+
+    private void OnDisable()
+    {
+        Weapon.OnShoot -= HandleShoot;
+    }
+
+    private void HandleShoot(float recoilForce)
+    {
+        _animator.SetLayerWeight(_recoilLayerIndex, Mathf.Clamp01(recoilForce));
+        _animator.SetTrigger(ShootHash);
     }
 
     private void Update()

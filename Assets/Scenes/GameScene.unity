@@ -6713,7 +6713,7 @@ PrefabInstance:
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: DefaultStartingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: dc0cf0d26f8b3884e924e8a84eb5c0d4, type: 2}
+      objectReference: {fileID: 11400000, guid: e3fdbdc76e02605469ef61a7a3eb2d1d, type: 2}
     - target: {fileID: 1208861912701890219, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _maxStamina
       value: 10000
