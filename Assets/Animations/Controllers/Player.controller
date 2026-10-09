@@ -470,13 +470,13 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Recoil
     m_StateMachine: {fileID: -9013124895102630565}
-    m_Mask: {fileID: 0}
+    m_Mask: {fileID: 31900000, guid: 65f5558fcc7baed4c91e55388d705da3, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 1
     m_SyncedLayerIndex: -1
     m_DefaultWeight: 1
-    m_IKPass: 0
+    m_IKPass: 1
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
 --- !u!1101 &51538822266703556
