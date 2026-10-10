@@ -11,9 +11,12 @@ public class TimeDebugger : MonoBehaviour
 
     private void Start()
     {
-        _inputs = Player.Instance.GetInputInstance();
+        if(Player.Instance != null)
+        {
+            _inputs = Player.Instance.GetInputInstance();
+            _inputs.Player.Test.performed += OnTestPerformed;
+        }
 
-        _inputs.Player.Test.performed += OnTestPerformed;
     }
 
     private void OnDestroy()
