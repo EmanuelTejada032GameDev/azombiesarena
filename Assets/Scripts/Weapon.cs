@@ -12,6 +12,8 @@ public class Weapon : MonoBehaviour
     [Header("Audio Components")]
     [SerializeField] private AudioSource _weaponAudioSource;
 
+    private const float MinimumCursorAimDistance = 0.25f;
+
     private WeaponInstanceState _state;
 
     private float _nextFireTime;
@@ -21,6 +23,7 @@ public class Weapon : MonoBehaviour
     public WeaponDataConfig Config => _state?.BlueprintConfig;
     public WeaponInstanceState State => _state;
     public bool IsReloading => _isReloading;
+    public Transform Muzzle => _muzzle;
 
     public int EffectiveMaxMagazineSize => Config == null
         ? 0
@@ -104,9 +107,19 @@ public class Weapon : MonoBehaviour
 
             float randomPitch = Random.Range(-Config.SpreadAngle * 0.5f, Config.SpreadAngle * 0.5f);
             float randomYaw = Random.Range(-Config.SpreadAngle * 0.5f, Config.SpreadAngle * 0.5f);
+            Vector3 shotDirection = _muzzle.forward;
 
+            PlayerMovement movement = PlayerMovement.Instance;
+            if (movement != null && movement.HasAimPoint)
+            {
+                Vector3 cursorDirection = movement.AimPoint - _muzzle.position;
+                if (cursorDirection.sqrMagnitude >= MinimumCursorAimDistance * MinimumCursorAimDistance)
+                    shotDirection = cursorDirection.normalized;
+            }
+
+            Quaternion aimRotation = Quaternion.LookRotation(shotDirection, Vector3.up);
             Quaternion spreadRotation = Quaternion.Euler(randomPitch, randomYaw, 0f);
-            bullet.transform.rotation = _muzzle.rotation * spreadRotation;
+            bullet.transform.rotation = aimRotation * spreadRotation;
 
             Projectile projectileScript = bullet.GetComponent<Projectile>();
             if (projectileScript != null)

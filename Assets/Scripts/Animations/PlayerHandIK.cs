@@ -26,11 +26,14 @@ public class PlayerHandIK : MonoBehaviour
     private Transform _rightHandAim;
     private Transform _leftHandTargetProxy;
     private Transform _rightHandTargetProxy;
+    private const float MinimumCursorAimDistance = 0.25f;
+
     private float _weight;
     private bool _isAiming;
     private float _recoilStartTime = -1f;
     private float _recoilStrength;
     private Vector3 _weaponSocketBaseLocalPosition;
+    private Quaternion _weaponBaseLocalRotation;
 
     private bool IsOneHanded => _currentWeapon != null && _leftHandGrip == null;
 
@@ -104,10 +107,7 @@ public class PlayerHandIK : MonoBehaviour
         UpdateWeaponRecoil();
         SyncHandTargetProxies();
 
-        PlayerMovement movement = PlayerMovement.Instance;
-        _isAiming = movement == null ||
-            (movement.GetLocomotionState() != PlayerMovement.LocomotionState.Sprinting &&
-             movement.GetManeuverState() == PlayerMovement.ManeuverState.None);
+        _isAiming = true;
 
         _weight = Mathf.MoveTowards(_weight, _isAiming ? 1f : 0f, _blendSpeed * Time.deltaTime);
 
@@ -127,7 +127,45 @@ public class PlayerHandIK : MonoBehaviour
 
     private void LateUpdate()
     {
+        AimWeaponAtCursor();
         SyncHandTargetProxies();
+    }
+
+    private void AimWeaponAtCursor()
+    {
+        if (_currentWeapon == null)
+            return;
+
+        PlayerMovement movement = PlayerMovement.Instance;
+        if (movement == null)
+            return;
+
+        if (movement.IsSprinting)
+        {
+            _currentWeapon.transform.localRotation = _weaponBaseLocalRotation;
+            return;
+        }
+
+        if (movement.IsAimDeadZone)
+            return;
+
+        _currentWeapon.transform.localRotation = _weaponBaseLocalRotation;
+        if (!movement.HasAimPoint || _currentWeapon.Muzzle == null)
+            return;
+
+        Transform muzzle = _currentWeapon.Muzzle;
+        Vector3 aimDirection = movement.AimPoint - muzzle.position;
+        if (aimDirection.sqrMagnitude < MinimumCursorAimDistance * MinimumCursorAimDistance ||
+            Vector3.ProjectOnPlane(aimDirection, Vector3.up).sqrMagnitude < 0.01f ||
+            Vector3.ProjectOnPlane(muzzle.forward, Vector3.up).sqrMagnitude < 0.01f)
+        {
+            return;
+        }
+
+        Quaternion currentMuzzleFacing = Quaternion.LookRotation(muzzle.forward, Vector3.up);
+        Quaternion desiredMuzzleFacing = Quaternion.LookRotation(aimDirection, Vector3.up);
+        Quaternion correction = desiredMuzzleFacing * Quaternion.Inverse(currentMuzzleFacing);
+        _currentWeapon.transform.rotation = correction * _currentWeapon.transform.rotation;
     }
 
     private void CreateHandTargetProxies()
@@ -166,6 +204,7 @@ public class PlayerHandIK : MonoBehaviour
             return;
 
         _currentWeapon = weapon;
+        _weaponBaseLocalRotation = weapon != null ? weapon.transform.localRotation : Quaternion.identity;
         _leftHandGrip = weapon != null ? FindNamedChild(weapon.transform, "LeftHandGrip") : null;
         _rightHandAim = weapon != null ? FindNamedChild(weapon.transform, "RightHandAim") : null;
 

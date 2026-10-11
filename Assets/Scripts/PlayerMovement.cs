@@ -7,6 +7,16 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
 
     private PlayerInput _inputs;
     private Transform _mainCamera;
+    private Vector3 _aimPoint;
+
+    private const float MinimumCursorAimDistance = 0.25f;
+
+    public Vector3 AimPoint => _aimPoint;
+    public bool HasAimPoint { get; private set; }
+    public bool IsAimDeadZone { get; private set; }
+    public bool IsSprinting =>
+        _locomotionState == LocomotionState.Sprinting &&
+        _maneuverState != ManeuverState.Sliding;
 
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private Transform _weaponHoldAnchor;
@@ -40,6 +50,8 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     [Header("Rotation Settings")]
     [SerializeField] private float _rotationSpeed = 15f;
     [SerializeField] private float _aimRotationSpeed = 200f;
+    [SerializeField] private bool _snapAimRotation = true;
+    [SerializeField, Min(0f)] private float _cursorAimDeadZoneRadius = 0.75f;
 
     [Header("Crouch Settings")]
     [SerializeField] private bool _canCrouch = false;
@@ -144,6 +156,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
 
         HandleMovement(moveDirection);
 
+        UpdateAimPoint();
         HandleRotation(moveDirection);
     }
 
@@ -419,80 +432,84 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
             );
     }
 
+    private void UpdateAimPoint()
+    {
+        IsAimDeadZone = false;
+        if (IsSprinting)
+        {
+            HasAimPoint = false;
+            return;
+        }
+
+        Camera aimCamera = Camera.main;
+        if (aimCamera == null)
+        {
+            HasAimPoint = false;
+            return;
+        }
+
+        Ray ray = aimCamera.ScreenPointToRay(Input.mousePosition);
+        float aimHeight = _weaponHoldAnchor != null
+            ? _weaponHoldAnchor.position.y
+            : transform.position.y + 1.2f;
+        Plane aimingPlane = new Plane(Vector3.up, new Vector3(0f, aimHeight, 0f));
+
+        if (!aimingPlane.Raycast(ray, out float enterDistance) || enterDistance < 0f)
+        {
+            HasAimPoint = false;
+            return;
+        }
+
+        _aimPoint = ray.GetPoint(enterDistance);
+        HasAimPoint = true;
+
+        Vector3 planarOffset = _aimPoint - transform.position;
+        planarOffset.y = 0f;
+        IsAimDeadZone = planarOffset.sqrMagnitude < _cursorAimDeadZoneRadius * _cursorAimDeadZoneRadius;
+    }
+
     private void HandleRotation(Vector3 moveDirection)
     {
         Vector3 targetDirection;
-        float rotationSpeed = _rotationSpeed;
 
-
-        if (_maneuverState ==
-            ManeuverState.Sliding)
+        if (IsSprinting)
         {
-            targetDirection =
-                _slideDirection;
+            targetDirection = moveDirection;
         }
-        else if (_locomotionState ==
-                 LocomotionState.Sprinting)
+        else if (HasAimPoint)
         {
-            targetDirection =
-                moveDirection;
+            if (IsAimDeadZone)
+                return;
+
+            targetDirection = _aimPoint - transform.position;
+            targetDirection.y = 0f;
+        }
+        else if (_maneuverState == ManeuverState.Sliding)
+        {
+            targetDirection = _slideDirection;
         }
         else
         {
-            rotationSpeed = _aimRotationSpeed;
-            Ray ray =
-                Camera.main.ScreenPointToRay(
-                    Input.mousePosition
-                );
-
-            float weaponAimHeight =
-                _weaponHoldAnchor != null
-                    ? _weaponHoldAnchor.position.y
-                    : 1.2f;
-
-            Plane aimingPlane =
-                new Plane(
-                    Vector3.up,
-                    new Vector3(
-                        0f,
-                        weaponAimHeight,
-                        0f
-                    )
-                );
-
-            if (!aimingPlane.Raycast(
-                    ray,
-                    out float enterDistance))
-            {
-                return;
-            }
-
-            Vector3 worldHitPoint =
-                ray.GetPoint(enterDistance);
-
-            targetDirection =
-                worldHitPoint -
-                transform.position;
-
-            targetDirection.y = 0f;
+            return;
         }
 
-        if (targetDirection.sqrMagnitude >
-            0.001f)
-        {
-            Quaternion targetRotation =
-                Quaternion.LookRotation(
-                    targetDirection
-                );
+        if (targetDirection.sqrMagnitude < 0.001f)
+            return;
 
-            transform.rotation =
-                Quaternion.Slerp(
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+        transform.rotation = IsSprinting
+            ? Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                Time.deltaTime * _rotationSpeed
+            )
+            : _snapAimRotation
+                ? targetRotation
+                : Quaternion.Slerp(
                     transform.rotation,
                     targetRotation,
-                    Time.deltaTime *
-                    rotationSpeed
+                    Time.deltaTime * _aimRotationSpeed
                 );
-        }
     }
 
     private void StartSlide(Vector3 moveDirection)
