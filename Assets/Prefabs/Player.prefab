@@ -739,8 +739,6 @@ MonoBehaviour:
   _layerBlendSpeed: 8
   _recoilDuration: 0.18
   _recoilBackOffset: 0.06
-  _recoilUpOffset: 0.015
-  _recoilPitch: 4
 --- !u!114 &3927621144172890183
 MonoBehaviour:
   m_ObjectHideFlags: 0

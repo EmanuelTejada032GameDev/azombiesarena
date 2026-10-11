@@ -58,7 +58,7 @@ public class PlayerAnimationHandler : MonoBehaviour
             _recoilLayerEndTime = Time.time + RecoilLayerActiveDuration;
         }
 
-        _animator.SetTrigger(ShootHash);
+        //_animator.SetTrigger(ShootHash);
     }
 
     private void Update()
