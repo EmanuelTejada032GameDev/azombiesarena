@@ -1028,7 +1028,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 40
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -2831,7 +2831,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 40
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -6720,13 +6720,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: _maxWeaponLimit
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _defaultBulletPool
       value: 
       objectReference: {fileID: 1731008875}
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: DefaultStartingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
+      objectReference: {fileID: 11400000, guid: dc0cf0d26f8b3884e924e8a84eb5c0d4, type: 2}
     - target: {fileID: 3578524425810942756, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: m_Name
       value: Player

@@ -140,33 +140,25 @@ public class PlayerHandIK : MonoBehaviour
         if (movement == null)
             return;
 
-        if (movement.IsSprinting)
-        {
-            _currentWeapon.transform.localRotation = _weaponBaseLocalRotation;
-            return;
-        }
-
-        if (movement.IsAimDeadZone)
-            return;
-
         _currentWeapon.transform.localRotation = _weaponBaseLocalRotation;
-        if (!movement.HasAimPoint || _currentWeapon.Muzzle == null)
+
+        if (movement.IsSprinting || !movement.HasAimPoint || _currentWeapon.Muzzle == null)
             return;
 
         Transform muzzle = _currentWeapon.Muzzle;
-        Vector3 aimDirection = movement.AimPoint - muzzle.position;
+        Vector3 aimDirection = Vector3.ProjectOnPlane(movement.AimPoint - muzzle.position, Vector3.up);
+        Vector3 muzzleForward = Vector3.ProjectOnPlane(muzzle.forward, Vector3.up);
+
         if (aimDirection.sqrMagnitude < MinimumCursorAimDistance * MinimumCursorAimDistance ||
-            Vector3.ProjectOnPlane(aimDirection, Vector3.up).sqrMagnitude < 0.01f ||
-            Vector3.ProjectOnPlane(muzzle.forward, Vector3.up).sqrMagnitude < 0.01f)
+            muzzleForward.sqrMagnitude < 0.01f)
         {
             return;
         }
 
-        Quaternion currentMuzzleFacing = Quaternion.LookRotation(muzzle.forward, Vector3.up);
-        Quaternion desiredMuzzleFacing = Quaternion.LookRotation(aimDirection, Vector3.up);
-        Quaternion correction = desiredMuzzleFacing * Quaternion.Inverse(currentMuzzleFacing);
+        Quaternion correction = Quaternion.FromToRotation(muzzleForward, aimDirection);
         _currentWeapon.transform.rotation = correction * _currentWeapon.transform.rotation;
     }
+
 
     private void CreateHandTargetProxies()
     {

@@ -105,20 +105,23 @@ public class Weapon : MonoBehaviour
         {
             bullet.transform.position = _muzzle.position;
 
-            float randomPitch = Random.Range(-Config.SpreadAngle * 0.5f, Config.SpreadAngle * 0.5f);
             float randomYaw = Random.Range(-Config.SpreadAngle * 0.5f, Config.SpreadAngle * 0.5f);
-            Vector3 shotDirection = _muzzle.forward;
+
+            Vector3 shotDirection = Vector3.ProjectOnPlane(_muzzle.forward, Vector3.up);
 
             PlayerMovement movement = PlayerMovement.Instance;
             if (movement != null && movement.HasAimPoint)
             {
-                Vector3 cursorDirection = movement.AimPoint - _muzzle.position;
+                Vector3 cursorDirection = Vector3.ProjectOnPlane(movement.AimPoint - _muzzle.position, Vector3.up);
                 if (cursorDirection.sqrMagnitude >= MinimumCursorAimDistance * MinimumCursorAimDistance)
-                    shotDirection = cursorDirection.normalized;
+                    shotDirection = cursorDirection;
             }
 
-            Quaternion aimRotation = Quaternion.LookRotation(shotDirection, Vector3.up);
-            Quaternion spreadRotation = Quaternion.Euler(randomPitch, randomYaw, 0f);
+            if (shotDirection.sqrMagnitude < 0.0001f)
+                shotDirection = Vector3.ProjectOnPlane(transform.root.forward, Vector3.up);
+
+            Quaternion aimRotation = Quaternion.LookRotation(shotDirection.normalized, Vector3.up);
+            Quaternion spreadRotation = Quaternion.Euler(0f, randomYaw, 0f);
             bullet.transform.rotation = aimRotation * spreadRotation;
 
             Projectile projectileScript = bullet.GetComponent<Projectile>();

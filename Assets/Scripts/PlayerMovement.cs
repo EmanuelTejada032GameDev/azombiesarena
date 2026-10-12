@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     private Transform _mainCamera;
     private Vector3 _aimPoint;
 
-    private const float MinimumCursorAimDistance = 0.25f;
 
     public Vector3 AimPoint => _aimPoint;
     public bool HasAimPoint { get; private set; }
@@ -51,7 +50,8 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     [SerializeField] private float _rotationSpeed = 15f;
     [SerializeField] private float _aimRotationSpeed = 200f;
     [SerializeField] private bool _snapAimRotation = true;
-    [SerializeField, Min(0f)] private float _cursorAimDeadZoneRadius = 0.75f;
+    [SerializeField, Min(0f)] private float _minimumAimDistance = 1.5f;
+    [SerializeField] private bool _showAimGizmos = true;
 
     [Header("Crouch Settings")]
     [SerializeField] private bool _canCrouch = false;
@@ -435,7 +435,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     private void UpdateAimPoint()
     {
         IsAimDeadZone = false;
-        if (IsSprinting)
+        if (IsSprinting || _maneuverState == ManeuverState.Sliding)
         {
             HasAimPoint = false;
             return;
@@ -460,33 +460,41 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
             return;
         }
 
-        _aimPoint = ray.GetPoint(enterDistance);
-        HasAimPoint = true;
-
-        Vector3 planarOffset = _aimPoint - transform.position;
+        Vector3 center = new Vector3(transform.position.x, aimHeight, transform.position.z);
+        Vector3 planarOffset = ray.GetPoint(enterDistance) - center;
         planarOffset.y = 0f;
-        IsAimDeadZone = planarOffset.sqrMagnitude < _cursorAimDeadZoneRadius * _cursorAimDeadZoneRadius;
+
+        float distance = planarOffset.magnitude;
+        IsAimDeadZone = distance < _minimumAimDistance;
+
+        Vector3 direction = distance > 0.0001f
+            ? planarOffset / distance
+            : transform.forward;
+
+        _aimPoint = center + direction * Mathf.Max(distance, _minimumAimDistance);
+        HasAimPoint = true;
     }
 
     private void HandleRotation(Vector3 moveDirection)
     {
         Vector3 targetDirection;
+        bool useTravelTurn;
 
-        if (IsSprinting)
+        if (_maneuverState == ManeuverState.Sliding)
+        {
+            targetDirection = _slideDirection;
+            useTravelTurn = true;
+        }
+        else if (IsSprinting)
         {
             targetDirection = moveDirection;
+            useTravelTurn = true;
         }
         else if (HasAimPoint)
         {
-            if (IsAimDeadZone)
-                return;
-
             targetDirection = _aimPoint - transform.position;
             targetDirection.y = 0f;
-        }
-        else if (_maneuverState == ManeuverState.Sliding)
-        {
-            targetDirection = _slideDirection;
+            useTravelTurn = false;
         }
         else
         {
@@ -497,19 +505,25 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
             return;
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-        transform.rotation = IsSprinting
-            ? Quaternion.Slerp(
+
+        if (useTravelTurn)
+        {
+            transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 targetRotation,
                 Time.deltaTime * _rotationSpeed
-            )
-            : _snapAimRotation
+            );
+        }
+        else
+        {
+            transform.rotation = _snapAimRotation
                 ? targetRotation
                 : Quaternion.Slerp(
                     transform.rotation,
                     targetRotation,
                     Time.deltaTime * _aimRotationSpeed
                 );
+        }
     }
 
     private void StartSlide(Vector3 moveDirection)
@@ -645,6 +659,40 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         {
             progressNormalized = _currentStamina / EffectiveMaxStamina
         });
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!_showAimGizmos)
+            return;
+
+        float height = _weaponHoldAnchor != null
+            ? _weaponHoldAnchor.position.y
+            : transform.position.y + 1.2f;
+
+        Vector3 center = new Vector3(transform.position.x, height, transform.position.z);
+
+        Gizmos.color = Color.yellow;
+        const int segments = 48;
+        Vector3 previous = center + new Vector3(_minimumAimDistance, 0f, 0f);
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * Mathf.PI * 2f / segments;
+            Vector3 next = center + new Vector3(
+                Mathf.Cos(angle) * _minimumAimDistance,
+                0f,
+                Mathf.Sin(angle) * _minimumAimDistance
+            );
+            Gizmos.DrawLine(previous, next);
+            previous = next;
+        }
+
+        if (Application.isPlaying && HasAimPoint)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(center, _aimPoint);
+            Gizmos.DrawWireSphere(_aimPoint, 0.1f);
+        }
     }
 
     //private void OnDrawGizmos()
