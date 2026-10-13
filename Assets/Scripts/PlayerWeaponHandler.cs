@@ -28,6 +28,7 @@ public class PlayerWeaponHandler : MonoBehaviour
     public Action<Weapon> OnWeaponSwapped;
 
     [SerializeField] private bool _autoReload = false;
+    public Weapon ActiveWeapon => _activeWeaponInstance;
     public bool AutoReload => _autoReload;
 
     private void Awake()

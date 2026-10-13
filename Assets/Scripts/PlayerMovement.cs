@@ -50,7 +50,17 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     [SerializeField] private float _rotationSpeed = 15f;
     [SerializeField] private float _aimRotationSpeed = 200f;
     [SerializeField] private bool _snapAimRotation = true;
-    [SerializeField, Min(0f)] private float _minimumAimDistance = 1.5f;
+    [SerializeField, Min(0f)] private float _aimDistanceMargin = 0.5f;
+    [SerializeField, Min(0f)] private float _fallbackMinimumAimDistance = 1.5f;
+
+    private float _currentMinimumAimDistance;
+
+    public float CurrentMinimumAimDistance =>
+        _currentMinimumAimDistance > 0f
+            ? _currentMinimumAimDistance
+            : _fallbackMinimumAimDistance;
+
+
     [SerializeField] private bool _showAimGizmos = true;
 
     [Header("Crouch Settings")]
@@ -140,6 +150,13 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         }
 
         _inputs = Player.Instance.GetInputInstance();
+
+        PlayerWeaponHandler weaponHandler = PlayerWeaponHandler.Instance;
+        if (weaponHandler != null)
+        {
+            weaponHandler.OnWeaponSwapped += HandleWeaponSwapped;
+            MeasureMinimumAimDistance(weaponHandler.ActiveWeapon);
+        }
     }
 
     private void Update()
@@ -435,6 +452,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     private void UpdateAimPoint()
     {
         IsAimDeadZone = false;
+
         if (IsSprinting || _maneuverState == ManeuverState.Sliding)
         {
             HasAimPoint = false;
@@ -464,14 +482,15 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         Vector3 planarOffset = ray.GetPoint(enterDistance) - center;
         planarOffset.y = 0f;
 
+        float minimumDistance = CurrentMinimumAimDistance;
         float distance = planarOffset.magnitude;
-        IsAimDeadZone = distance < _minimumAimDistance;
+        IsAimDeadZone = distance < minimumDistance;
 
         Vector3 direction = distance > 0.0001f
             ? planarOffset / distance
             : transform.forward;
 
-        _aimPoint = center + direction * Mathf.Max(distance, _minimumAimDistance);
+        _aimPoint = center + direction * Mathf.Max(distance, minimumDistance);
         HasAimPoint = true;
     }
 
@@ -661,6 +680,32 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         });
     }
 
+
+    private void OnDestroy()
+    {
+        if (PlayerWeaponHandler.Instance != null)
+            PlayerWeaponHandler.Instance.OnWeaponSwapped -= HandleWeaponSwapped;
+    }
+
+    private void HandleWeaponSwapped(Weapon weapon)
+    {
+        MeasureMinimumAimDistance(weapon);
+    }
+
+    private void MeasureMinimumAimDistance(Weapon weapon)
+    {
+        if (weapon == null || weapon.Muzzle == null)
+        {
+            _currentMinimumAimDistance = 0f;
+            return;
+        }
+
+        Vector3 offset = weapon.Muzzle.position - transform.position;
+        offset.y = 0f;
+        _currentMinimumAimDistance = offset.magnitude + _aimDistanceMargin;
+    }
+
+
     private void OnDrawGizmos()
     {
         if (!_showAimGizmos)
@@ -670,18 +715,19 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
             ? _weaponHoldAnchor.position.y
             : transform.position.y + 1.2f;
 
+        float radius = CurrentMinimumAimDistance;
         Vector3 center = new Vector3(transform.position.x, height, transform.position.z);
 
         Gizmos.color = Color.yellow;
         const int segments = 48;
-        Vector3 previous = center + new Vector3(_minimumAimDistance, 0f, 0f);
+        Vector3 previous = center + new Vector3(radius, 0f, 0f);
         for (int i = 1; i <= segments; i++)
         {
             float angle = i * Mathf.PI * 2f / segments;
             Vector3 next = center + new Vector3(
-                Mathf.Cos(angle) * _minimumAimDistance,
+                Mathf.Cos(angle) * radius,
                 0f,
-                Mathf.Sin(angle) * _minimumAimDistance
+                Mathf.Sin(angle) * radius
             );
             Gizmos.DrawLine(previous, next);
             previous = next;
