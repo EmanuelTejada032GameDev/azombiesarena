@@ -27,6 +27,7 @@ public class PlayerHandIK : MonoBehaviour
     private Transform _leftHandTargetProxy;
     private Transform _rightHandTargetProxy;
     private const float MinimumCursorAimDistance = 0.25f;
+    private const float MaxWeaponResidualAngle = 12f;
 
     private float _weight;
     private bool _isAiming;
@@ -155,7 +156,10 @@ public class PlayerHandIK : MonoBehaviour
             return;
         }
 
-        Quaternion correction = Quaternion.FromToRotation(muzzleForward, aimDirection);
+        // The body already turns to align the muzzle; the weapon only absorbs a small residual.
+        float residualAngle = Vector3.SignedAngle(muzzleForward, aimDirection, Vector3.up);
+        float clampedAngle = Mathf.Clamp(residualAngle, -MaxWeaponResidualAngle, MaxWeaponResidualAngle);
+        Quaternion correction = Quaternion.AngleAxis(clampedAngle, Vector3.up);
         _currentWeapon.transform.rotation = correction * _currentWeapon.transform.rotation;
     }
 

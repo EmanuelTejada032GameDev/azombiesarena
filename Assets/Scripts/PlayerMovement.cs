@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
 
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private Transform _weaponHoldAnchor;
+    private Weapon _currentWeapon;
 
     [Header("Movement Settings")]
     [SerializeField] private bool _canSprint = true;
@@ -486,12 +487,68 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         float distance = planarOffset.magnitude;
         IsAimDeadZone = distance < minimumDistance;
 
-        Vector3 direction = distance > 0.0001f
-            ? planarOffset / distance
-            : transform.forward;
+        Vector3 direction;
+
+        if (IsAimDeadZone)
+        {
+            direction = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+        }
+        else
+        {
+            direction = planarOffset / distance;
+        }
 
         _aimPoint = center + direction * Mathf.Max(distance, minimumDistance);
         HasAimPoint = true;
+    }
+
+    private const int MuzzleAlignmentIterations = 4;
+    private const float MuzzleAlignmentFadeDistance = 1.5f;
+    private const float MaxMuzzleAlignmentAngle = 35f;
+
+    /// <summary>
+    /// Returns the planar body facing direction that makes the weapon muzzle point at the aim point,
+    /// so the whole body turns with the gun instead of only the gun swinging to the cursor.
+    /// </summary>
+    private Vector3 CalculateMuzzleAlignedBodyDirection()
+    {
+        Vector3 bodyToAim = _aimPoint - transform.position;
+        bodyToAim.y = 0f;
+
+        if (_currentWeapon == null || _currentWeapon.Muzzle == null || bodyToAim.sqrMagnitude < 0.001f)
+            return bodyToAim;
+
+        Vector3 muzzleLocalOffset = transform.InverseTransformPoint(_currentWeapon.Muzzle.position);
+        muzzleLocalOffset.y = 0f;
+
+        Vector3 solvedDirection = bodyToAim;
+
+        for (int i = 0; i < MuzzleAlignmentIterations; i++)
+        {
+            Quaternion candidateRotation = Quaternion.LookRotation(solvedDirection);
+            Vector3 muzzlePosition = transform.position + candidateRotation * muzzleLocalOffset;
+            Vector3 muzzleToAim = _aimPoint - muzzlePosition;
+            muzzleToAim.y = 0f;
+
+            if (muzzleToAim.sqrMagnitude < 0.001f)
+                break;
+
+            solvedDirection = muzzleToAim;
+        }
+
+        // Fade the muzzle solve in as the cursor moves away from the dead zone edge.
+        float blend = Mathf.InverseLerp(
+            CurrentMinimumAimDistance,
+            CurrentMinimumAimDistance + MuzzleAlignmentFadeDistance,
+            bodyToAim.magnitude);
+
+        float solvedOffsetAngle = Vector3.SignedAngle(bodyToAim, solvedDirection, Vector3.up);
+        float limitedOffsetAngle = Mathf.Clamp(
+            solvedOffsetAngle * blend,
+            -MaxMuzzleAlignmentAngle,
+            MaxMuzzleAlignmentAngle);
+
+        return Quaternion.AngleAxis(limitedOffsetAngle, Vector3.up) * bodyToAim;
     }
 
     private void HandleRotation(Vector3 moveDirection)
@@ -511,8 +568,11 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
         }
         else if (HasAimPoint)
         {
-            targetDirection = _aimPoint - transform.position;
-            targetDirection.y = 0f;
+            // Inside the dead zone there is no valid target, so hold the current facing.
+            if (IsAimDeadZone)
+                return;
+
+            targetDirection = CalculateMuzzleAlignedBodyDirection();
             useTravelTurn = false;
         }
         else
@@ -694,6 +754,8 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
 
     private void MeasureMinimumAimDistance(Weapon weapon)
     {
+        _currentWeapon = weapon;
+
         if (weapon == null || weapon.Muzzle == null)
         {
             _currentMinimumAimDistance = 0f;

@@ -4,6 +4,7 @@ using UnityEngine;
 public class WeaponPickup : MonoBehaviour, IInteractable
 {
     [SerializeField] private Transform _pickupVisual;
+    [SerializeField] private Floater _floater;
 
     private WeaponInstanceState _weaponState;
     private float _vanishTimer;
@@ -72,6 +73,9 @@ public class WeaponPickup : MonoBehaviour, IInteractable
 
         if (droppedState != null)
         {
+            if (_floater != null)
+                _floater.RestoreBasePose();
+
             GameObject newPickupObj = Instantiate(gameObject, transform.position, Quaternion.identity);
             WeaponPickup newPickupScript = newPickupObj.GetComponent<WeaponPickup>();
 

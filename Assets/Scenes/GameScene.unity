@@ -6721,7 +6721,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _maxWeaponLimit
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _defaultBulletPool
@@ -6730,7 +6730,7 @@ PrefabInstance:
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: DefaultStartingWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: dc0cf0d26f8b3884e924e8a84eb5c0d4, type: 2}
+      objectReference: {fileID: 11400000, guid: cb7994c264f2c744a9ef462a418c0649, type: 2}
     - target: {fileID: 3578524425810942756, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: m_Name
       value: Player
