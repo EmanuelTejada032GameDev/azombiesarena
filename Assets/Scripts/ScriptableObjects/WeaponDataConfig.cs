@@ -59,6 +59,8 @@ public class WeaponDataConfig : ScriptableObject
     [SerializeField] private int _maxMagazineSize = 30;
     [SerializeField] private int _maxReserveAmmo = 90;
     [SerializeField] private float _reloadDuration = 2.0f;
+    [Tooltip("Optional procedural reload animation. Leave empty for no reload animation.")]
+    [SerializeField] private WeaponReloadAnimationProfile _reloadAnimation;
 
 
     [Header("Economy Settings")]
@@ -94,6 +96,7 @@ public class WeaponDataConfig : ScriptableObject
     public int MaxMagazineSize => _maxMagazineSize;
     public int MaxReserveAmmo => _maxReserveAmmo;
     public float ReloadDuration => _reloadDuration;
+    public WeaponReloadAnimationProfile ReloadAnimation => _reloadAnimation;
 
     public int BasePurchaseCost => _basePurchaseCost;
     public int NormalAmmoPrice => _normalAmmoPrice;

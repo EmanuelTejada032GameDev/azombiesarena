@@ -31,7 +31,8 @@ MonoBehaviour:
   _recoilForce: 1
   _maxMagazineSize: 10000
   _maxReserveAmmo: 10000
-  _reloadDuration: 0.4
+  _reloadDuration: 1
+  _reloadAnimation: {fileID: 11400000, guid: b6add7b2b3ed8084d8a7977c3408be18, type: 2}
   _basePurchaseCost: 500
   _normalAmmoPrice: 300
   _upgradedAmmoPrice: 4500

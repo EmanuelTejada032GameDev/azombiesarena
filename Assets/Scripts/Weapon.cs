@@ -34,6 +34,8 @@ public class Weapon : MonoBehaviour
 
     public EventHandler OnAmmoChanged;
     public static event Action<float> OnShoot;
+    public static event Action<Weapon, float> OnReloadStarted;
+    public static event Action<Weapon> OnReloadFinished;
 
     /// <summary>
     /// Injects the runtime data instance packet and ties this physical prefab shell to its unique stats.
@@ -170,9 +172,12 @@ public class Weapon : MonoBehaviour
     {
         _isReloading = true;
 
+        float reloadDuration = EffectiveReloadDuration;
+        OnReloadStarted?.Invoke(this, reloadDuration);
+
         Config.ReloadEvent.Play(_weaponAudioSource);
 
-        yield return new WaitForSeconds(EffectiveReloadDuration);
+        yield return new WaitForSeconds(reloadDuration);
 
         int amountNeeded = EffectiveMaxMagazineSize - _state.CurrentMagazineAmmo;
         int amountToTransfer = Mathf.Min(amountNeeded, _state.CurrentReserveAmmo);
@@ -182,5 +187,6 @@ public class Weapon : MonoBehaviour
         OnAmmoChanged?.Invoke(this, EventArgs.Empty);
 
         _isReloading = false;
+        OnReloadFinished?.Invoke(this);
     }
 }

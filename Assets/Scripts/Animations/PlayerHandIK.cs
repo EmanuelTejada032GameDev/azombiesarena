@@ -36,6 +36,12 @@ public class PlayerHandIK : MonoBehaviour
     private Vector3 _weaponSocketBaseLocalPosition;
     private Quaternion _weaponBaseLocalRotation;
 
+    private WeaponReloadAnimationProfile _reloadProfile;
+    private float _reloadStartTime = -1f;
+    private float _reloadDuration = 1f;
+    private Vector3 _weaponBaseLocalPosition;
+    private Vector3 _leftHandReloadOffsetWorld;
+
     private bool IsOneHanded => _currentWeapon != null && _leftHandGrip == null;
 
     private void Awake()
@@ -86,11 +92,62 @@ public class PlayerHandIK : MonoBehaviour
     private void OnEnable()
     {
         Weapon.OnShoot += HandleShoot;
+        Weapon.OnReloadStarted += HandleReloadStarted;
+        Weapon.OnReloadFinished += HandleReloadFinished;
     }
 
     private void OnDisable()
     {
         Weapon.OnShoot -= HandleShoot;
+        Weapon.OnReloadStarted -= HandleReloadStarted;
+        Weapon.OnReloadFinished -= HandleReloadFinished;
+    }
+
+    private void HandleReloadStarted(Weapon weapon, float duration)
+    {
+        if (weapon != _currentWeapon || weapon.Config == null) return;
+
+        _reloadProfile = weapon.Config.ReloadAnimation;
+        _reloadStartTime = Time.time;
+        _reloadDuration = Mathf.Max(duration, 0.01f);
+    }
+
+    private void HandleReloadFinished(Weapon weapon)
+    {
+        if (weapon != _currentWeapon) return;
+
+        ClearReloadState();
+    }
+
+    private void ClearReloadState()
+    {
+        _reloadProfile = null;
+        _reloadStartTime = -1f;
+        _leftHandReloadOffsetWorld = Vector3.zero;
+    }
+
+    /// <summary>
+    /// Applies the profile's weapon pose and left-hand offset for the current point in the reload.
+    /// </summary>
+    private void ApplyReloadPose()
+    {
+        if (_currentWeapon == null || _reloadProfile == null || _reloadStartTime < 0f)
+        {
+            _leftHandReloadOffsetWorld = Vector3.zero;
+            return;
+        }
+
+        float normalizedTime = Mathf.Clamp01((Time.time - _reloadStartTime) / _reloadDuration);
+        Transform weaponTransform = _currentWeapon.transform;
+
+        weaponTransform.localPosition = _weaponBaseLocalPosition + _reloadProfile.EvaluateWeaponPosition(normalizedTime);
+        weaponTransform.localRotation = weaponTransform.localRotation * _reloadProfile.EvaluateWeaponRotation(normalizedTime);
+
+        Vector3 handOffsetLocal = _reloadProfile.EvaluateLeftHandOffset(normalizedTime);
+        _leftHandReloadOffsetWorld = weaponTransform.TransformDirection(handOffsetLocal);
+
+        if (normalizedTime >= 1f)
+            ClearReloadState();
     }
 
     private void HandleShoot(float recoilForce)
@@ -128,7 +185,11 @@ public class PlayerHandIK : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (_currentWeapon != null)
+            _currentWeapon.transform.localPosition = _weaponBaseLocalPosition;
+
         AimWeaponAtCursor();
+        ApplyReloadPose();
         SyncHandTargetProxies();
     }
 
@@ -187,7 +248,7 @@ public class PlayerHandIK : MonoBehaviour
     private void SyncHandTargetProxies()
     {
         if (_leftHandGrip != null && _leftHandTargetProxy != null)
-            _leftHandTargetProxy.SetPositionAndRotation(_leftHandGrip.position, _leftHandGrip.rotation);
+            _leftHandTargetProxy.SetPositionAndRotation(_leftHandGrip.position + _leftHandReloadOffsetWorld, _leftHandGrip.rotation);
 
         if (_rightHandAim != null && _rightHandTargetProxy != null)
             _rightHandTargetProxy.SetPositionAndRotation(_rightHandAim.position, _rightHandAim.rotation);
@@ -201,6 +262,8 @@ public class PlayerHandIK : MonoBehaviour
 
         _currentWeapon = weapon;
         _weaponBaseLocalRotation = weapon != null ? weapon.transform.localRotation : Quaternion.identity;
+        _weaponBaseLocalPosition = weapon != null ? weapon.transform.localPosition : Vector3.zero;
+        ClearReloadState();
         _leftHandGrip = weapon != null ? FindNamedChild(weapon.transform, "LeftHandGrip") : null;
         _rightHandAim = weapon != null ? FindNamedChild(weapon.transform, "RightHandAim") : null;
 
