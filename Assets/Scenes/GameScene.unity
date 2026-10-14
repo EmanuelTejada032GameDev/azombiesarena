@@ -6721,7 +6721,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _maxWeaponLimit
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _defaultBulletPool

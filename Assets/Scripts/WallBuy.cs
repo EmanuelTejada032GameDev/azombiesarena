@@ -38,19 +38,17 @@ public class WallBuy : MonoBehaviour, IInteractable
 
                 if (droppedState != null && _weaponPickupPrefabShell != null)
                 {
-                    GameObject newPickupObj = Instantiate(_weaponPickupPrefabShell, interactorTransform.position, Quaternion.identity);
+                    // Pop the old weapon away from the wall, toward the player's side
+                    Vector3 awayFromWall = interactorTransform.position - transform.position;
+                    awayFromWall.y = 0f;
+                    awayFromWall = awayFromWall.sqrMagnitude > 0.0001f ? awayFromWall.normalized : interactorTransform.forward;
+
+                    Vector3 spawnPosition = interactorTransform.position + Vector3.up + awayFromWall * 0.5f;
+                    GameObject newPickupObj = Instantiate(_weaponPickupPrefabShell, spawnPosition, Quaternion.identity);
                     WeaponPickup newPickupScript = newPickupObj.GetComponent<WeaponPickup>();
 
                     newPickupScript.InitializePickup(droppedState, 15f);
-
-                    if (newPickupObj.TryGetComponent(out Rigidbody rb))
-                    {
-                        Vector3 upwardForce = Vector3.up * 3f;
-                        Vector3 randomHorizontalDirection = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized;
-                        Vector3 forwardForce = randomHorizontalDirection * 4f;
-
-                        rb.AddForce(upwardForce + forwardForce, ForceMode.Impulse);
-                    }
+                    newPickupScript.Launch(awayFromWall);
                 }
             }
         }

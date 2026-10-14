@@ -8,27 +8,22 @@ public class PlayerInteractProximity : MonoBehaviour
     [SerializeField] private float INTERACT_RANGE = 3f;
     [SerializeField] private Vector3 _interactionOffset = new Vector3(0f, 1f, 0f);
 
+    [Header("Target Stability")]
+    [Tooltip("A new interactable must be this much closer than the current one to steal focus (prevents prompt flicker).")]
+    [SerializeField] private float _switchDistanceMargin = 0.5f;
+
+    private IInteractable _currentTarget;
+    private string _displayedText;
+
     private void Update()
     {
         IInteractable closestInteractable = GetInteractableObject();
-
-        if (closestInteractable != null && closestInteractable.CanDoInteractAction(IInteractable.InteractAction.Primary))
-        {
-            var textDict = closestInteractable.GetInteractTextDictionary();
-            if (textDict != null && textDict.ContainsKey(IInteractable.InteractAction.Primary))
-            {
-                UI_InteractionHUD.Instance.DisplayPrompt(textDict[IInteractable.InteractAction.Primary]);
-            }
-        }
-        else
-        {
-            UI_InteractionHUD.Instance.HidePrompt();
-        }
+        UpdatePrompt(closestInteractable);
 
 #if ENABLE_INPUT_SYSTEM
-        bool isFKeyDown = Keyboard.current.fKey.wasPressedThisFrame;
+        bool isFKeyDown = Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame;
 #else
-                bool isFKeyDown = Input.GetKeyDown(KeyCode.F);
+        bool isFKeyDown = Input.GetKeyDown(KeyCode.F);
 #endif
 
         if (isFKeyDown && closestInteractable != null)
@@ -40,37 +35,76 @@ public class PlayerInteractProximity : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Shows or hides the HUD prompt, only touching the HUD when the text actually changes.
+    /// </summary>
+    private void UpdatePrompt(IInteractable target)
+    {
+        string newText = null;
+
+        if (target != null && target.CanDoInteractAction(IInteractable.InteractAction.Primary))
+        {
+            var textDict = target.GetInteractTextDictionary();
+            if (textDict != null && textDict.TryGetValue(IInteractable.InteractAction.Primary, out string text))
+            {
+                newText = text;
+            }
+        }
+
+        if (newText == _displayedText) return;
+        _displayedText = newText;
+
+        if (UI_InteractionHUD.Instance == null) return;
+
+        if (newText != null)
+            UI_InteractionHUD.Instance.DisplayPrompt(newText);
+        else
+            UI_InteractionHUD.Instance.HidePrompt();
+    }
+
+    /// <summary>
+    /// Returns the interactable in range, keeping the current one unless another is clearly closer.
+    /// </summary>
     public IInteractable GetInteractableObject()
     {
-        List<IInteractable> interactableList = new List<IInteractable>();
         Vector3 detectionCenter = transform.position + _interactionOffset;
         Collider[] colliderArray = Physics.OverlapSphere(detectionCenter, INTERACT_RANGE);
 
+        IInteractable closestInteractable = null;
+        float closestDistance = float.MaxValue;
+        bool currentTargetStillInRange = false;
+        float currentTargetDistance = float.MaxValue;
+
         foreach (Collider collider in colliderArray)
         {
-            if (collider.TryGetComponent(out IInteractable interactable))
-            {
-                interactableList.Add(interactable);
-            }
-        }
+            if (!collider.TryGetComponent(out IInteractable interactable)) continue;
 
-        IInteractable closestInteractable = null;
-        foreach (IInteractable interactable in interactableList)
-        {
-            if (closestInteractable == null)
+            // Unity-destroyed objects compare as null through the interface cast
+            if (interactable is Object unityObject && unityObject == null) continue;
+
+            float distance = Vector3.Distance(detectionCenter, interactable.GetTransform().position);
+
+            if (interactable == _currentTarget)
             {
+                currentTargetStillInRange = true;
+                currentTargetDistance = distance;
+            }
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
                 closestInteractable = interactable;
             }
-            else
-            {
-                if (Vector3.Distance(detectionCenter, interactable.GetTransform().position) <
-                    Vector3.Distance(detectionCenter, closestInteractable.GetTransform().position))
-                {
-                    closestInteractable = interactable;
-                }
-            }
         }
 
+        // Hysteresis: only switch when the new candidate is significantly closer
+        if (currentTargetStillInRange && closestInteractable != _currentTarget &&
+            closestDistance > currentTargetDistance - _switchDistanceMargin)
+        {
+            closestInteractable = _currentTarget;
+        }
+
+        _currentTarget = closestInteractable;
         return closestInteractable;
     }
 

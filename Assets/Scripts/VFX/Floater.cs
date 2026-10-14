@@ -17,10 +17,15 @@ public class Floater : MonoBehaviour
     [Header("Variation")]
     [SerializeField] private bool _randomOffset = true;
 
+    [Header("Rise")]
+    [Tooltip("Seconds taken to rise from the resting pose up to the hover height after BeginFloating.")]
+    [SerializeField] private float _riseDuration = 0.6f;
+
     private Vector3 _startLocalPosition;
     private Quaternion _startLocalRotation;
     private float _phase;
     private float _yaw;
+    private float _riseProgress = 1f;
 
     private void Awake()
     {
@@ -36,12 +41,18 @@ public class Floater : MonoBehaviour
 
     private void Update()
     {
+        if (_riseProgress < 1f)
+        {
+            _riseProgress = _riseDuration <= 0f ? 1f : Mathf.MoveTowards(_riseProgress, 1f, Time.deltaTime / _riseDuration);
+        }
+
+        float riseBlend = Mathf.SmoothStep(0f, 1f, _riseProgress);
         float height = _hoverHeight;
 
         if (_bob)
             height += Mathf.Sin(Time.time * _bobSpeed + _phase) * _bobAmplitude;
 
-        transform.localPosition = _startLocalPosition + Vector3.up * height;
+        transform.localPosition = _startLocalPosition + Vector3.up * (height * riseBlend);
 
         if (_spin)
             _yaw += _spinSpeed * Time.deltaTime;
@@ -53,5 +64,24 @@ public class Floater : MonoBehaviour
     {
         transform.localPosition = _startLocalPosition;
         transform.localRotation = _startLocalRotation;
+    }
+
+    /// <summary>
+    /// Uses the current pose as the resting pose, then smoothly rises to the hover height and starts bobbing/spinning.
+    /// </summary>
+    public void BeginFloating()
+    {
+        _startLocalPosition = transform.localPosition;
+        _startLocalRotation = transform.localRotation;
+        _riseProgress = 0f;
+        enabled = true;
+    }
+
+    /// <summary>
+    /// Stops floating so physics can take over the transform.
+    /// </summary>
+    public void StopFloating()
+    {
+        enabled = false;
     }
 }
