@@ -15,6 +15,8 @@ MonoBehaviour:
   _displayName: first boss
   _maxHealth: 300
   _moveSpeed: 2
+  _moveSpeedPercentPerWave: 0
+  _maxMoveSpeed: 2
   _attackDamage: 2
   _attackCooldown: 1.5
   _attackRange: 3.5

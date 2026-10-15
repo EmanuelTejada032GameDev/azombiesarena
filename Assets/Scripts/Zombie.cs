@@ -36,6 +36,7 @@ public class Zombie : MonoBehaviour
 
     private Animator _animator;
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
+    private const float AnimatorLocomotionSpeedCap = 4f;
 
     [Header("Attack Animation")]
     [SerializeField] private float _attackConeAngle = 90f;
@@ -94,9 +95,12 @@ public class Zombie : MonoBehaviour
     }
 
 
-    public void ApplyZombieSO(ZombieSO zombieSO, float healthMultiplier = 1f, float damageMultiplier = 1f, int damageBonus = 0)
+    /// <summary>
+    /// Applies a zombie type's base configuration and wave-scaled combat stats.
+    /// </summary>
+    public void ApplyZombieSO(ZombieSO zombieSO, int waveNumber, float healthMultiplier = 1f, float damageMultiplier = 1f, int damageBonus = 0)
     {
-        _agent.speed = zombieSO.MoveSpeed;
+        _agent.speed = GetWaveScaledMoveSpeed(zombieSO, waveNumber);
 
         int scaledHealth = Mathf.Max(1, Mathf.RoundToInt(zombieSO.MaxHealth * healthMultiplier));
         _healthSystem.Initialize(scaledHealth);
@@ -108,6 +112,16 @@ public class Zombie : MonoBehaviour
         _attackRange = zombieSO.AttackRange;
         _xpOnDeath = zombieSO.XpReward;
         _drops = zombieSO.Drops;
+    }
+
+    private static float GetWaveScaledMoveSpeed(ZombieSO zombieSO, int waveNumber)
+    {
+        int wavesAfterFirst = Mathf.Max(0, waveNumber - 1);
+        float waveMultiplier = 1f + zombieSO.MoveSpeedPercentPerWave * wavesAfterFirst;
+        float scaledSpeed = zombieSO.MoveSpeed * waveMultiplier;
+        float configuredCap = Mathf.Max(zombieSO.MoveSpeed, zombieSO.MaxMoveSpeed);
+        float animationCap = Mathf.Min(configuredCap, AnimatorLocomotionSpeedCap);
+        return Mathf.Min(scaledSpeed, animationCap);
     }
 
     private void HandleDamaged(object sender, EventArgs e)

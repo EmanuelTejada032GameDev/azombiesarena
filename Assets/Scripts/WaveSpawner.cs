@@ -167,7 +167,7 @@ public class WaveSpawner : MonoBehaviour
 
         if (zombieScript != null)
         {
-            zombieScript.ApplyZombieSO(zombieType, _currentPlan.HealthMultiplier, _currentPlan.DamageMultiplier, _currentPlan.DamageBonus);
+            zombieScript.ApplyZombieSO(zombieType, _currentWave, _currentPlan.HealthMultiplier, _currentPlan.DamageMultiplier, _currentPlan.DamageBonus);
             zombieScript.InitializeTarget(_playerTarget);
         }
 

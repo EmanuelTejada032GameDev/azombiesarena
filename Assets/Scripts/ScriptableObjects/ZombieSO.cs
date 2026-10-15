@@ -24,7 +24,13 @@ public class ZombieSO : ScriptableObject
 
     [Header("Stats")]
     [SerializeField] private int _maxHealth = 20;
-    [SerializeField] private float _moveSpeed = 3.5f;
+
+    [Header("Movement")]
+    [SerializeField, Min(0f)] private float _moveSpeed = 3.5f;
+    [Tooltip("Fractional speed increase per wave after wave 1. For example, 0.03 means +3% per wave.")]
+    [SerializeField, Min(0f)] private float _moveSpeedPercentPerWave;
+    [Tooltip("Absolute speed limit for wave scaling. The shared zombie locomotion blend tree tops out at speed 4.")]
+    [SerializeField, Min(0f)] private float _maxMoveSpeed = 4f;
 
     [Header("Attack")]
     [SerializeField] private int _attackDamage = 1;
@@ -42,6 +48,8 @@ public class ZombieSO : ScriptableObject
     public string DisplayName => _displayName;
     public int MaxHealth => _maxHealth;
     public float MoveSpeed => _moveSpeed;
+    public float MoveSpeedPercentPerWave => _moveSpeedPercentPerWave;
+    public float MaxMoveSpeed => _maxMoveSpeed;
     public int AttackDamage => _attackDamage;
     public float AttackCooldown => _attackCooldown;
     public float AttackRange => _attackRange;
