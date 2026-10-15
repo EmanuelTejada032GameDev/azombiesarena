@@ -1,4 +1,20 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+
+[Serializable]
+public class ZombieDropDefinition
+{
+    [SerializeField] private GameObject _prefab;
+    [SerializeField] private int _amount = 1;
+    [SerializeField, Range(0f, 1f)] private float _dropChance = 1f;
+    [SerializeField] private bool _applyCoinsPerKillModifier;
+
+    public GameObject Prefab => _prefab;
+    public int Amount => _amount;
+    public float DropChance => _dropChance;
+    public bool ApplyCoinsPerKillModifier => _applyCoinsPerKillModifier;
+}
 
 [CreateAssetMenu(fileName = "ZombieSO", menuName = "Zombies/Zombie Type")]
 public class ZombieSO : ScriptableObject
@@ -15,10 +31,9 @@ public class ZombieSO : ScriptableObject
     [SerializeField] private float _attackCooldown = 1.0f;
     [SerializeField] private float _attackRange = 1.5f;
 
-    [Header("Economy")]
-    [SerializeField] private int _pointsPerHit = 10;
-    [SerializeField] private int _pointsOnDeath = 60;
+    [Header("Rewards")]
     [SerializeField] private int _xpReward = 20;
+    [SerializeField] private List<ZombieDropDefinition> _drops = new List<ZombieDropDefinition>();
 
     [Header("Visuals")]
     [SerializeField] private GameObject _prefab;
@@ -30,11 +45,8 @@ public class ZombieSO : ScriptableObject
     public int AttackDamage => _attackDamage;
     public float AttackCooldown => _attackCooldown;
     public float AttackRange => _attackRange;
-    public int PointsPerHit => _pointsPerHit;
-    public int PointsOnDeath => _pointsOnDeath;
+    public IReadOnlyList<ZombieDropDefinition> Drops => _drops;
     public GameObject Prefab => _prefab;
     public float ScaleMultiplier => _scaleMultiplier;
-
-
     public int XpReward => _xpReward;
 }

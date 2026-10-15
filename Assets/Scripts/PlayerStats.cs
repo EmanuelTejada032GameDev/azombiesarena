@@ -12,7 +12,8 @@ public class PlayerStats : MonoBehaviour
         StaminaRegen,
         MaxHealth,
         XpPerKill,
-        CoinsPerKill
+        CoinsPerKill,
+        PickupRange
     }
 
     public enum ModifierKind

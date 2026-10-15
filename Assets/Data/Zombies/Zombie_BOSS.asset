@@ -18,8 +18,11 @@ MonoBehaviour:
   _attackDamage: 2
   _attackCooldown: 1.5
   _attackRange: 3.5
-  _pointsPerHit: 10
-  _pointsOnDeath: 500
   _xpReward: 200
+  _drops:
+  - _prefab: {fileID: 6240673524622749518, guid: 2008916626521044898c89ab6c531bde, type: 3}
+    _amount: 500
+    _dropChance: 1
+    _applyCoinsPerKillModifier: 1
   _prefab: {fileID: 2985613078062470518, guid: 5b2ff4170b8ef37419c5726ea47d3801, type: 3}
   _scaleMultiplier: 3

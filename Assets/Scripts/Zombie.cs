@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,6 +16,7 @@ public class Zombie : MonoBehaviour
 
     private HealthSystem _healthSystem;
     private Collider _collider;
+    private IReadOnlyList<ZombieDropDefinition> _drops;
 
     [Header("Attack Configuration")]
     [SerializeField] private float _attackRange = 1.5f;
@@ -27,11 +29,7 @@ public class Zombie : MonoBehaviour
     private IDamagable _playerDamageable;
     private bool _canAttack = true;
 
-    [Header("Economy Rewards")]
-    [SerializeField] private int _pointsPerHit = 10;
-    [SerializeField] private int _pointsOnDeath = 60;
     [SerializeField] private int _xpOnDeath = 20;
-
 
     [Header("Animation")]
     [SerializeField] private float _speedDampTime = 0.1f;
@@ -108,15 +106,12 @@ public class Zombie : MonoBehaviour
         _attackDamage = Mathf.Max(1, Mathf.RoundToInt(zombieSO.AttackDamage * damageMultiplier) + damageBonus);
         _attackCooldown = zombieSO.AttackCooldown;
         _attackRange = zombieSO.AttackRange;
-        _pointsPerHit = zombieSO.PointsPerHit;
-        _pointsOnDeath = zombieSO.PointsOnDeath;
         _xpOnDeath = zombieSO.XpReward;
+        _drops = zombieSO.Drops;
     }
 
     private void HandleDamaged(object sender, EventArgs e)
     {
-        EconomyManager.Instance.AddPoints(_pointsPerHit);
-
         if (_isDead || _isAttacking || _animator == null || _wasHitRecently) return;
 
         _wasHitRecently = true;
@@ -252,11 +247,43 @@ public class Zombie : MonoBehaviour
             _agent.enabled = false; 
         }
 
-        EconomyManager.Instance.AddPoints(Mathf.RoundToInt(PlayerStats.Get(PlayerStats.StatType.CoinsPerKill, _pointsOnDeath)));
+        SpawnDrops();
         XPManager.Instance.AddXP(Mathf.RoundToInt(PlayerStats.Get(PlayerStats.StatType.XpPerKill, _xpOnDeath)));
 
         // Trigger zombie death logic and FXs here
         Destroy(gameObject, 10f);
+    }
+
+    private void SpawnDrops()
+    {
+        if (_drops == null)
+            return;
+
+        foreach (ZombieDropDefinition drop in _drops)
+        {
+            if (drop == null || drop.Prefab == null || UnityEngine.Random.value > drop.DropChance)
+                continue;
+
+            int amount = drop.Amount;
+            if (drop.ApplyCoinsPerKillModifier)
+                amount = Mathf.RoundToInt(PlayerStats.Get(PlayerStats.StatType.CoinsPerKill, amount));
+
+            if (amount <= 0)
+                continue;
+
+            Vector3 spawnPosition = transform.position + Vector3.up;
+            GameObject dropObject = Instantiate(drop.Prefab, spawnPosition, Quaternion.identity);
+            MagnetCollectible collectible = dropObject.GetComponent<MagnetCollectible>();
+
+            if (collectible == null)
+            {
+                Debug.LogWarning($"Drop prefab '{drop.Prefab.name}' has no MagnetCollectible component.", drop.Prefab);
+                Destroy(dropObject);
+                continue;
+            }
+
+            collectible.Initialize(amount);
+        }
     }
 
     private void OnDisable()
