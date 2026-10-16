@@ -9,16 +9,17 @@ public class UI_EnemyHealthBar : MonoBehaviour
     [SerializeField] private GameObject _healthBar;
     [SerializeField] private Image _barImage;
     [SerializeField] private HealthSystem _enemyHealth;
+    [SerializeField] private bool _useHideOnFull = false;
+    [SerializeField] private bool _useHideOnEmpty = false;
 
     private void Start()
     {
         _enemyHealth.OnDamaged += HandleDamaged;
         _enemyHealth.OnHealed += HandleHealed;
-        Refresh();
-
         if (_showHealthBar)
         {
             Show();
+            Refresh();
         }
         else
         {
@@ -46,6 +47,25 @@ public class UI_EnemyHealthBar : MonoBehaviour
     private void Refresh()
     {
         _barImage.fillAmount = _enemyHealth.NormalizedHealthAmount;
+        if (_useHideOnFull)
+        {
+            if (_enemyHealth.NormalizedHealthAmount >= 1f)
+            {
+                Hide();
+            }
+            else
+            {
+                Show();
+            }
+        }
+
+        if (_useHideOnEmpty)
+        {
+            if (_enemyHealth.NormalizedHealthAmount <= 0f)
+            {
+                Hide();
+            }
+        }
     }
 
     private void Show()

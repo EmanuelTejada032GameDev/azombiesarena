@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab4d003f88d845246a0355c9d80c0d82, type: 3}
   m_Name: WaveProgressionConfig
   m_EditorClassIdentifier: Assembly-CSharp::WaveProgressionSO
-  _baseZombieCount: 5
-  _zombiesPerWave: 3
+  _baseZombieCount: 30
+  _zombiesPerWave: 5
   _zombieTypes:
   - _zombieType: {fileID: 11400000, guid: bdd17211cc60c344b96b891b8438ce5a, type: 2}
     _unlockWave: 1

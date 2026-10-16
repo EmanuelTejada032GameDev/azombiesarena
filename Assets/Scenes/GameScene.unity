@@ -5117,9 +5117,9 @@ MonoBehaviour:
   - {fileID: 941877638}
   _playerTarget: {fileID: 1818118127}
   _waveProgression: {fileID: 11400000, guid: cb412631385a6e549a300ce0f99b25c5, type: 2}
-  _timeBetweenSpawns: 1.5
+  _timeBetweenSpawns: 1
   _intermissionDuration: 5
-  _maxActiveZombiesCap: 24
+  _maxActiveZombiesCap: 100
   _continuousMode: 1
   _currentWaveVariable: {fileID: 11400000, guid: 1ad6fc888649e364d8ca26b0d9353814, type: 2}
   _zombiesRemainingVariable: {fileID: 11400000, guid: df7181657c2f07b458234db9d073098c, type: 2}
@@ -6721,7 +6721,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _maxWeaponLimit
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 583183887723706424, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _defaultBulletPool

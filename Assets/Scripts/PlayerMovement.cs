@@ -86,7 +86,6 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
 
     [Header("Slide Settings")]
     [SerializeField] private bool _canSlide = true;
-    [SerializeField] private float _slideSpeed = 10f;
     [SerializeField] private float _slideDuration = 0.7f;
     [SerializeField] private float _slideCooldown = 1f;
     [SerializeField] private float _slideStaminaCost = 20f;
@@ -646,9 +645,8 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
 
     private void ApplySlideMovement()
     {
-        Vector3 movement =
-            _slideDirection *
-            _slideSpeed;
+
+        Vector3 movement = _slideDirection * (_currentPlayerSpeed * 1.5f);
 
         movement.y =
             _verticalVelocity;

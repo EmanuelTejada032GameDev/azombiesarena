@@ -8,6 +8,8 @@ public class HealthSystem : MonoBehaviour, IDamagable
     public event EventHandler OnDied;
     public event EventHandler<DamageEventArgs> OnDamageDealt;
 
+  
+
     private int _healthAmount;
     [SerializeField] private int _maxHealthAmount;
     private int _baseMaxHealth;

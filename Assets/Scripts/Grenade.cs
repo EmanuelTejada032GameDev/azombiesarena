@@ -41,7 +41,7 @@ public class Grenade : MonoBehaviour
 
             if (health != null)
             {
-                float normalZombieMaxHP = 6;
+                float normalZombieMaxHP = 100;
                 float finalDamage = 0f;
 
                 // Zone 1: Epicenter Zone (0.0 to 0.4) -> 100% Lethal Strike
