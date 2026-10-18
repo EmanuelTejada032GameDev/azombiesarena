@@ -88,47 +88,47 @@ public class PlayerGrenadeController : MonoBehaviour
     [SerializeField] private int _trajectoryResolution = 30; // Number of points along the line
     [SerializeField] private float _timeStepBetweenPoints = 0.05f; // Time interval between points
 
-    private void OnDrawGizmos()
-    {
-        if (!_showDebugGizmos || _throwPoint == null)
-            return;
+    //private void OnDrawGizmos()
+    //{
+    //    if (!_showDebugGizmos || _throwPoint == null)
+    //        return;
 
-        // FIXED: Use the player's actual physical direction instead of the live mouse position.
-        // This ensures the Gizmo line locks perfectly to your player even when the game is paused!
-        Vector3 throwDirection = transform.forward;
-        throwDirection.y = 0f;
-        throwDirection.Normalize();
+    //    // FIXED: Use the player's actual physical direction instead of the live mouse position.
+    //    // This ensures the Gizmo line locks perfectly to your player even when the game is paused!
+    //    Vector3 throwDirection = transform.forward;
+    //    throwDirection.y = 0f;
+    //    throwDirection.Normalize();
 
-        // Calculate the exact initial Velocity vector matching your ThrowGrenade method
-        Vector3 startingVelocity = (throwDirection * _throwForce) + (Vector3.up * _upwardForce);
+    //    // Calculate the exact initial Velocity vector matching your ThrowGrenade method
+    //    Vector3 startingVelocity = (throwDirection * _throwForce) + (Vector3.up * _upwardForce);
 
-        Vector3 previousPoint = _throwPoint.position;
-        Vector3 gravity = Physics.gravity; // Grabs your scene's global gravity settings
+    //    Vector3 previousPoint = _throwPoint.position;
+    //    Vector3 gravity = Physics.gravity; // Grabs your scene's global gravity settings
 
-        Gizmos.color = Color.cyan;
+    //    Gizmos.color = Color.cyan;
 
-        // Plot and draw the parabolic arc frame by frame
-        for (int i = 1; i <= _trajectoryResolution; i++)
-        {
-            float time = i * _timeStepBetweenPoints;
+    //    // Plot and draw the parabolic arc frame by frame
+    //    for (int i = 1; i <= _trajectoryResolution; i++)
+    //    {
+    //        float time = i * _timeStepBetweenPoints;
 
-            // Kinematic Equation: Displacement = (Velocity * t) + (0.5 * Gravity * t^2)
-            Vector3 displacement = (startingVelocity * time) + (0.5f * gravity * time * time);
-            Vector3 currentPoint = _throwPoint.position + displacement;
+    //        // Kinematic Equation: Displacement = (Velocity * t) + (0.5 * Gravity * t^2)
+    //        Vector3 displacement = (startingVelocity * time) + (0.5f * gravity * time * time);
+    //        Vector3 currentPoint = _throwPoint.position + displacement;
 
-            // Draw a line connecting the previous calculated point to the new one
-            Gizmos.DrawLine(previousPoint, currentPoint);
+    //        // Draw a line connecting the previous calculated point to the new one
+    //        Gizmos.DrawLine(previousPoint, currentPoint);
 
-            // Draw a tiny marker at each step point
-            Gizmos.DrawSphere(currentPoint, 0.05f);
+    //        // Draw a tiny marker at each step point
+    //        Gizmos.DrawSphere(currentPoint, 0.05f);
 
-            previousPoint = currentPoint;
-        }
+    //        previousPoint = currentPoint;
+    //    }
 
-        // Draw a wire sphere at the final predicted point to represent the grenade size
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(previousPoint, 0.2f);
-    }
+    //    // Draw a wire sphere at the final predicted point to represent the grenade size
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(previousPoint, 0.2f);
+    //}
 
 
 }

@@ -766,40 +766,40 @@ public class PlayerMovement : MonoBehaviour, IHasProgress
     }
 
 
-    private void OnDrawGizmos()
-    {
-        if (!_showAimGizmos)
-            return;
+    //private void OnDrawGizmos()
+    //{
+    //    if (!_showAimGizmos)
+    //        return;
 
-        float height = _weaponHoldAnchor != null
-            ? _weaponHoldAnchor.position.y
-            : transform.position.y + 1.2f;
+    //    float height = _weaponHoldAnchor != null
+    //        ? _weaponHoldAnchor.position.y
+    //        : transform.position.y + 1.2f;
 
-        float radius = CurrentMinimumAimDistance;
-        Vector3 center = new Vector3(transform.position.x, height, transform.position.z);
+    //    float radius = CurrentMinimumAimDistance;
+    //    Vector3 center = new Vector3(transform.position.x, height, transform.position.z);
 
-        Gizmos.color = Color.yellow;
-        const int segments = 48;
-        Vector3 previous = center + new Vector3(radius, 0f, 0f);
-        for (int i = 1; i <= segments; i++)
-        {
-            float angle = i * Mathf.PI * 2f / segments;
-            Vector3 next = center + new Vector3(
-                Mathf.Cos(angle) * radius,
-                0f,
-                Mathf.Sin(angle) * radius
-            );
-            Gizmos.DrawLine(previous, next);
-            previous = next;
-        }
+    //    Gizmos.color = Color.yellow;
+    //    const int segments = 48;
+    //    Vector3 previous = center + new Vector3(radius, 0f, 0f);
+    //    for (int i = 1; i <= segments; i++)
+    //    {
+    //        float angle = i * Mathf.PI * 2f / segments;
+    //        Vector3 next = center + new Vector3(
+    //            Mathf.Cos(angle) * radius,
+    //            0f,
+    //            Mathf.Sin(angle) * radius
+    //        );
+    //        Gizmos.DrawLine(previous, next);
+    //        previous = next;
+    //    }
 
-        if (Application.isPlaying && HasAimPoint)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(center, _aimPoint);
-            Gizmos.DrawWireSphere(_aimPoint, 0.1f);
-        }
-    }
+    //    if (Application.isPlaying && HasAimPoint)
+    //    {
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawLine(center, _aimPoint);
+    //        Gizmos.DrawWireSphere(_aimPoint, 0.1f);
+    //    }
+    //}
 
     //private void OnDrawGizmos()
     //{

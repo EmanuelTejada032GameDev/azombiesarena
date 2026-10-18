@@ -9,10 +9,12 @@ public class Zombie : MonoBehaviour
 {
     [Header("Navigation Settings")]
     [SerializeField] private float _pathUpdateInterval = 0.2f;
+    [SerializeField, Min(0f)] private float _levelUpKnockbackDuration = 0.55f;
 
     private NavMeshAgent _agent;
     private Transform _targetPlayer;
     private Coroutine _trackingCoroutine;
+    private Coroutine _levelUpKnockbackCoroutine;
 
     private HealthSystem _healthSystem;
     private Collider _collider;
@@ -143,6 +145,65 @@ public class Zombie : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Smoothly pushes the zombie away from a world-space source while keeping it constrained to its NavMesh.
+    /// </summary>
+    public void ApplyLevelUpKnockback(Vector3 sourcePosition, float displacement)
+    {
+        if (_isDead || displacement <= 0f || _agent == null || !_agent.enabled || !_agent.isOnNavMesh)
+            return;
+
+        Vector3 direction = transform.position - sourcePosition;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.001f)
+        {
+            direction = transform.forward;
+            direction.y = 0f;
+        }
+
+        if (direction.sqrMagnitude < 0.001f)
+            direction = Vector3.forward;
+
+        direction.Normalize();
+
+        if (_levelUpKnockbackCoroutine != null)
+            StopCoroutine(_levelUpKnockbackCoroutine);
+
+        if (_levelUpKnockbackDuration <= 0f)
+        {
+            _agent.Move(direction * displacement);
+            _agent.isStopped = _isAttacking;
+            _levelUpKnockbackCoroutine = null;
+            return;
+        }
+
+        _agent.isStopped = true;
+        _levelUpKnockbackCoroutine = StartCoroutine(LevelUpKnockbackRoutine(direction, displacement));
+    }
+
+    private IEnumerator LevelUpKnockbackRoutine(Vector3 direction, float displacement)
+    {
+        float elapsed = 0f;
+        float previousProgress = 0f;
+
+        while (elapsed < _levelUpKnockbackDuration && !_isDead && _agent != null && _agent.enabled && _agent.isOnNavMesh)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(elapsed / _levelUpKnockbackDuration);
+            float easedProgress = 1f - Mathf.Pow(1f - progress, 3f);
+            float frameDisplacement = (easedProgress - previousProgress) * displacement;
+            _agent.Move(direction * frameDisplacement);
+            previousProgress = easedProgress;
+            yield return null;
+        }
+
+        if (!_isDead && _agent != null && _agent.enabled && _agent.isOnNavMesh)
+            _agent.isStopped = _isAttacking;
+
+        _levelUpKnockbackCoroutine = null;
+    }
+
     private IEnumerator TrackTargetRoutine()
     {
         while (_targetPlayer != null)
@@ -207,7 +268,8 @@ public class Zombie : MonoBehaviour
             _attackTimeoutCoroutine = null;
         }
 
-        if (_agent != null && _agent.enabled && _agent.isOnNavMesh) _agent.isStopped = false;
+        if (_agent != null && _agent.enabled && _agent.isOnNavMesh)
+            _agent.isStopped = _levelUpKnockbackCoroutine != null;
 
         if (!_isDead) StartCoroutine(CooldownRoutine());
     }

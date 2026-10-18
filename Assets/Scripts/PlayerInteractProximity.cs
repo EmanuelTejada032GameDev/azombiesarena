@@ -108,9 +108,9 @@ public class PlayerInteractProximity : MonoBehaviour
         return closestInteractable;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position + _interactionOffset, INTERACT_RANGE);
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawWireSphere(transform.position + _interactionOffset, INTERACT_RANGE);
+    //}
 }

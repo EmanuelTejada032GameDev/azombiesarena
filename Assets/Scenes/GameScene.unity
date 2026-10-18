@@ -907,6 +907,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f23e587bd6721694cae29707cbfda058, type: 2}
   _cardsPerLevel: 3
   _playerHealth: {fileID: 1818118120}
+  _playerLevelUpVfxPrefab: {fileID: 1055585006069982, guid: c7f93a0255162fd47bbe40874f339bf4, type: 3}
+  _playerLevelUpVfxOffset: {x: 0, y: 1, z: 0}
+  _playerLevelUpVfxLifetime: 3
+  _zombieKnockbackRadius: 4
+  _zombieKnockbackDistance: 2
+  _slowMotionScale: 0.2
+  _slowMotionBlendDuration: 0.2
+  _slowMotionDuration: 1
 --- !u!4 &278145167
 Transform:
   m_ObjectHideFlags: 0
