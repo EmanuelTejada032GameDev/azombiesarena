@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 3844589736176721437}
   - component: {fileID: 7807233073286670806}
   - component: {fileID: 8870725793957139092}
+  - component: {fileID: 7608616653920598503}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -293,11 +294,14 @@ MonoBehaviour:
   _locomotionState: 0
   _rotationSpeed: 30
   _aimRotationSpeed: 200
+  _snapAimRotation: 1
+  _aimDistanceMargin: 0.5
+  _fallbackMinimumAimDistance: 1.5
+  _showAimGizmos: 1
   _canCrouch: 0
   _crouchTransitionSpeed: 10
   _maneuverState: 0
   _canSlide: 1
-  _slideSpeed: 10
   _slideDuration: 0.7
   _slideCooldown: 1
   _slideStaminaCost: 20
@@ -324,6 +328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractProximity
   INTERACT_RANGE: 2
   _interactionOffset: {x: 0, y: 0, z: 0}
+  _switchDistanceMargin: 0.5
 --- !u!114 &583183887723706424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,6 +410,26 @@ MonoBehaviour:
   _staminaCost: 5
   _slashVFXPrefab: {fileID: 4885471022005174213, guid: 92b9d12a5bf1e7242b3ee4fb2886866f, type: 3}
   _vfxSpawnPoint: {fileID: 3369653180941596817}
+--- !u!114 &7608616653920598503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3578524425810942756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b16b87b7340c146940209468ac1a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLevelUpTransition
+  _playerLevelUpVfxPrefab: {fileID: 1055585006069982, guid: c7f93a0255162fd47bbe40874f339bf4, type: 3}
+  _playerLevelUpVfxOffset: {x: 0, y: 1, z: 0}
+  _playerLevelUpVfxLifetime: 3
+  _zombieKnockbackRadius: 4
+  _zombieKnockbackDistance: 2
+  _slowMotionScale: 0.2
+  _slowMotionBlendDuration: 0.2
+  _slowMotionDuration: 1
 --- !u!1 &6764590684121968215
 GameObject:
   m_ObjectHideFlags: 0

@@ -228,8 +228,7 @@ public class GameManager : MonoBehaviour
         PlayerStats.Instance.ResetStats();
         XPManager.Instance.ResetXP();
 
-        if (_playerHealth != null)
-            _playerHealth.RefreshMaxHealthFromStats();
+        // PlayerStats notifies the player when MaxHealth modifiers are cleared.
     }
 
     private void HandlePlayerDeath(object sender, System.EventArgs e)
