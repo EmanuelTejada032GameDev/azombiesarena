@@ -9,8 +9,11 @@ public class PlayerGrenadeController : MonoBehaviour
     [SerializeField] private GameObject _grenadePrefab;
     [SerializeField] private Transform _throwPoint;
 
-    [SerializeField] private float _throwForce = 30f;
+    [SerializeField, Min(0f), Tooltip("Maximum launch speed for aimed throws; farther aim points clamp to the reachable range.")]
+    private float _throwForce = 30f;
     [SerializeField] private float _upwardForce = 3f;
+    [SerializeField, Range(10f, 80f), Tooltip("Launch arc angle used when aiming at the ground.")]
+    private float _aimArcAngleDegrees = 45f;
 
     private PlayerInput _inputs;
 
@@ -41,42 +44,96 @@ public class PlayerGrenadeController : MonoBehaviour
     }
     private void ThrowGrenade()
     {
+        if (_grenadePrefab == null || _throwPoint == null)
+            return;
+
         _currentGrenades--;
 
         GameObject spawnedGrenade = Instantiate(_grenadePrefab, _throwPoint.position, _throwPoint.rotation);
         Rigidbody rb = spawnedGrenade.GetComponent<Rigidbody>();
 
-        if (rb != null)
+        if (rb == null)
+            return;
+
+        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+        if (playerMovement != null && playerMovement.HasAimPoint &&
+            TryCalculateAimedVelocity(_throwPoint.position, playerMovement.AimPoint, out Vector3 aimedVelocity))
         {
-            // 1. Fire the mouse ray from the camera
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            // 2. FORCE the calculation plane onto the true arena ground floor (Y = 0)
-            // This strips out perspective projection errors caused by the 63-degree camera lift
-            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-
-            Vector3 throwDirection = transform.forward; // Reliable default safety fallback
-
-            if (groundPlane.Raycast(ray, out float enterDistance))
-            {
-                Vector3 worldFloorPoint = ray.GetPoint(enterDistance);
-
-                // 3. Flatten the player position to the same exact ground height floor level (Y = 0)
-                Vector3 playerFloorBase = transform.position;
-                playerFloorBase.y = 0f;
-
-                // 4. Calculate direction from ground base to the ground target point
-                throwDirection = worldFloorPoint - playerFloorBase;
-                throwDirection.y = 0f;
-                throwDirection.Normalize();
-            }
-
-            // 5. Inject the clean vector forces straight to the rigidbody
-            Vector3 finalForce = (throwDirection * _throwForce) + (Vector3.up * _upwardForce);
-            rb.AddForce(finalForce, ForceMode.Impulse);
+            rb.AddForce(aimedVelocity * rb.mass, ForceMode.Impulse);
+            return;
         }
+
+        Vector3 fallbackDirection = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+        if (fallbackDirection.sqrMagnitude < 0.001f)
+            fallbackDirection = Vector3.forward;
+
+        Vector3 fallbackForce = fallbackDirection * _throwForce + Vector3.up * _upwardForce;
+        rb.AddForce(fallbackForce, ForceMode.Impulse);
     }
 
+    private bool TryCalculateAimedVelocity(Vector3 launchPosition, Vector3 aimPoint, out Vector3 launchVelocity)
+    {
+        launchVelocity = Vector3.zero;
+        Vector3 horizontalOffset = aimPoint - launchPosition;
+        horizontalOffset.y = 0f;
+
+        if (horizontalOffset.sqrMagnitude < 0.001f)
+        {
+            horizontalOffset = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+            if (horizontalOffset.sqrMagnitude < 0.001f)
+                horizontalOffset = Vector3.forward;
+        }
+
+        float targetHeightDifference = -launchPosition.y;
+        float horizontalDistance = horizontalOffset.magnitude;
+        float gravity = Mathf.Abs(Physics.gravity.y);
+        float angleRadians = Mathf.Clamp(_aimArcAngleDegrees, 10f, 80f) * Mathf.Deg2Rad;
+        float cosAngle = Mathf.Cos(angleRadians);
+        float tanAngle = Mathf.Tan(angleRadians);
+        float maximumSpeed = Mathf.Max(0f, _throwForce);
+
+        float requiredSpeed = GetRequiredLaunchSpeed(horizontalDistance, targetHeightDifference, gravity, cosAngle, tanAngle);
+        if (requiredSpeed > maximumSpeed)
+        {
+            float minimumReach = 0f;
+            float maximumReach = horizontalDistance;
+
+            for (int iteration = 0; iteration < 16; iteration++)
+            {
+                float candidateDistance = (minimumReach + maximumReach) * 0.5f;
+                float candidateSpeed = GetRequiredLaunchSpeed(candidateDistance, targetHeightDifference, gravity, cosAngle, tanAngle);
+
+                if (candidateSpeed <= maximumSpeed)
+                    minimumReach = candidateDistance;
+                else
+                    maximumReach = candidateDistance;
+            }
+
+            horizontalDistance = minimumReach;
+            requiredSpeed = GetRequiredLaunchSpeed(horizontalDistance, targetHeightDifference, gravity, cosAngle, tanAngle);
+        }
+
+        if (requiredSpeed <= 0f || requiredSpeed > maximumSpeed || float.IsInfinity(requiredSpeed) || float.IsNaN(requiredSpeed))
+            return false;
+
+        Vector3 horizontalDirection = horizontalOffset.normalized;
+        launchVelocity = horizontalDirection * (requiredSpeed * cosAngle) + Vector3.up * (requiredSpeed * Mathf.Sin(angleRadians));
+        return true;
+    }
+
+    private static float GetRequiredLaunchSpeed(float horizontalDistance, float verticalDistance, float gravity, float cosAngle, float tanAngle)
+    {
+        if (horizontalDistance <= 0f || gravity <= 0f)
+            return float.PositiveInfinity;
+
+        float denominator = 2f * cosAngle * cosAngle * (horizontalDistance * tanAngle - verticalDistance);
+        if (denominator <= 0f)
+            return float.PositiveInfinity;
+
+        return Mathf.Sqrt(gravity * horizontalDistance * horizontalDistance / denominator);
+    }
+
+    /// <summary>Restores grenades up to the configured maximum inventory.</summary>
     public void RefillGrenades(int amount)
     {
         _currentGrenades = Mathf.Clamp(_currentGrenades + amount, 0, _maxGrenades);

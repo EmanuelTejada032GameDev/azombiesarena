@@ -5118,7 +5118,7 @@ MonoBehaviour:
   _waveProgression: {fileID: 11400000, guid: cb412631385a6e549a300ce0f99b25c5, type: 2}
   _timeBetweenSpawns: 1
   _intermissionDuration: 5
-  _maxActiveZombiesCap: 100
+  _maxActiveZombiesCap: 60
   _continuousMode: 1
   _currentWaveVariable: {fileID: 11400000, guid: 1ad6fc888649e364d8ca26b0d9353814, type: 2}
   _zombiesRemainingVariable: {fileID: 11400000, guid: df7181657c2f07b458234db9d073098c, type: 2}
@@ -6821,6 +6821,14 @@ PrefabInstance:
     - target: {fileID: 7608616653920598503, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
       propertyPath: _playerLevelUpVfxOffset.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7807233073286670806, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: _maxGrenades
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7807233073286670806, guid: b6402a5d74f4a8147a779f7bee002d8d, type: 3}
+      propertyPath: _currentGrenades
+      value: 300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

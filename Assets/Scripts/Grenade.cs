@@ -75,20 +75,20 @@ public class Grenade : MonoBehaviour
     }
 
 
-    //private void OnDrawGizmosSelected()
-    //{
-    //    // 1. Inner Circle: Epicenter Zone (Red)
-    //    Gizmos.color = new Color(1f, 0f, 0f, 0.4f);
-    //    Gizmos.DrawWireSphere(transform.position, _explosionRadius * _lethalBlastAreaPercentage);
+    private void OnDrawGizmosSelected()
+    {
+        // 1. Inner Circle: Epicenter Zone (Red)
+        Gizmos.color = new Color(1f, 0f, 0f, 0.4f);
+        Gizmos.DrawWireSphere(transform.position, _explosionRadius * _lethalBlastAreaPercentage);
 
-    //    // 2. Middle Circle: Mid-Ring Zone (Orange)
-    //    Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f);
-    //    Gizmos.DrawWireSphere(transform.position, _explosionRadius * _highDamageBlastAreaPercentage);
+        // 2. Middle Circle: Mid-Ring Zone (Orange)
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f);
+        Gizmos.DrawWireSphere(transform.position, _explosionRadius * _highDamageBlastAreaPercentage);
 
-    //    // 3. Outer Circle: Full Limit (Yellow)
-    //    Gizmos.color = new Color(1f, 1f, 0f, 0.2f);
-    //    Gizmos.DrawWireSphere(transform.position, _explosionRadius);
-    //}
+        // 3. Outer Circle: Full Limit (Yellow)
+        Gizmos.color = new Color(1f, 1f, 0f, 0.2f);
+        Gizmos.DrawWireSphere(transform.position, _explosionRadius);
+    }
 
 
 
