@@ -250,6 +250,25 @@ public class PlayerWeaponHandler : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Returns whether the matching weapon has reserve ammo available to replenish.
+    /// </summary>
+    public bool CanReplenishWeaponAmmo(WeaponDataConfig config)
+    {
+        if (config == null) return false;
+
+        int effectiveMaxReserve = GetEffectiveMaxReserveAmmo(config);
+        foreach (var slot in _playerCarryInventorySlots)
+        {
+            if (slot != null && slot.BlueprintConfig == config)
+            {
+                return slot.CurrentReserveAmmo < effectiveMaxReserve;
+            }
+        }
+
+        return false;
+    }
+
     public bool HasCategoryInInventory(WeaponCategory category)
     {
         foreach (var slot in _playerCarryInventorySlots)
@@ -263,16 +282,20 @@ public class PlayerWeaponHandler : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Replenishes reserve ammo for the matching weapon in the inventory.
+    /// </summary>
     public void ReplenishWeaponAmmo(WeaponDataConfig config)
     {
         if (config == null) return;
 
+        int effectiveMaxReserve = GetEffectiveMaxReserveAmmo(config);
         foreach (var slot in _playerCarryInventorySlots)
         {
-            if (slot.BlueprintConfig == config)
+            if (slot != null && slot.BlueprintConfig == config)
             {
+                if (slot.CurrentReserveAmmo >= effectiveMaxReserve) return;
 
-                int effectiveMaxReserve = Mathf.RoundToInt(WeaponStatsHub.Get(WeaponStatsHub.WeaponStatType.ReserveAmmo, config.Category, config.MaxReserveAmmo));
                 slot.CurrentReserveAmmo = effectiveMaxReserve;
 
                 if (_activeWeaponInstance != null && _activeWeaponInstance.Config == config)
@@ -284,5 +307,13 @@ public class PlayerWeaponHandler : MonoBehaviour
                 return;
             }
         }
+    }
+
+    private int GetEffectiveMaxReserveAmmo(WeaponDataConfig config)
+    {
+        return Mathf.RoundToInt(WeaponStatsHub.Get(
+            WeaponStatsHub.WeaponStatType.ReserveAmmo,
+            config.Category,
+            config.MaxReserveAmmo));
     }
 }

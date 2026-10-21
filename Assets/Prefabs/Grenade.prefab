@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd2224edb5da60945bc40a7e5e9dcd29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grenade
-  _fuseDuration: 3
+  _fuseDuration: 2
   _explosionRadius: 5
   _lethalBlastAreaPercentage: 0.4
   _highDamageBlastAreaPercentage: 0.7

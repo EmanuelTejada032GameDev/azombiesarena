@@ -84,7 +84,8 @@ public class Zombie : MonoBehaviour
 
         if (_animator == null || _agent == null || !_agent.enabled) return;
 
-        _animator.SetFloat(SpeedHash, _agent.velocity.magnitude, _speedDampTime, Time.deltaTime);
+        float animationSpeed = _agent.isStopped ? 0f : _agent.velocity.magnitude;
+        _animator.SetFloat(SpeedHash, animationSpeed, _speedDampTime, Time.deltaTime);
     }
 
     private void OnEnable()
@@ -217,16 +218,23 @@ public class Zombie : MonoBehaviour
     {
         while (true)
         {
-
-            if (!_isDead && _targetPlayer != null && _playerDamageable != null && _canAttack)
+            if (!_isDead && !_isAttacking && _targetPlayer != null && _playerDamageable != null)
             {
-                float distance = Vector3.Distance(transform.position, _targetPlayer.position);
+                Vector3 toPlayer = _targetPlayer.position - transform.position;
+                toPlayer.y = 0f;
+                bool isPlayerInAttackRange = toPlayer.sqrMagnitude <= _attackRange * _attackRange;
 
-                if (distance <= _attackRange)
+                if (_agent != null && _agent.enabled && _agent.isOnNavMesh)
+                {
+                    _agent.isStopped = isPlayerInAttackRange || _levelUpKnockbackCoroutine != null;
+                }
+
+                if (isPlayerInAttackRange && _canAttack)
                 {
                     StartAttack();
                 }
             }
+
             yield return new WaitForSeconds(_pollingInterval);
         }
     }
@@ -269,7 +277,7 @@ public class Zombie : MonoBehaviour
         }
 
         if (_agent != null && _agent.enabled && _agent.isOnNavMesh)
-            _agent.isStopped = _levelUpKnockbackCoroutine != null;
+            _agent.isStopped = true;
 
         if (!_isDead) StartCoroutine(CooldownRoutine());
     }

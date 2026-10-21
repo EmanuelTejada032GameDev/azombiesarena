@@ -8,11 +8,15 @@ public class WallBuy : MonoBehaviour, IInteractable
 
     public bool CanDoInteractAction(IInteractable.InteractAction interactAction)
     {
-        if (interactAction == IInteractable.InteractAction.Primary)
+        if (interactAction != IInteractable.InteractAction.Primary || _weaponToGive == null)
         {
-            return _weaponToGive != null;
+            return false;
         }
-        return false;
+
+        PlayerWeaponHandler weaponHandler = PlayerWeaponHandler.Instance;
+        return weaponHandler == null ||
+               !weaponHandler.HasWeaponInInventory(_weaponToGive) ||
+               weaponHandler.CanReplenishWeaponAmmo(_weaponToGive);
     }
 
     public void Interact(IInteractable.InteractAction interactAction, Transform interactorTransform)
@@ -23,6 +27,7 @@ public class WallBuy : MonoBehaviour, IInteractable
         if (weaponHandler == null) return;
 
         bool holdsWeapon = weaponHandler.HasWeaponInInventory(_weaponToGive);
+        if (holdsWeapon && !weaponHandler.CanReplenishWeaponAmmo(_weaponToGive)) return;
 
         int activeCost = holdsWeapon ? _weaponToGive.NormalAmmoPrice : _weaponToGive.BasePurchaseCost;
 
