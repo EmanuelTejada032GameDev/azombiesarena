@@ -2,6 +2,12 @@ using UnityEngine;
 
 public abstract class MagnetCollectible : MonoBehaviour
 {
+    private const float DEFAULT_LIFETIME = 30f;
+
+    [Header("Lifetime")]
+    [SerializeField, Min(0f)] private float _lifetime = DEFAULT_LIFETIME;
+    private float _remainingLifetime;
+
     [Header("Attraction")]
     [SerializeField] private float _attractionRange = 4f;
     [SerializeField] private float _collectionDistance = 0.65f;
@@ -19,10 +25,13 @@ public abstract class MagnetCollectible : MonoBehaviour
     public void Initialize(int amount)
     {
         _amount = Mathf.Max(0, amount);
+        _remainingLifetime = Mathf.Max(0f, _lifetime);
     }
 
     private void Awake()
     {
+        _remainingLifetime = Mathf.Max(0f, _lifetime);
+
         if (_floater == null)
             _floater = GetComponent<Floater>();
 
@@ -38,6 +47,13 @@ public abstract class MagnetCollectible : MonoBehaviour
 
     private void Update()
     {
+        _remainingLifetime -= Time.deltaTime;
+        if (_remainingLifetime <= 0f)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         if (_hasBeenCollected || Player.Instance == null)
             return;
 

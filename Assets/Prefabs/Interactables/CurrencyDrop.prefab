@@ -127,14 +127,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98e9130e13dc23745999874c663b0a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floater
-  _hoverHeight: 0.8
+  _hoverHeight: 0.5
   _bob: 1
   _bobAmplitude: 0.5
-  _bobSpeed: 4
+  _bobSpeed: 2
   _spin: 0
   _spinSpeed: 90
   _randomOffset: 1
-  _riseDuration: 0.35
+  _riseDuration: 0.8
 --- !u!96 &268000897020726509
 TrailRenderer:
   serializedVersion: 4
@@ -266,9 +266,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96203293412351c488e400d2d582875a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CurrencyDropPickup
-  _attractionRange: 4
+  _lifetime: 30
+  _attractionRange: 3
   _collectionDistance: 0.65
   _flySpeed: 12
-  _targetHeightOffset: 1
+  _targetHeightOffset: 0
   _floater: {fileID: 783119893034311554}
   _trailRenderer: {fileID: 268000897020726509}

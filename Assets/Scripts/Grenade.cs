@@ -1,3 +1,5 @@
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Grenade : MonoBehaviour
@@ -41,23 +43,23 @@ public class Grenade : MonoBehaviour
 
             if (health != null)
             {
-                float normalZombieMaxHP = 100;
+                float baseGrenadeDamage = 100;
                 float finalDamage = 0f;
 
                 // Zone 1: Epicenter Zone (0.0 to 0.4) -> 100% Lethal Strike
                 if (normalizedDistance <= _lethalBlastAreaPercentage)
                 {
-                    finalDamage = normalZombieMaxHP;
+                    finalDamage = baseGrenadeDamage;
                 }
                 // Zone 2: Mid-Ring Zone (0.41 to 0.7) -> 50% Heavy Chunk Damage
                 else if (normalizedDistance <= _highDamageBlastAreaPercentage)
                 {
-                    finalDamage = normalZombieMaxHP * 0.5f;
+                    finalDamage = baseGrenadeDamage * 0.5f;
                 }
                 // Zone 3: Outer-Ring Zone (0.71 to 1.0) -> 30% Light Clip Damage
                 else
                 {
-                    finalDamage = normalZombieMaxHP * 0.3f;
+                    finalDamage = baseGrenadeDamage * 0.3f;
                 }
 
          

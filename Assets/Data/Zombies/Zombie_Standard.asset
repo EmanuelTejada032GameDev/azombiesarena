@@ -20,7 +20,7 @@ MonoBehaviour:
   _attackDamage: 1
   _attackCooldown: 1
   _attackRange: 2
-  _xpReward: 50
+  _xpReward: 1
   _drops:
   - _prefab: {fileID: 6240673524622749518, guid: 2008916626521044898c89ab6c531bde, type: 3}
     _amount: 40

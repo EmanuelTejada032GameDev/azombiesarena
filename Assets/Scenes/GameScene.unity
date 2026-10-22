@@ -714,6 +714,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4033748065978181159, guid: 914dc9f20bb7f53429832774a61f93c2, type: 3}
+      propertyPath: _fuseDuration
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4033748065978181159, guid: 914dc9f20bb7f53429832774a61f93c2, type: 3}
+      propertyPath: _explosionRadius
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4033748065978181159, guid: 914dc9f20bb7f53429832774a61f93c2, type: 3}
+      propertyPath: _lethalBlastAreaPercentage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4033748065978181159, guid: 914dc9f20bb7f53429832774a61f93c2, type: 3}
+      propertyPath: _highDamageBlastAreaPercentage
+      value: 0.9
+      objectReference: {fileID: 0}
     - target: {fileID: 981124020793382735, guid: 914dc9f20bb7f53429832774a61f93c2, type: 3}
       propertyPath: m_Name
       value: Grenade

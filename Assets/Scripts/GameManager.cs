@@ -220,6 +220,12 @@ public class GameManager : MonoBehaviour
             Destroy(zombie.gameObject);
         }
 
+        MagnetCollectible[] leftoverDrops = FindObjectsByType<MagnetCollectible>(FindObjectsSortMode.None);
+        foreach (MagnetCollectible drop in leftoverDrops)
+        {
+            Destroy(drop.gameObject);
+        }
+
         if (_waveSpawner != null)
         {
             _waveSpawner.gameObject.SetActive(false);

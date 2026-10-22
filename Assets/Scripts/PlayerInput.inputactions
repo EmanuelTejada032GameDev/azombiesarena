@@ -275,7 +275,7 @@
                 {
                     "name": "",
                     "id": "14a6f63a-459c-4dd2-b861-9b6ded87884b",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Mouse>/forwardButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -287,6 +287,17 @@
                     "name": "",
                     "id": "dbafe0f9-2332-45fe-90a1-8d65f3bdd06b",
                     "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Melee",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73da3a8d-4a9e-47c4-bae9-493b6225e7ed",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
