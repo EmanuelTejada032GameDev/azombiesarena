@@ -17,12 +17,6 @@ public class PlayerAnimationHandler : MonoBehaviour
     private static readonly int IsSprintingHash = Animator.StringToHash("IsSprinting");
     private static readonly int IsSlidingHash = Animator.StringToHash("IsSliding");
 
-    private const float RecoilLayerActiveDuration = 0.8f;
-
-    private int _recoilLayerIndex;
-    private float _recoilLayerEndTime;
-    private static readonly int ShootHash = Animator.StringToHash("Shoot");
-
     private CharacterController _controller;
     private Transform _root;
 
@@ -35,42 +29,8 @@ public class PlayerAnimationHandler : MonoBehaviour
         _root = _controller.transform;
     }
 
-    private void Start()
-    {
-        _recoilLayerIndex = _animator.GetLayerIndex("Recoil");
-    }
-
-    private void OnEnable()
-    {
-        Weapon.OnShoot += HandleShoot;
-    }
-
-    private void OnDisable()
-    {
-        Weapon.OnShoot -= HandleShoot;
-    }
-
-    private void HandleShoot(float recoilForce)
-    {
-        if (_recoilLayerIndex >= 0)
-        {
-            _animator.SetLayerWeight(_recoilLayerIndex, Mathf.Clamp01(recoilForce));
-            _recoilLayerEndTime = Time.time + RecoilLayerActiveDuration;
-        }
-
-        //_animator.SetTrigger(ShootHash);
-    }
-
     private void Update()
     {
-        if (_recoilLayerIndex >= 0 &&
-            _recoilLayerEndTime > 0f &&
-            Time.time >= _recoilLayerEndTime)
-        {
-            _animator.SetLayerWeight(_recoilLayerIndex, 0f);
-            _recoilLayerEndTime = 0f;
-        }
-
         PlayerMovement movement = PlayerMovement.Instance;
 
         if (movement == null)
